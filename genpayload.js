@@ -3,9 +3,9 @@ $.blockUI.defaults.overlayCSS.opacity = 0.8;
 $.blockUI.defaults.overlayCSS.cursor = 'default';
 $.blockUI.defaults.baseZ = 500;
 $.blockUI.defaults.message = null;
-$('#radio,#telemetry,#sentence').block();
+$('#radio,#telemetry,#dataformat,#documents').block();
 
-var steps = [ "payload", "radio", "telemetry", "sentence" ];
+var steps = [ "payload", "radio", "telemetry", "dataformat", "documents" ];
 var current = 0;
 
 var text = [
@@ -34,16 +34,8 @@ $('input').focus(function(e) {
     var index = steps.indexOf(section);
     if(index != current) {
         $('#' + steps[current]).block();
-        var height = $('#' + steps[current]).height();
-        var old_top = $('#scroller').css('top').replace('px', '');
-        var new_top = old_top;
-        if(index > current) {
-            new_top = parseInt(old_top) - parseInt(height) - 42;
-            current++;
-        } else {
-            new_top = parseInt(old_top) + parseInt(height) + 42;
-            current--;
-        }
+        current = index;
+        var new_top = 200 - $('#' + steps[current]).position().top;
         $('#scroller').animate({top: new_top + 'px'}, 800, 'linear');
         $('#' + steps[current]).unblock();
         $('#text').html(text[current]);
