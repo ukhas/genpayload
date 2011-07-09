@@ -12,7 +12,7 @@ var text = [
     "<p>Why are you back here? You only had to enter a NAME. Make sure you've entered a NAME.</p>",
     "<p>Great! Well done for entering that NAME.</p><p>However, further details are required to make your PAYLOAD DOCUMENT. You must enter a FREQUENCY in MEGAHERTZ and a MODE such as LSB or USB.</p><p>Good luck!</p>",
     "<p>You continue on your quest for a PAYLOAD DOCUMENT.</p><p>Further challenges await: you must enter TELEMETRY details now. The DEFAULTS may be to your liking, and if so you can SKIP through this section.</p>",
-    "<p>Everything before now was the kiddy stuff. This is where we separate the wheat from the chaff. You must now enter the DATA FORMAT INFORMATION.</p><p>At first, enter a CALLSIGN which is how your PAYLOAD will identify itself in RADIO TELEMETRY. Once this is done, you must also enter the CHECKSUM ALGORITHM in use. Common choices here include CRC-16 and XOR.</p>",
+    "<p>Everything before now was the kiddy stuff. This is where we separate the wheat from the chaff. You must now enter the DATA FORMAT INFORMATION.</p><p>At first, enter a CALLSIGN which is how your PAYLOAD will identify itself in RADIO TELEMETRY. Once this is done, you must also enter the CHECKSUM ALGORITHM in use. Common choices here include CRC-16 and XOR.</p><p>The second step, and toughest trial you will face, is to select the FIELDs for your SENTENCE. This arduous challenge is undertaken by DRAG AND DROPing FIELDs from the list on the right into the FIELD RECEPTACLE on the left. You must then enter the FIELD CONFIGURATION INFORMATION into each FIELD.</p><p>Typically, the FIELD CONFIGURATION INFORMATION is only a FIELD NAME. On rare occasion it may be required of you to enter a FIELD FORMAT. If this happens to you, do not fear! Simply chose from `DD.DDDD' or `DDMM.MM', and good luck.",
     "<p>GAME OVER. You've entered all your information. There is nothing left to be done but reap the benefits of your hard labour in the form of these PAYLOAD DOCUMENTS. YOUR SCORE: 10 POINTS.</p>"
 ]
 
@@ -35,10 +35,24 @@ $('input').focus(function(e) {
     if(index != current) {
         $('#' + steps[current]).block();
         current = index;
-        var new_top = 200 - $('#' + steps[current]).position().top;
+        $('#text').html(text[current]);
+        var header_height = $('#top-bar').height();
+        var new_top = header_height - $('#' + steps[current]).position().top;
         $('#scroller').animate({top: new_top + 'px'}, 800, 'linear');
         $('#' + steps[current]).unblock();
-        $('#text').html(text[current]);
     }
 });
 
+// Make fields draggable and such
+$('.field').draggable({
+    helper: "clone",
+    appendTo: "body"
+});
+$('#sentence').droppable({
+    accept: ":not(.ui-sortable-helper)",
+    drop: function(event, ui) {
+        $("<div></div>").text(ui.draggable.text()).appendTo(this);
+    }
+}).sortable({
+    items: "div"
+});
