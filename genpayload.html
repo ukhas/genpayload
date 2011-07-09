@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<title>PAYLOAD DOCUMENT GENERATOR</title>
+
+<!-- css -->
+<link href='http://fonts.googleapis.com/css?family=Special+Elite&v1' rel='stylesheet' type='text/css'>
+<link href='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/themes/hot-sneaks/jquery-ui.css' rel='stylesheet' type='text/css'>
+<link href='tipsy.css' rel='stylesheet' type='text/css'>
+<link href='genpayload.less' rel='stylesheet/less' type='text/css'>
+
+<div id="top-bar">
+<header>
+    <h1>PAYLOAD DOCUMENT GENERATOR</h1>
+    <div id="text">
+    <p>
+        You have found a PAYLOAD DOCUMENT GENERATOR.
+        You can use it to generate PAYLOAD DOCUMENTS in both OLD and
+        <a href="http://habitat.habhub.org/docs/database/example.html#flight-docs-json">NEW</a> formats.
+        It was written by <a href="http://adamgreig.com">ADAM GREIG</a>
+        and is <a href="https://github.com/adamgreig/genpayload">OPEN SOURCE</a>.
+    </p>
+    <p>To begin, enter a PAYLOAD NAME in the TEXT ENTRY BOX below.</p>
+    </div>
+</header>
+</div>
+
+<div id="scroller">
+    <section id="payload">
+        <h2>PAYLOAD</h2>
+        <label for="name">PAYLOAD NAME&gt;</label>
+        <input type="text" size="12" id="name" tabindex="1" required autofocus><br /><br />
+        <a href="#" class="continue">CONTINUE</a> (or press TAB)
+    </section>
+    <section id="radio">
+        <h2>RADIO DETAILS</h2>
+        <label for="frequency">FREQUENCY (MEGAHERTZ)&gt;</label>
+        <input type="text" size="7" id="frequency" value="434.075" tabindex="2" required><br />
+        <label for="mode">MODE&gt;</label>
+        <input type="text" size="3" id="mode" value="USB" tabindex="3" required><br /><br />
+        <a href="#" class="continue">CONTINUE</a> (or press TAB)
+    </section>
+    <section id="telemetry">
+        <h2>TELEMETRY</h2>
+        <label for="modulation">MODULATION&gt;</label>
+        <input type="text" size="5" id="modulation" value="RTTY" tabindex="4" required><br />
+        <label for="shift">SHIFT (HERTZ)&gt;</label>
+        <input type="text" size="3" id="shift" value="350" tabindex="5" required><br />
+        <label for="encoding">ENCODING&gt;</label>
+        <input type="text" size="8" id="encoding" value="ASCII-8" tabindex="6" required><br />
+        <label for="baud">BAUD&gt;</label>
+        <input type="text" size="3" id="baud" value="50" tabindex="7" required><br />
+        <label for="parity">PARITY&gt;</label>
+        <input type="text" size="4" id="parity" value="NONE" tabindex="8" required><br />
+        <label for="stop">STOP BITS&gt;</label>
+        <input type="text" size="1" id="stop" value="1" tabindex="9" required><br /><br /><br />
+        <a href="#" class="continue">CONTINUE</a> (or press TAB)
+    </section>
+    <section id="sentence">
+        <h2>DATA FORMAT</h2>
+        <label for="callsign">CALLSIGN&gt;</label>
+        <input type="text" size="12" id="callsign" tabindex="10" required><br />
+        <label for="checksum">CHECKSUM&gt;</label>
+        <input type="text" size="8" id="checksum" value="CRC-16" tabindex="11" required><br /><br />
+        <a href="#" class="continue">CONTINUE</a> (or press TAB)
+    </section>
+    <section id="output">
+        <h2>DOCUMENTS</h2>
+    </section>
+</div>
+
+<!-- javascript -->
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js'></script>
+<script src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js'></script>
+<script src='jquery.tipsy.min.js'></script>
+<script src='jquery.blockUI.min.js'></script>
+<script src='less-1.1.3.min.js'></script>
+<script src='genpayload.js'></script>
