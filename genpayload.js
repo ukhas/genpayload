@@ -6,22 +6,22 @@ $.blockUI.defaults.message = null;
 $('#flight,#radio,#telemetry,#dataformat,#documents').block();
 
 // Bind datetime selectors
-$('#window_start').datepicker({
+$('#window-start').datepicker({
     dateFormat: 'yy-mm-dd',
     onClose: function(date_text, inst) {
-        $('#window_start').focus();
+        $('#window-start').focus();
     }
 });
-$('#window_end').datepicker({
+$('#window-end').datepicker({
     dateFormat: 'yy-mm-dd',
     onClose: function(date_text, inst) {
-        $('#window_end').focus();
+        $('#window-end').focus();
     }
 });
-$('#launch_date').datetimepicker({
+$('#launch-date').datetimepicker({
     dateFormat: 'yy-mm-dd',
     onClose: function(date_text, inst) {
-        $('#launch_date').focus();
+        $('#launch-date').focus();
     }
 });
 
@@ -124,4 +124,80 @@ $('#fields').droppable({
     drop: function(event, ui) {
         ui.draggable.remove();
     }
+});
+
+// the fun part
+function make_json() {
+    var field_list = [];
+    $('#sentence > div.sentence-field').each(function(index, element) {
+        var type = $(element).children('strong').text().toLowerCase();
+        var name = $(element).children('input:first').val();
+        switch(type) {
+            case "time":
+                type = "stdtelem.time";
+                break;
+            case "coordinate":
+                type = "stdtelem.coordinate";
+                break;
+            case "integer":
+                type = "base.ascii_int";
+                break;
+            case "float":
+                type = "base.ascii_float";
+                break;
+            case "string":
+                type = "base.string";
+                break;
+        }
+        var field = { name: name, type: type }
+        if(type == "stdtelem.coordinate") {
+            field.format = $(element).children('input:last').val();
+        }
+        field_list.push(field);
+    });
+    var checksum = $('#checksum').val().toLowerCase();
+    if(checksum == "crc-16")
+        checksum = "crc16-ccitt";
+    var payload =  {
+        radio: {
+            frequency: $('#frequency').val(),
+            mode: $('#mode').val()
+        },
+        telemetry: {
+            modulation: $('#modulation').val().toLowerCase(),
+            shift: $('#shift').val(),
+            encoding: $('#encoding').val().toLowerCase(),
+            baud: $('#baud').val(),
+            parity: $('#parity').val().toLowerCase(),
+            stop: $('#stop').val()
+        },
+        sentence: {
+            protocol: "UKHAS",
+            checksum: checksum,
+            payload: $('#callsign').val(),
+            fields: field_list
+        }
+    };
+    var flight_doc = {
+        type: "flight",
+        name: $('#name').val(),
+        start: new Date($('#window-start').val()).getTime() / 1000,
+        end: new Date($('#window-end').val()).getTime() / 1000,
+        launch: {
+            time: new Date($('#launch-date').val()).getTime() / 1000,
+            timezone: $('#timezone').val()
+        },
+        metadata: {
+            location: $('#location').val(),
+            project: $('#project').val()
+        },
+        payloads: {}
+    };
+    flight_doc.payloads[$('#callsign').val()] = payload;
+    return flight_doc;
+}
+
+$('#generate').click(function(e) {
+    var flight_doc = JSON.stringify(make_json());
+    $('#json-flight-doc').text(flight_doc);
 });
