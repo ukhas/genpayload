@@ -75,14 +75,18 @@ function generate_sentence_field(type) {
     body += '<label for="sentence-field-' + sentence_field_count + '">';
     body += 'FIELD NAME&gt;</label>';
     body += '<input type="text" size="12" id="sentence-field-';
-    body += sentence_field_count + '" required><br />';
+    body += sentence_field_count + '"';
+    if(type == "TIME") {
+        body += ' value="time"';
+    }
+    body += ' required><br />';
     container.append(body);
     if(type == "COORDINATE") {
         body = '<label for="sentence-field-';
         body += sentence_field_count + '-format">FORMAT&gt;';
         body += '</label><input type="text" size="12" id="';
         body += 'sentence-field-' + sentence_field_count;
-        body += '-format" required><br />';
+        body += '-format" value="dd.dddd" required><br />';
         container.append(body);
     }
     sentence_field_count++;
