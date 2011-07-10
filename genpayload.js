@@ -1,4 +1,5 @@
 // Set up blockUI and block the elements we don't want
+$.blockUI.defaults.applyPlatformOpacityRules = false;
 $.blockUI.defaults.overlayCSS.opacity = 0.8;
 $.blockUI.defaults.overlayCSS.cursor = 'default';
 $.blockUI.defaults.baseZ = 500;
