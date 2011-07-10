@@ -86,6 +86,20 @@ $('.field').draggable({
 // Generate the sentence-field items
 var sentence_field_count = 0;
 function generate_sentence_field(type) {
+    var name = "";
+    if(type == "LATITUDE") {
+        type = "COORDINATE";
+        name = "latitude";
+    } else if(type == "LONGITUDE") {
+        type = "COORDINATE";
+        name = "longitude";
+    } else if(type == "ALTITUDE") {
+        type = "INTEGER";
+        name = "altitude";
+    } else if(type == "TEMPERATURE") {
+        type = "FLOAT";
+        name = "temperature";
+    }
     var container = $('<div class="sentence-field"></div>');
     var body = '<strong>'+type+'</strong><br />';
     body += '<label for="sentence-field-' + sentence_field_count + '">';
@@ -94,6 +108,8 @@ function generate_sentence_field(type) {
     body += sentence_field_count + '"';
     if(type == "TIME") {
         body += ' value="time"';
+    } else if(name != "") {
+        body += ' value="' + name + '"';
     }
     body += ' required><br />';
     container.append(body);
@@ -114,10 +130,22 @@ $('#sentence').droppable({
     accept: ":not(.ui-sortable-helper)",
     drop: function(event, ui) {
         generate_sentence_field(ui.draggable.text()).appendTo(this);
+        $(this).children('.sentence-field:last').children('input:first').focus();
     }
 }).sortable({
     items: "div"
 });
+
+// Give some default fields
+generate_sentence_field('INTEGER').appendTo($('#sentence'));
+generate_sentence_field('TIME').appendTo($('#sentence'));
+generate_sentence_field('COORDINATE').appendTo($('#sentence'));
+generate_sentence_field('COORDINATE').appendTo($('#sentence'));
+generate_sentence_field('ALTITUDE').appendTo($('#sentence'));
+$('.sentence-field:eq(0)').children('input').val('count');
+$('.sentence-field:eq(1)').children('input').val('time');
+$('.sentence-field:eq(2)').children('input:eq(0)').val('latitude');
+$('.sentence-field:eq(3)').children('input:eq(0)').val('longitude');
 
 // Make the fields list droppable to 'remove'
 $('#fields').droppable({
