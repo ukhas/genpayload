@@ -69,11 +69,42 @@ $('.field').draggable({
     helper: "clone",
     appendTo: "body"
 });
+
+// Generate the sentence-field items
+var sentence_field_count = 0;
+function generate_sentence_field(type) {
+    var container = $('<div class="sentence-field"></div>');
+    var body = '<strong>'+type+'</strong><br />';
+    body += '<label for="sentence-field-' + sentence_field_count + '">';
+    body += 'FIELD NAME&gt;</label>';
+    body += '<input type="text" size="12" id="sentence-field-';
+    body += sentence_field_count + '" required><br />';
+    container.append(body);
+    if(type == "COORDINATE") {
+        body = '<label for="sentence-field-';
+        body += sentence_field_count + '-format">FORMAT&gt;';
+        body += '</label><input type="text" size="12" id="';
+        body += 'sentence-field-' + sentence_field_count;
+        body += '-format" required><br />';
+        container.append(body);
+    }
+    sentence_field_count++;
+    return container;
+};
+
+// Make the sentence box droppable and sortable
 $('#sentence').droppable({
     accept: ":not(.ui-sortable-helper)",
     drop: function(event, ui) {
-        $("<div></div>").text(ui.draggable.text()).appendTo(this);
+        generate_sentence_field(ui.draggable.text()).appendTo(this);
     }
 }).sortable({
     items: "div"
+});
+
+// Make the fields list droppable to 'remove'
+$('#fields').droppable({
+    drop: function(event, ui) {
+        ui.draggable.remove();
+    }
 });

@@ -40,7 +40,7 @@ section {
     width: 200px;
     padding: 10px;
 }
-.field {
+.field, .sentence-field {
     padding: 2px;
     margin-bottom: 3px;
 }
@@ -89,7 +89,7 @@ a {
 #fields {
     border-radius: 3px;
 }
-.field {
+.field, .sentence-field {
     border-style: solid;
 }
 #sentence {
@@ -97,7 +97,8 @@ a {
     border-style: solid;
 }
 #dataformat {
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     max-height: 400px;
 }
 
@@ -139,8 +140,11 @@ section {
 #fields {
     background-color: #ccc;
 }
-.field {
+.field, .sentence-field {
     border-color: #555;
+    input {
+        background-color: #ccc;
+    }
 }
 #sentence {
     background-color: #ccc;
