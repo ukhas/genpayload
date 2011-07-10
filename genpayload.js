@@ -6,8 +6,24 @@ $.blockUI.defaults.message = null;
 $('#flight,#radio,#telemetry,#dataformat,#documents').block();
 
 // Bind datetime selectors
-$('#window_start,#window_end').datepicker({dateFormat: 'yy-mm-dd'});
-$('#launch_date').datetimepicker({dateFormat: 'yy-mm-dd'});
+$('#window_start').datepicker({
+    dateFormat: 'yy-mm-dd',
+    onClose: function(date_text, inst) {
+        $('#window_start').focus();
+    }
+});
+$('#window_end').datepicker({
+    dateFormat: 'yy-mm-dd',
+    onClose: function(date_text, inst) {
+        $('#window_end').focus();
+    }
+});
+$('#launch_date').datetimepicker({
+    dateFormat: 'yy-mm-dd',
+    onClose: function(date_text, inst) {
+        $('#launch_date').focus();
+    }
+});
 
 var steps = [   "payload", "flight", "radio", "telemetry",
                 "dataformat", "documents" ];
@@ -15,10 +31,10 @@ var current = 0;
 
 var text = [
     "<p>Why are you back here? You only had to enter a NAME. Make sure you've entered a NAME.</p>",
-    "<p>Okay, now for some FLIGHT DETAILS. You have to reveal the LAUNCH LOCATION and the PROJECT NAME first.</p><p>Once past that first hurdle, you will have to input the LAUNCH WINDOW and the ESTIMATED LAUNCH TIME for this flight. Finally, input the LOCAL TIMEZONE for the flight.</p><p>Now, onwards to greater challenges!</p>",
+    "<p>Okay, now for some FLIGHT DETAILS. You have to reveal the LAUNCH LOCATION and the PROJECT NAME first.</p><p>Once past that first hurdle, you will have to input the LAUNCH WINDOW and the ESTIMATED LAUNCH TIME for this flight. These are both in the LOCAL TIME. Finally, input the LOCAL TIMEZONE for the flight.</p><p>Now, onwards to greater challenges!</p>",
     "<p>Great! Well done for entering the FLIGHT DETAILS.</p><p>However, further details are required to make your PAYLOAD DOCUMENT. You must enter a FREQUENCY in MEGAHERTZ and a MODE such as LSB or USB.</p><p>Good luck!</p>",
     "<p>You continue on your quest for a PAYLOAD DOCUMENT.</p><p>Further challenges await: you must enter TELEMETRY details now. The DEFAULTS may be to your liking, and if so you can SKIP through this section.</p>",
-    "<p>Everything before now was the kiddy stuff. This is where we separate the wheat from the chaff. You must now enter the DATA FORMAT INFORMATION.</p><p>First things first. Enter the CALLSIGN, the identifier the PAYLOAD uses in the RADIO TELEMETRY STRINGS.</p><p>The second step, and toughest trial you will face, is to select the FIELDs for your SENTENCE. This arduous challenge is undertaken by DRAG AND DROPing FIELDs from the list on the right into the FIELD RECEPTACLE on the left. You can also SORT the FIELDs by DRAGGING them inside the FIELD RECEPTACLE. You must then enter the FIELD CONFIGURATION INFORMATION into each FIELD.</p><p>Typically, the FIELD CONFIGURATION INFORMATION is only a FIELD NAME. On rare occasion it may be required of you to enter a FIELD FORMAT. If this happens to you, do not fear! Simply choose from `DD.DDDD' or `DDMM.MM', and good luck.</p><p>Finally, input the CHECKSUM ALGORITHM. Common choices include CRC-16 and XOR.</p>",
+    "<p>Everything before now was the kiddy stuff. This is where we separate the wheat from the chaff. You must now enter the DATA FORMAT INFORMATION.</p><p>First things first. Enter the CALLSIGN, the identifier the PAYLOAD uses in the RADIO TELEMETRY STRINGS.</p><p>The second step, and toughest trial you will face, is to select the FIELDs for your SENTENCE. This arduous challenge is undertaken by DRAG AND DROPing FIELDs from the list on the right into the FIELD RECEPTACLE on the left. FIELDs on the left may be deleted by DRAG AND DROPing them back to the FIELD LIST on the right. You can also SORT the FIELDs by DRAGGING them inside the FIELD RECEPTACLE. You must then enter the FIELD CONFIGURATION INFORMATION into each FIELD.</p><p>Typically, the FIELD CONFIGURATION INFORMATION is only a FIELD NAME. On rare occasion it may be required of you to enter a FIELD FORMAT. If this happens to you, do not fear! Simply choose from `DD.DDDD' or `DDMM.MM', and good luck.</p><p>Finally, input the CHECKSUM ALGORITHM. Common choices include CRC-16 and XOR.</p>",
     "<p>GAME OVER. You've entered all your information. There is nothing left to be done but reap the benefits of your hard labour in the form of these PAYLOAD DOCUMENTS. YOUR SCORE: 10 POINTS.</p>"
 ]
 
