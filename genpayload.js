@@ -65,12 +65,15 @@ $('input').focus(function(e) {
     var index = steps.indexOf(section);
     if(index != current) {
         $('#' + steps[current]).block();
+        $('#' + steps[current]).scrollTop(0);
+        $('#' + steps[current]).css('overflow-y', 'hidden');
         current = index;
         $('#text').html(text[current]);
         var header_height = $('#top-bar').height();
         var new_top = header_height - $('#' + steps[current]).position().top;
         $('#scroller').animate({top: new_top + 'px'}, 800, 'linear');
         $('#' + steps[current]).unblock();
+        $('#' + steps[current]).css('overflow-y', 'auto');
         // set the correct max_height to make sure overflow works okay
         var max_height = $(window).height() - $('#top-bar').height();
         max_height -= 70;
