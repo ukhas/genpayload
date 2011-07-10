@@ -243,7 +243,68 @@ function make_json() {
     return flight_doc;
 }
 
-$('#json-flight-doc').focus(function(e) {
+function make_xml(root) {
+    root.empty();
+    root.append("<transmission></transmission>");
+    var transmission = root.children("transmission");
+    transmission.append("<frequency>"+$('#frequency').val()+".00</frequency>");
+    transmission.append("<mode">+$('#mode').val()+"</mode>");
+    transmission.append("<timings>continuous</timings>");
+    transmission.append("<txtype><rtty></rtty></txtype>");
+    var rtty = transmission.children("txtype").children("rtty");
+    rtty.append("<shift>"+$('#shift').val()+"</shift>");
+    rtty.append("<coding>"+$('#encoding').val().toLowerCase()+"</coding>");
+    rtty.append("<baud>"+$('#baud').val()+"</baud>");
+    rtty.append("<parity>"+$('#parity').val().toLowerCase()+"</parity>");
+    rtty.append("<stop>"+$('#stop').val()+"</stop>");
+    transmission.append("<sentence></sentence>");
+    var sentence = transmission.children("sentence");
+    sentence.append("<sentence_deliminator>$$</sentence_deliminator>");
+    sentence.append("<string_limit>999</string_limit>");
+    sentence.append("<field_delimiter>,</field_delimiter>");
+    sentence.append("<fields>"+$('#sentence > div').length+"</fields>");
+    sentence.append("<callsign>"+$('#callsign').val()+"</callsign>");
+    var callsign_field = "<field><seq>1</seq><dbfield>callsign</dbfield>";
+    callsign_field += "<minsize>"+$('#callsign').val().length+"</minsize>";
+    callsign_field += "<maxsize>"+$('#callsign').val().length+"</maxsize>";
+    callsign_field += "<datatype>char</datatype></field>";
+    sentence.append(callsign_field);
+    $('#sentence > div.sentence-field').each(function(index, element) {
+        var type = $(element).children('strong').text().toLowerCase();
+        var name = $(element).children('input:first').val();
+        var format = null;
+        if(type == "coordinate") {
+            format = $(element).children('input:last').val();
+        }
+        switch(type) {
+            case "coordinate":
+                type = "decimal"
+                break;
+            case "float":
+                type = "decimal";
+                break;
+            case "string":
+                type = "char";
+                break;
+        }
+        var field = $("<field></field>");
+        field.append("<seq>"+(index + 2)+"</seq>");
+        field.append("<dbfield>"+name+"</dbfield>");
+        field.append("<minsize>0</minsize>");
+        field.append("<maxsize>99</maxsize>");
+        field.append("<datatype>"+type+"</datatype>");
+        if(format != null) {
+            field.append("<format>"+format+"</format>");
+        }
+        sentence.append(field);
+    });
+    return root;
+}
+
+$('#json-flight-doc,#xml-flight-doc').focus(function(e) {
     var flight_doc = JSON.stringify(make_json());
     $('#json-flight-doc').val(flight_doc);
+    flight_doc = make_xml($('#xml-root')).html();
+    $('#xml-flight-doc').val(flight_doc);
 });
+
