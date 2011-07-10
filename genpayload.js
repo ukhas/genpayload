@@ -55,6 +55,10 @@ $('.back').click(function(e) {
 
 // Bind text entry to capitalise
 $('input').keyup(function(e) {
+    if($(this).attr('id') == "json-flight-doc")
+        return;
+    if($(this).attr('id') == "xml-flight-doc")
+        return;
     if(e.which >= 65 && e.which <= 90)
         this.value = this.value.toUpperCase();
 });
@@ -129,11 +133,20 @@ function generate_sentence_field(type) {
     return container;
 };
 
+function set_sentence_field_tabindicies() {
+    var tabindex = 20;
+    $('#sentence input').each(function(index, element) {
+        $(element).attr('tabindex', tabindex);
+        tabindex++;
+    });
+}
+
 // Make the sentence box droppable and sortable
 $('#sentence').droppable({
     accept: ":not(.ui-sortable-helper)",
     drop: function(event, ui) {
         generate_sentence_field(ui.draggable.text()).appendTo(this);
+        set_sentence_field_tabindicies();
         $(this).children('.sentence-field:last').children('input:first').focus();
     }
 }).sortable({
@@ -150,6 +163,7 @@ $('.sentence-field:eq(0)').children('input').val('count');
 $('.sentence-field:eq(1)').children('input').val('time');
 $('.sentence-field:eq(2)').children('input:eq(0)').val('latitude');
 $('.sentence-field:eq(3)').children('input:eq(0)').val('longitude');
+set_sentence_field_tabindicies();
 
 // Make the fields list droppable to 'remove'
 $('#fields').droppable({
@@ -229,7 +243,7 @@ function make_json() {
     return flight_doc;
 }
 
-$('#generate').click(function(e) {
+$('#json-flight-doc').focus(function(e) {
     var flight_doc = JSON.stringify(make_json());
-    $('#json-flight-doc').text(flight_doc);
+    $('#json-flight-doc').val(flight_doc);
 });

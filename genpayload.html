@@ -91,22 +91,21 @@
             <div class="field" id="altitude">ALTITUDE</div>
             <div class="field" id="temperature">TEMPERATURE</div>
         </div>
-        <div id="sentence" tabindex="17">
+        <div id="sentence">
             
         </div>
         <div class="clear"></div>
         <label for="checksum">CHECKSUM&gt;</label>
-        <input type="text" size="8" id="checksum" value="CRC-16" tabindex="18" required><br /><br />
+        <input type="text" size="8" id="checksum" value="CRC-16" tabindex="100" required><br /><br />
         <a href="#" class="back">BACK</a> (or press SHIFT+TAB)<br />
         <a href="#" class="continue">CONTINUE</a> (or press TAB)
     </section>
     <section id="documents">
         <h2>DOCUMENTS</h2>
-        <input type="button" id="generate" tabindex="19" value="GENERATE"><br /><br />
         <strong>HABITAT FLIGHT DOC:</strong><br />
-        <textarea id="json-flight-doc" rows="2" cols="20"></textarea><br /><br />
+        <input type="text" size="30" id="json-flight-doc" tabindex="102"><br /><br />
         <strong>XML FLIGHT DOC:</strong><br />
-        <textarea id="xml-flight-doc" rows="2" cols="20"></textarea><br /><br />
+        <input type="text" size="30" id="xml-flight-doc" tabindex="103"><br /><br />
         <a href="#" class="back">BACK</a> (or press SHIFT+TAB)<br />
     </section>
 </div>
