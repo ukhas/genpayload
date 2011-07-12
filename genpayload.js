@@ -53,16 +53,6 @@ $('.back').click(function(e) {
     return false;
 });
 
-// Bind text entry to capitalise
-$('input').keyup(function(e) {
-    if($(this).attr('id') == "json-flight-doc")
-        return;
-    if($(this).attr('id') == "xml-flight-doc")
-        return;
-    if(e.which >= 65 && e.which <= 90)
-        this.value = this.value.toUpperCase();
-});
-
 // Bind focus events to shift the scroller into position
 $('input').focus(function(e) {
     var section = $(this).parent().attr('id');
