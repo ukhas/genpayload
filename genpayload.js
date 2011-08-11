@@ -238,7 +238,7 @@ function make_xml(root) {
     root.append("<transmission></transmission>");
     var transmission = root.children("transmission");
     transmission.append("<frequency>"+$('#frequency').val()+".00</frequency>");
-    transmission.append("<mode">+$('#mode').val()+"</mode>");
+    transmission.append("<mode>"+$('#mode').val()+"</mode>");
     transmission.append("<timings>continuous</timings>");
     transmission.append("<txtype><rtty></rtty></txtype>");
     var rtty = transmission.children("txtype").children("rtty");
@@ -249,7 +249,7 @@ function make_xml(root) {
     rtty.append("<stop>"+$('#stop').val()+"</stop>");
     transmission.append("<sentence></sentence>");
     var sentence = transmission.children("sentence");
-    sentence.append("<sentence_deliminator>$$</sentence_deliminator>");
+    sentence.append("<sentence_delimiter>$$</sentence_delimiter>");
     sentence.append("<string_limit>999</string_limit>");
     sentence.append("<field_delimiter>,</field_delimiter>");
     sentence.append("<fields>"+$('#sentence > div').length+"</fields>");
