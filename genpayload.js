@@ -166,27 +166,27 @@ $('#fields').droppable({
 function make_json() {
     var field_list = [];
     $('#sentence > div.sentence-field').each(function(index, element) {
-        var type = $(element).children('strong').text().toLowerCase();
+        var sensor = $(element).children('strong').text().toLowerCase();
         var name = $(element).children('input:first').val();
-        switch(type) {
+        switch(sensor) {
             case "time":
-                type = "stdtelem.time";
+                sensor = "stdtelem.time";
                 break;
             case "coordinate":
-                type = "stdtelem.coordinate";
+                sensor = "stdtelem.coordinate";
                 break;
             case "integer":
-                type = "base.ascii_int";
+                sensor = "base.ascii_int";
                 break;
             case "float":
-                type = "base.ascii_float";
+                sensor = "base.ascii_float";
                 break;
             case "string":
-                type = "base.string";
+                sensor = "base.string";
                 break;
         }
-        var field = { name: name, type: type }
-        if(type == "stdtelem.coordinate") {
+        var field = { name: name, sensor: sensor }
+        if(sensor == "stdtelem.coordinate") {
             field.format = $(element).children('input:last').val();
         }
         field_list.push(field);
