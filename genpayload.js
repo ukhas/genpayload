@@ -201,11 +201,11 @@ function make_json() {
         },
         telemetry: {
             modulation: $('#modulation').val().toLowerCase(),
-            shift: $('#shift').val(),
+            shift: parseFloat($('#shift').val()),
             encoding: $('#encoding').val().toLowerCase(),
-            baud: $('#baud').val(),
+            baud: parseFloat($('#baud').val()),
             parity: $('#parity').val().toLowerCase(),
-            stop: $('#stop').val()
+            stop: parseFloat($('#stop').val())
         },
         sentence: {
             protocol: "UKHAS",
