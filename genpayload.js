@@ -149,7 +149,7 @@ generate_sentence_field('TIME').appendTo($('#sentence'));
 generate_sentence_field('COORDINATE').appendTo($('#sentence'));
 generate_sentence_field('COORDINATE').appendTo($('#sentence'));
 generate_sentence_field('ALTITUDE').appendTo($('#sentence'));
-$('.sentence-field:eq(0)').children('input').val('count');
+$('.sentence-field:eq(0)').children('input').val('sentence_id');
 $('.sentence-field:eq(1)').children('input').val('time');
 $('.sentence-field:eq(2)').children('input:eq(0)').val('latitude');
 $('.sentence-field:eq(3)').children('input:eq(0)').val('longitude');
@@ -196,7 +196,7 @@ function make_json() {
         checksum = "crc16-ccitt";
     var payload =  {
         radio: {
-            frequency: $('#frequency').val(),
+            frequency: parseFloat($('#frequency').val()),
             mode: $('#mode').val()
         },
         telemetry: {
