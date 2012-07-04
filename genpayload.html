@@ -1,119 +1,402 @@
 <!DOCTYPE html>
-<title>PAYLOAD DOCUMENT GENERATOR</title>
+<!-- Copyright (c) 2012 Daniel Richman; GNU GPL 3 -->
 
-<!-- css -->
-<link href="http://fonts.googleapis.com/css?family=Special+Elite&amp;v1" rel="stylesheet" type="text/css">
-<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/themes/vader/jquery-ui.css" rel="stylesheet" type="text/css">
-<link href="jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css">
-<link href="genpayload.less" rel="stylesheet/less" type="text/css">
+<html>
+    <head>
+        <title>habitat genpayload</title>
 
-<div id="top-bar">
-<header>
-    <h1>PAYLOAD DOCUMENT GENERATOR</h1>
-    <div id="text">
-    <p>
-        You have found a PAYLOAD DOCUMENT GENERATOR.
-        You can use it to generate PAYLOAD DOCUMENTS in both OLD and
-        <a href="http://habitat.habhub.org/docs/database/example.html#flight-docs-json">NEW</a> formats.
-        It was written by <a href="http://adamgreig.com">ADAM GREIG</a>
-        and is <a href="https://github.com/adamgreig/genpayload">OPEN SOURCE</a>.
-    </p>
-    <p>To begin, enter a PAYLOAD NAME in the TEXT ENTRY BOX below.</p>
-    </div>
-</header>
-</div>
+        <link type="text/css" href="css/redmond/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
+        <link type="text/css" href="css/genpayload.css" rel="stylesheet" />
+        <script type="text/javascript" src="js/json2.js"></script>
+        <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="js/jquery-ui-1.8.21.custom.min.js"></script>
+        <script type="text/javascript" src="js/jquery.cookie.js"></script>
+        <script type="text/javascript" src="js/genpayload.js"></script>
+    </head>
 
-<div id="scroller">
-    <section id="payload">
-        <h2>PAYLOAD</h2>
-        <label for="name">PAYLOAD NAME&gt;</label>
-        <input type="text" size="12" id="name" tabindex="1" required autofocus><br /><br />
-        <a href="#" class="continue">CONTINUE</a> (or press TAB)
-    </section>
-    <section id="flight">
-        <h2>FLIGHT DETAILS</h2>
-        <label for="location">LAUNCH LOCATION&gt;</label>
-        <input type="text" size="16" id="location" tabindex="2"><br />
-        <label for="project">PROJECT NAME&gt;</label>
-        <input type="text" size="16" id="project" tabindex="3"><br /><br />
-        LAUNCH WINDOW:<br />
-        <label for="window-start">FROM&gt;</label>
-        <input type="text" size="12" id="window-start" tabindex="4" required><br />
-        <label for="window-end">TO&gt;</label>
-        <input type="text" size="12" id="window-end" tabindex="5" required><br />
-        <label for="launch-date">LAUNCH DATE AND TIME&gt;</label>
-        <input type="text" size="17" id="launch-date" tabindex="6" required><br />
-        <label for="timezone">TIMEZONE&gt;</label>
-        <input type="text" size="20" id="timezone" tabindex="7" required><br /><br />
-        <a href="#" class="back">BACK</a> (or press SHIFT+TAB)<br />
-        <a href="#" class="continue">CONTINUE</a> (or press TAB)
-    </section>
-    <section id="radio">
-        <h2>RADIO DETAILS</h2>
-        <label for="frequency">FREQUENCY (MEGAHERTZ)&gt;</label>
-        <input type="text" size="7" id="frequency" value="434.075" tabindex="8" required><br />
-        <label for="mode">MODE&gt;</label>
-        <input type="text" size="3" id="mode" value="USB" tabindex="9" required><br /><br />
-        <a href="#" class="back">BACK</a> (or press SHIFT+TAB)<br />
-        <a href="#" class="continue">CONTINUE</a> (or press TAB)
-    </section>
-    <section id="telemetry">
-        <h2>TELEMETRY</h2>
-        <label for="modulation">MODULATION&gt;</label>
-        <input type="text" size="5" id="modulation" value="RTTY" tabindex="10" required><br />
-        <label for="shift">SHIFT (HERTZ)&gt;</label>
-        <input type="text" size="3" id="shift" value="350" tabindex="11" required><br />
-        <label for="encoding">ENCODING&gt;</label>
-        <input type="text" size="8" id="encoding" value="ASCII-8" tabindex="12" required><br />
-        <label for="baud">BAUD&gt;</label>
-        <input type="text" size="3" id="baud" value="50" tabindex="13" required><br />
-        <label for="parity">PARITY&gt;</label>
-        <input type="text" size="4" id="parity" value="NONE" tabindex="14" required><br />
-        <label for="stop">STOP BITS&gt;</label>
-        <input type="text" size="1" id="stop" value="1" tabindex="15" required><br /><br /><br />
-        <a href="#" class="back">BACK</a> (or press SHIFT+TAB)<br />
-        <a href="#" class="continue">CONTINUE</a> (or press TAB)
-    </section>
-    <section id="dataformat">
-        <h2>DATA FORMAT</h2>
-        <label for="callsign">CALLSIGN&gt;</label>
-        <input type="text" size="12" id="callsign" tabindex="16" required><br /><br />
-        SENTENCE&gt;<br />
-        <div id="fields">
-            <div class="field" id="time">TIME</div>
-            <div class="field" id="coordinate">COORDINATE</div>
-            <div class="field" id="integer">INTEGER</div>
-            <div class="field" id="float">FLOAT</div>
-            <div class="field" id="string">STRING</div>
-            <hr>
-            <div class="field" id="latitude">LATITUDE</div>
-            <div class="field" id="longitude">LONGITUDE</div>
-            <div class="field" id="altitude">ALTITUDE</div>
-            <div class="field" id="temperature">TEMPERATURE</div>
+    <body>
+        <h1>habitat genpayload</h1>
+        <p id="subtitle">habitat flight and payload configuration document generator</p>
+
+        <div id="home">
+            <div id="blurb">
+                <p>This application should hopefully make configuring habitat to parse your payload's telemetry
+                simple, and creating flight documents painless.</p>
+
+                <p>This genpayload understands the UKHAS protocol.</p>
+
+                <a id="show_help" href="#">Show help</a>
+            </div>
+
+            <div id="help">
+                <h2>Introduction</h2>
+
+                <h3>payload configuration documents</h3>
+                <p><code>payload_configuration</code> documents have two purposes: firstly, they tell the habitat
+                parser how to treat incoming strings of telemetry: the protocol, the checksum type it uses,
+                the number of fields, and what each field means; secondly, they contain the frequency and radio
+                mode used, which allows dl-fldigi to automatically tune and configure for that payload.
+                You should not have to change the <code>payload_configuration</code> document for your payload
+                unless you reprogram it and change the format of the telemetry it sends.</p>
+
+                <p>A <code>payload_configuration</code> document contains two ordered lists, one of radio and one
+                of sentence settings applicable to that version of the payload and callsign. Note that the first
+                sentence format in the list that matches successfully is used.</p>
+
+                <h3>flight documents</h3>
+                <p><code>flight</code> documents contain a launch name, time and location, and a list of
+                <code>payload_configuration</code> documents that belong to payloads on that flight.
+                Once approved (below) a flight document appears in the habitat calendar, tracker and 
+                (after the flight window) flight archive.</p>
+
+                <h4>Launch windows</h4>
+                <p>Flight documents are only valid for an amount of time, preferably as small as possible: e.g.,
+                the 24 hours surrounding a regular flight. Parsed strings that don't belong to an active flight
+                document are treated as 'test' uploads, and will only be shown in the testing section of the
+                new tracker.</p>
+
+                <h4>Approval</h4>
+                <p>Since anyone at all can sign up and create flight documents, they must be checked before your
+                flight will appear in the main list of flights. <code>payload_configuration</code> documents
+                referenced by active approved flights are given priority when parsing (otherwise the most recent
+                version is used).</p>
+
+                <h3>See also</h3>
+                <ul>
+                    <li><a href="http://habitat.habhub.org/habitat">habitat</a></li>
+                    <li><a href="http://habhub.org">habhub</a></li>
+                </ul>
+
+                <div class="buttons" id="hide_help">
+                    <a href="#">Continue...</a>
+                    <input type="checkbox" id="help_once">
+                    <label for="help_once">Don't show this blurb next time</label>
+                </div>
+            </div>
+
+            <div id="create">
+                <h2>Create a new:</h2>
+
+                <div>
+                    <h3>payload_configuration document</h3>
+                    <div class="buttons">
+                        <a id="go_pcfg_new" href="#">From scratch</a>
+                        <a id="go_pcfg_modify" href="#">Modify existing</a>
+                    </div>
+                </div>
+
+                <div>
+                    <h3>flight document</h3>
+                    <div class="buttons">
+                        <a id="go_flight_new" href="#">From scratch</a>
+                        <a id="go_flight_modify" href="#">Modify existing</a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div id="sentence">
-            
-        </div>
-        <div class="clear"></div>
-        <label for="checksum">CHECKSUM&gt;</label>
-        <input type="text" size="8" id="checksum" value="CRC-16" tabindex="100" required><br /><br />
-        <a href="#" class="back">BACK</a> (or press SHIFT+TAB)<br />
-        <a href="#" class="continue">CONTINUE</a> (or press TAB)
-    </section>
-    <section id="documents">
-        <h2>DOCUMENTS</h2>
-        <strong>HABITAT FLIGHT DOC:</strong><br />
-        <input type="text" size="30" id="json-flight-doc" tabindex="102"><br /><br />
-        <p>The XML format is now deprecated, please submit the flight document
-        above!</p>
-        <a href="#" class="back">BACK</a> (or press SHIFT+TAB)<br />
-    </section>
-</div>
 
-<!-- javascript -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>
-<script src="jquery.blockUI.min.js"></script>
-<script src="jquery-ui-timepicker-addon.min.js"></script>
-<script src="less-1.1.3.min.js"></script>
-<script src="genpayload.js"></script>
+        <div id="browse">
+            <label for="browse_search">Search: </label><input type="text" id="browse_search" />
+
+            <div id="browse_list">
+            </div>
+
+            <div class="buttons"><a id="browse_cancel" href="#">Cancel</a></div>
+        </div>
+
+        <div id="payload_configuration">
+            <h2>payload_configuration</h2>
+
+            <hr />
+
+            <div id="pcfg_misc" class="top_labelled_form">
+                <div>
+                    <label for="pcfg_name">Payload name</label>
+                    <input type="text" id="pcfg_name" />
+                    <span class="input_extra">(need not be its callsign)</span>
+                </div>
+                <div>
+                    <label for="pcfg_version">Configuration version</label>
+                    <input type="text" id="pcfg_version" class="short_input" />
+                    <span class="input_extra">(integer)</span>
+                </div>
+                <div>
+                    <label for="pcfg_description">Configuration description</label>
+                    <input type="text" id="pcfg_description" class="long_input" />
+                    <span class="input_extra">(free form, optional)</span>
+                </div>
+            </div>
+
+            <hr />
+
+            <div>
+                <h3>transmissions</h3>
+
+                <table><tbody id="transmissions_list"></tbody></table>
+
+                <div class="buttons">
+                    <a id="transmission_new" href="#">Add</a>
+                </div>
+            </div>
+
+            <hr />
+
+            <div>
+                <h3>sentences</h3>
+
+                <table><tbody id="sentences_list"></tbody></table>
+
+                <div class="buttons">
+                    <a id="go_wizard" href="#">New format wizard</a>
+                    <a id="go_manual" href="#">Manually add a new format</a>
+                    <a id="go_import" href="#">Copy format from another doc</a>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="buttons">
+                <a id="pcfg_save" href="#">Save</a>
+                <a id="pcfg_abandon" href="#">Cancel</a>
+            </div>
+        </div>
+
+        <div id="transmission_edit">
+            <div id="transmission_misc" class="top_labelled_form">
+                <div>
+                    <label for="transmission_frequency">Frequency (MHz)</label>
+                    <input type="text" id="transmission_frequency" class="short_input" />
+                    <span class="input_extra">(MHz)</span>
+                </div>
+                <div>
+                    <label for="transmission_mode">Mode</label>
+                    <select id="transmission_mode">
+                        <option>USB</option>
+                        <option>LSB</option>
+                        <option>AM</option>
+                        <option>FM</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="transmission_modulation">Modulation</label>
+                    <select id="transmission_modulation">
+                        <option>RTTY</option>
+                        <option>DominoEX</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="transmission_rtty" class="top_labelled_form">
+                <div>
+                    <label for="transmission_shift">Shift (Hz)</label>
+                    <input type="text" id="transmission_shift" class="short_input" />
+                </div>
+                <div>
+                    <label for="transmission_encoding">Encoding</label>
+                    <select id="transmission_encoding">
+                        <option>BAUDOT</option>
+                        <option>ASCII-7</option>
+                        <option>ASCII-8</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="transmission_baud">Baud</label>
+                    <input type="text" id="transmission_baud" class="short_input" />
+                </div>
+                <div>
+                    <label for="transmission_parity">Parity</label>
+                    <select id="transmission_parity">
+                        <option>none</option>
+                        <option>odd</option>
+                        <option>even</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="transmission_stop">Stop bits</label>
+                    <select id="transmission_stop">
+                        <option>1</option>
+                        <option>1.5</option>
+                        <option>2</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="transmission_dominoex" class="top_labelled_form">
+                <div>
+                    <label for="transmission_speed">Speed</label>
+                    <select id="transmission_speed">
+                        <option>4</option>
+                        <option>5</option>
+                        <option>8</option>
+                        <option>11</option>
+                        <option>16</option>
+                        <option>22</option>
+                    </select>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="buttons">
+                <a id="transmission_confirm" href="#">Confirm</a>
+                <a id="transmission_cancel" href="#">Cancel</a>
+            </div>
+        </div>
+
+        <div id="sentence_wizard">
+            <input type="text" id="wizard_text_box" placeholder="Please paste an example typical telemetry string" />
+
+            <div class="small" id="wizard_error"></div>
+
+            <div id="wizard_success">
+                <div id="wizard_fields"></div>
+                <div class="small" id="wizard_parse_info">
+                    Parse OK; callsign: <span id="wizard_callsign"></span>,
+                    checksum: <span id="wizard_checksum_type"></span>
+                </div>
+
+                <hr />
+            </div>
+
+            <div id="wizard_form">
+                <div>
+                    <label for="wizard_field_name">Field name</label>
+                    <input type="text" id="wizard_field_name" />
+                </div>
+                <div>
+                    <label for="wizard_field_sensor">Field type</label>
+                    <select id="wizard_field_sensor">
+                        <option value="stdtelem.time">Time (HH:MM:SS)</option>
+                        <option value="stdtelem.coordinate">Coordinate (dd or ddm)</option>
+                        <option value="base.ascii_int">Integer</option>
+                        <option value="base.ascii_float">Float</option>
+                        <option value="base.string">String</option>
+                        <option value="base.constant">Constant</option>
+                    </select>
+                </div>
+                <div id="wizard_coordinate_format">
+                    <label for="wizard_coordinate_format_select">Format</label>
+                    <select id="wizard_coordinate_format_select">
+                        <option>dd.dddd</option>
+                        <option>ddmm.mmmm</option>
+                    </select>
+                </div>
+                <div id="wizard_numeric_scale_section">
+                    <input type="checkbox" id="wizard_numeric_scale" />
+                    <label for="wizard_numeric_scale">Scale or translate this value</label>
+                </div>
+                <div id="wizard_numeric_scale_opts">
+                    <div>
+                        <label for="wizard_numeric_scale_type">Type</label>
+                        <select id="wizard_numeric_scale_type">
+                            <option value="m">Multiply</option>
+                            <option value="d">Divide</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="wizard_numeric_scale_factor">Factor</label>
+                        <input type="text" id="wizard_numeric_scale_factor" class="short_input" />
+                    </div>
+                    <div>
+                        <label for="wizard_numeric_scale_offset">Offset</label>
+                        <input type="text" id="wizard_numeric_scale_offset" class="short_input" />
+                    </div>
+                    <div>
+                        <label for="wizard_numeric_scale_do_round">Round?</label>
+                        <input type="checkbox" id="wizard_numeric_scale_do_round" />
+                        <label for="wizard_numeric_scale_round">To x significant figures:</label>
+                        <input type="text" id="wizard_numeric_scale_round" />
+                    </div>
+                    <div>
+                        Example result: <span id="wizard_numeric_scale_example"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="wizard_misc">
+                <div>
+                    <label for="wizard_no_lock">When it doesn't have a lock, the payload sends</label>
+                    <select id="wizard_no_lock">
+                        <option value="other">other</option>
+                        <option value="always">this is the no-lock sentence format</option>
+                        <option value="lockfield">a certain value in a gps_lock field</option>
+                        <option value="zeroes">latitude/longitude as 0,0</option>
+                    </select>
+                    <div>
+                        <p class="small">Other: Includes sending another format, such as empty or "!!!.!!!!!" fields.
+                        You should add the 'no-lock' format as another sentence format after you have finished this one.</p>
+                    </div>
+                </div>
+
+                <div id="wizard_lockfield">
+                    <label>The following values in the <span id="wizard_lockfield_which"></span>
+                    field are ok/indicate a lock</label>
+
+                    <div id="wizard_lockfield_ok">
+                    </div>
+
+                    <div class="buttons">
+                        <a href="#" id="wizard_lockfield_add">Add</a>
+                        <a href="#" id="wizard_lockfield_remove">Remove</a>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <div id="wizard_buttons" class="buttons">
+                <a id="wizard_next" href="#">Next</a>
+                <a id="wizard_prev" href="#">Prev</a>
+                <a id="wizard_cancel" href="#">Cancel</a>
+            </div>
+        </div>
+
+        <div id="sentence_edit">
+            <!-- TODO: #sentence_edit -->
+            <div class="buttons"><a id="sentence_edit_cancel" href="#">Cancel</a></div>
+        </div>
+
+        <div id="flight">
+            <div id="dates">
+                <!-- launch window, estimated launch time -->
+            </div>
+
+            <div id="launch_location">
+                <div>
+                    <label for="launch_latitude">Launch latitude (decimal degrees)</label>
+                    <input type="text" id="launch_latitude" />
+                </div>
+                <div>
+                    <label for="launch_longitude">Launch longitude (decimal degrees)</label>
+                    <input type="text" id="launch_longitude" />
+                </div>
+                <div>
+                    <label for="launch_location_name">Launch location name</label>
+                    <input type="text" id="launch_location_name" />
+                </div>
+            </div>
+
+            <div id="metadata">
+                <div>
+                    <label for="flight_project">Project name</label>
+                    <input type="text" id="flight_project" />
+                </div>
+                <div>
+                    <label for="flight_group">Group/team name</label>
+                    <input type="text" id="flight_group" />
+                </div>
+            </div>
+
+            <div id="flight_pcfgs">
+                <div id="flight_pcfgs_list">
+                    <!-- name/description, <a href="#">Edit</a> <a href="#">Delete</a> -->
+                </div>
+            </div>
+
+            <div class="buttons">
+                <a id="flight_save" href="#">Save</a>
+                <a id="flight_abandon" href="#">Abandon</a>
+            </div>
+        </div>
+    </body>
+</html>
