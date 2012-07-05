@@ -77,7 +77,7 @@ hexify = (num, len) ->
 
 # Sanity check and then split a UKHAS string into fields.
 parse_ukhas_string = (s) ->
-    s = s.trim()
+    s = $.trim s
 
     if (s.indexOf "$$") is -1
         s = "$$" + s
@@ -601,6 +601,9 @@ wizard_setup_nolock_form = ->
             $("#wizard_lockfield_remove").button("disable")
 
 $ ->
+    $("#wizard_text_box").keydown (e) ->
+        if e.which is 13 and wizard_stage is "paste"
+            wizard_guess()
     $("#wizard_retry").click -> sentence_wizard false, wizard_callback # restart with same cb
     $("#wizard_cancel").click -> wizard_callback false
     $("#wizard_next").click ->
