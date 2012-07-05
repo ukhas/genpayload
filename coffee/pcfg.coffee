@@ -61,10 +61,14 @@ transmissions_list_item = (t) ->
 
     row = $("<tr />")
     row.append $("<td />").text description
-    row.append $("<td />").append $("<a href='#'>Edit</a>").button().click ->
+
+    buttons = $("<td />")
+    buttons.append $("<a href='#'>Edit</a>").button().click ->
         transmission_maybe_edit row.index()
-    row.append $("<td />").append $("<a href='#'>Delete</a>").button().click ->
+    buttons.append $("<a href='#'>Delete</a>").button().click ->
         transmission_delete row.index()
+    buttons.buttonset()
+    row.append buttons
 
     return row
 
@@ -129,10 +133,13 @@ sentences_list_item = (s) ->
 
     row.append e
 
-    row.append $("<td />").append $("<a href='#'>Edit</a>").button().click ->
+    buttons = $("<td />")
+    buttons.append $("<a href='#'>Edit</a>").button().click ->
         sentence_maybe_edit row.index()
-    row.append $("<td />").append $("<a href='#'>Delete</a>").button().click ->
+    buttons.append $("<a href='#'>Delete</a>").button().click ->
         sentence_delete row.index()
+    buttons.buttonset()
+    row.append buttons
 
     return row
 
