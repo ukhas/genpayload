@@ -17,6 +17,8 @@ suggest_data_ok = [
     "satellites"
 ]
 
+suggest_data_ok.sort()
+
 suggest_data_correct = {
     "ascent_rate": "ascentrate",
     "bearing": "heading",
@@ -41,16 +43,20 @@ suggest_data_correct = {
 }
 
 suggest_field_names = (what) ->
+    if what is ""
+        return suggest_data_ok
+
     results = []
 
     # Try a few correction strategies
     c_a = what.replace /\ /g, '_'
+    c_a = c_a.replace /^_+/, ''
     c_b = c_a.toLowerCase()
     c_c = suggest_data_correct[c_b] or c_b
 
-    if c_c != c_b then results.push c_c
-    if c_b != c_a then results.push c_b
-    if c_a != what then results.push c_a
+    if c_c != c_b and c_c.length then results.push c_c
+    if c_b != c_a and c_b.length then results.push c_b
+    if c_a != what and c_a.length then results.push c_a
 
     # Otherwise just suggest
     results.push f for f in suggest_data_ok when f != c_c and (f.indexOf c_c) != -1

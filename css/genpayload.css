@@ -24,8 +24,9 @@ h2 { margin-top: 0; }
 hr { height: 3px; width: 99%; background-color: #aaf; border: 0; margin: 10px; }
 #payload_configuration h2, #payload_configuration h3 { margin-top: 0; margin-bottom: 0; }
 
-div.top_labelled_form > div { margin-top: 15px; }
-div.top_labelled_form > div:first-child { margin-top: 0; }
+.separate_children > div, div.top_labelled_form > div { margin-top: 15px; }
+.separate_children > div:first-child, div.top_labelled_form > div:first-child { margin-top: 0; }
+
 div.top_labelled_form label { display: block; }
 div.top_labelled_form input, div.top_labelled_form select { display: block; margin-left: 10px; }
 div.top_labelled_form span.input_extra { display: block; font-size: 0.8em; margin-left: 10px; }
@@ -54,9 +55,6 @@ input[type=text].long_input { width: 500px; }
 #create > div > h3 { display: inline-block; width: 330px; margin: 0; }
 #create > div > .buttons { display: inline-block }
 
-#transmission_edit > div { margin-top: 15px; }
-#transmission_edit > div:first-child { margin-top: 0; }
-
 .telemetry_string { font-family: monospace; }
 
 #wizard_text_box, #wizard_fields
@@ -75,3 +73,10 @@ input[type=text].long_input { width: 500px; }
 #wizard_parse_info { margin-left: 10px; }
 
 #wizard_error { color: red; margin-left: 10px; }
+
+#wizard_numeric_scale_section, #wizard_numeric_scale_opts { margin-top: 15px; }
+#wizard_numeric_scale_example_container { margin-top: 5px; }
+
+#wizard_lockfield > label { display: block; }
+#wizard_lockfield_ok, #wizard_lockfield > .buttons { display: inline-block; margin-left: 10px; }
+#wizard_lockfield_ok input { vertical-align: middle; }

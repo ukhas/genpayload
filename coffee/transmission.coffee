@@ -1,14 +1,12 @@
 # Copyright (c) 2012 Daniel Richman; GNU GPL 3
 
 # State
-transmission = null
 transmission_callback = null
 
 # Main start point for transmission editor. #transmission_edit should be visible.
 # t: an transmission dict to modify.
 # callback: called when finished, with the new `t` as a single argument, or false if the user cancelled
 transmission_edit = (t, callback) ->
-    transmission = t
     transmission_callback = callback
 
     $("#transmission_frequency").val  t.frequency / 1e6
@@ -30,24 +28,37 @@ transmission_edit = (t, callback) ->
 
 # Validate the form, then pass it back to the callback
 transmission_confirm = ->
-    b = switch transmission.modulation
-        when "RTTY" then "#transmission_rtty"
-        when "DominoEX" then "#transmission_dominoex"
+    ok = true
+    transmission = {}
 
-    if $("#transmission_misc .invalid, #{b} .invalid").length
+    # keys here are numeric or select.
+    get = (key, numeric=false) ->
+        v = $("#transmission_#{key}").val()
+        if numeric
+            transmission[key] = strict_numeric transmission[key]
+            if (isNaN v) or v <= 0
+                ok = false
+        transmission[key] = v
+
+    get "frequency", true
+    transmission.frequency *= 1e6
+    get "modulation"
+    get "mode"
+
+    keys = switch transmission.modulation
+        when "RTTY"
+            strs: ["encoding", "parity"]
+            nums: ["stop", "shift", "baud"]
+        when "DominoEX"
+            strs: []
+            nums: ["speed"]
+
+    get key for key in keys.strs
+    get key, true for key in keys.nums
+
+    if not ok
         alert "There are errors in the form. Please fix them"
         return
-
-    # Prune unwanted keys from the transmission dict
-    kill_list = 
-        RTTY: ["shift", "encoding", "baud", "parity", "stop"]
-        DominoEX: ["speed"]
-
-    for m, l of kill_list
-        if transmission.modulation is m
-            continue
-        for k in l
-            delete transmission[k]
 
     transmission_callback transmission
 
@@ -58,32 +69,18 @@ transmission_cancel = -> transmission_callback false
 setup_transmission_form = ->
     # Positive integer fields
     for f in ["frequency", "shift", "baud"]
-        do (f) ->
-            fe = $("#transmission_#{f}")
-            fe.change ->
-                v = strict_numeric fe.val()
-                if isNaN(v) or v <= 0
-                    fe.addClass("invalid")
-                else
-                    fe.removeClass("invalid")
-                    if f is "frequency"
-                        v *= 1e6
-                    transmission[f] = v
+        form_field "#transmission_#{f}",
+            numeric: true
+            positive: true
 
     $("#transmission_modulation").change ->
-        transmission.modulation = $("#transmission_modulation").val()
-        show = switch transmission.modulation
+        v = $("#transmission_modulation").val()
+        show = switch v
             when "RTTY" then "#transmission_rtty"
             when "DominoEX" then "#transmission_dominoex"
 
         $("#transmission_edit > div").not("#transmission_misc, .buttons").not(show).hide()
         $(show).show()
-
-    # Simple <select> fields
-    for f in ["mode", "encoding", "parity", "stop", "speed"]
-        do (f) ->
-            fe = $("#transmission_#{f}")
-            fe.change -> transmission[f] = fe.val()
 
 $ ->
     setup_transmission_form()

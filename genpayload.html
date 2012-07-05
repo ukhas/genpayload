@@ -161,7 +161,7 @@
             </div>
         </div>
 
-        <div id="transmission_edit">
+        <div id="transmission_edit" class="separate_children">
             <div id="transmission_misc" class="top_labelled_form">
                 <div>
                     <label for="transmission_frequency">Frequency (MHz)</label>
@@ -259,73 +259,87 @@
             </div>
 
             <div id="wizard_form">
-                <div>
-                    <label for="wizard_field_name">Field name</label>
-                    <input type="text" id="wizard_field_name" />
-                </div>
-                <div>
-                    <label for="wizard_field_sensor">Field type</label>
-                    <select id="wizard_field_sensor">
-                        <option value="stdtelem.time">Time (HH:MM:SS)</option>
-                        <option value="stdtelem.coordinate">Coordinate (dd or ddm)</option>
-                        <option value="base.ascii_int">Integer</option>
-                        <option value="base.ascii_float">Float</option>
-                        <option value="base.string">String</option>
-                        <option value="base.constant">Constant</option>
-                    </select>
-                </div>
-                <div id="wizard_coordinate_format">
-                    <label for="wizard_coordinate_format_select">Format</label>
-                    <select id="wizard_coordinate_format_select">
-                        <option>dd.dddd</option>
-                        <option>ddmm.mmmm</option>
-                    </select>
-                </div>
-                <div id="wizard_numeric_scale_section">
-                    <input type="checkbox" id="wizard_numeric_scale" />
-                    <label for="wizard_numeric_scale">Scale or translate this value</label>
-                </div>
-                <div id="wizard_numeric_scale_opts">
+                <div class="top_labelled_form">
                     <div>
-                        <label for="wizard_numeric_scale_type">Type</label>
-                        <select id="wizard_numeric_scale_type">
-                            <option value="m">Multiply</option>
-                            <option value="d">Divide</option>
+                        <label for="wizard_field_name">Field name</label>
+                        <input type="text" id="wizard_field_name" />
+                    </div>
+                    <div>
+                        <label for="wizard_field_sensor">Field type</label>
+                        <select id="wizard_field_sensor">
+                            <option value="stdtelem.time">Time (HH:MM:SS)</option>
+                            <option value="stdtelem.coordinate">Coordinate (dd or ddm)</option>
+                            <option value="base.ascii_int">Integer</option>
+                            <option value="base.ascii_float">Float</option>
+                            <option value="base.string">String</option>
+                            <option value="base.constant">Constant</option>
                         </select>
                     </div>
-                    <div>
-                        <label for="wizard_numeric_scale_factor">Factor</label>
-                        <input type="text" id="wizard_numeric_scale_factor" class="short_input" />
+                    <div id="wizard_coordinate_format">
+                        <label for="wizard_coordinate_format_select">Format</label>
+                        <select id="wizard_coordinate_format_select">
+                            <option>dd.dddd</option>
+                            <option>ddmm.mmmm</option>
+                        </select>
                     </div>
+                </div>
+                <div id="wizard_numeric_scale_section">
                     <div>
-                        <label for="wizard_numeric_scale_offset">Offset</label>
-                        <input type="text" id="wizard_numeric_scale_offset" class="short_input" />
+                        <input type="checkbox" id="wizard_numeric_scale" />
+                        <label for="wizard_numeric_scale">Scale or translate this value</label>
                     </div>
-                    <div>
-                        <label for="wizard_numeric_scale_do_round">Round?</label>
-                        <input type="checkbox" id="wizard_numeric_scale_do_round" />
-                        <label for="wizard_numeric_scale_round">To x significant figures:</label>
-                        <input type="text" id="wizard_numeric_scale_round" />
-                    </div>
-                    <div>
-                        Example result: <span id="wizard_numeric_scale_example"></span>
+                    <div id="wizard_numeric_scale_opts">
+                        <div>
+                            <select id="wizard_numeric_scale_type">
+                                <option value="m">Multiply</option>
+                                <option value="d">Divide</option>
+                            </select>
+                            <label for="wizard_numeric_scale_factor">by</label>
+                            <input type="text" id="wizard_numeric_scale_factor" class="short_input" />
+                        </div>
+                        <div>
+                            <label for="wizard_numeric_scale_offset">Offset:</label>
+                            <input type="text" id="wizard_numeric_scale_offset" class="short_input" />
+                        </div>
+                        <div>
+                            <label for="wizard_numeric_scale_do_round">Round?</label>
+                            <input type="checkbox" id="wizard_numeric_scale_do_round" />
+
+                            <span id="wizard_numeric_scale_round_opts">
+                                To <input type="text" id="wizard_numeric_scale_round" class="short_input" />
+                                <label for="wizard_numeric_scale_round">significant figures.</label>
+                            </span>
+                        </div>
+                        <div id="wizard_numeric_scale_example_container">
+                            Example result: <span id="wizard_numeric_scale_example"></span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div id="wizard_misc">
+            <div id="wizard_misc" class="separate_children">
                 <div>
                     <label for="wizard_no_lock">When it doesn't have a lock, the payload sends</label>
                     <select id="wizard_no_lock">
                         <option value="other">other</option>
-                        <option value="always">this is the no-lock sentence format</option>
-                        <option value="lockfield">a certain value in a gps_lock field</option>
+                        <option value="always">this format</option>
+                        <option value="lockfield">a certain value in a gps lock field</option>
                         <option value="zeroes">latitude/longitude as 0,0</option>
                     </select>
-                    <div>
-                        <p class="small">Other: Includes sending another format, such as empty or "!!!.!!!!!" fields.
-                        You should add the 'no-lock' format as another sentence format after you have finished this one.</p>
-                    </div>
+                </div>
+
+                <div id="wizard_nolock_othernotice">
+                    <p class="small">Other: Includes sending another format, such as empty or "!!!.!!!!!" fields.
+                    You should add the 'no-lock' format as another sentence format after you have finished this one.</p>
+                </div>
+
+                <div id="wizard_nolock_alwaysnotice">
+                    <p class="small">Any latitude longitude or altitude, if present, will be marked invalid.
+                    Other parsed data, like temperature, can still be used and plotted.</p>
+                </div>
+
+                <div id="wizard_select_lockfield">
+                    <p>Please click on the field to test above</p>
                 </div>
 
                 <div id="wizard_lockfield">

@@ -26,7 +26,14 @@ pcfg_edit = (doc, callback) ->
 
 # Save the doc, and then callback to close #payload_configuration
 pcfg_save = ->
-    if $("#payload_configuration .invalid").length
+    pcfg_doc.name = $("#pcfg_name").val()
+    pcfg_doc.version = strict_numeric $("#pcfg_version").val()
+    pcfg_doc.description = $("#pcfg_description").val()
+
+    if pcfg_doc.description == ""
+        delete pcfg_doc.description
+
+    if pcfg_doc.name == "" or isNaN(pcfg_doc.version) or pcfg_doc.version <= 0
         alert "There are errors in the form: the server would reject this"
     else
         # TODO pcfg save
@@ -38,7 +45,7 @@ pcfg_save = ->
             # ignore
         pcfg_callback_func "TODO_document_id"
 
-# Create a <li> that describes the transmission dict, t, and give it Edit/Delete links.
+# Create a <tr> that describes the transmission dict, t, and give it Edit/Delete links.
 transmissions_list_item = (t) ->
     description = "#{t.frequency / 1e6}MHz #{t.mode} #{t.modulation}"
 
@@ -157,14 +164,14 @@ transmission_maybe_edit = (index) ->
         toplevel "#payload_configuration"
         if et
             pcfg_doc.transmissions[index] = et
-            li = $("#transmissions_list").children()[index]
-            $(li).replaceWith transmissions_list_item et
+            tr = $("#transmissions_list").children()[index]
+            $(tr).replaceWith transmissions_list_item et
 
 # Remove a transmission
 transmission_delete = (index) ->
     pcfg_doc.transmissions.pop index
-    li = $("#transmissions_list").children()[index]
-    $(li).remove()
+    tr = $("#transmissions_list").children()[index]
+    $(tr).remove()
 
 # Create a new sentence using either some defaults or the provided doc
 # Push it onto the end of sentences and then start the editor specified by 'method'
@@ -200,40 +207,23 @@ sentence_maybe_edit = (index) ->
         toplevel "#payload_configuration"
         if es
             pcfg_doc.sentences[index] = es
-            li = $("#sentences_list").children()[index]
-            $(li).replaceWith sentences_list_item es
+            tr = $("#sentences_list").children()[index]
+            $(tr).replaceWith sentences_list_item es
 
 # Delete a sentence
 sentence_delete = (index) ->
     pcfg_doc.sentences.pop index
-    li = $("#sentences_list").children()[index]
-    $(li).remove()
+    tr = $("#sentences_list").children()[index]
+    $(tr).remove()
 
 # Add callbacks for the #pcfg_misc form
 setup_pcfg_form = ->
-    $("#pcfg_name").change ->
-        v = $("#pcfg_name").val()
-        if v
-            pcfg_doc.name = v
-            $("#pcfg_name").removeClass("invalid")
-        else
-            $("#pcfg_name").addClass("invalid")
-
-    $("#pcfg_version").change ->
-        v = strict_numeric $("#pcfg_version").val()
-        if isNaN(v) or v <= 0
-            $("#pcfg_version").addClass("invalid")
-        else
-            $("#pcfg_version").removeClass("invalid")
-            pcfg_doc.version = v
-
-    # this key is optional.
-    $("#pcfg_description").change ->
-        v = $("#pcfg_description").val()
-        if v
-            pcfg_doc.description = v
-        else
-            delete pcfg_doc.description
+    form_field "#pcfg_name",
+        nonempty: true
+    form_field "#pcfg_version",
+        numeric: true
+        positive: true
+    # #pcfg_description is optional.
 
 # Use jQuery UI's sortable, with callbacks to update the doc as items are reordered
 setup_sortable_lists = ->
