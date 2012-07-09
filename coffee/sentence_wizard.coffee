@@ -214,8 +214,7 @@ wizard_guess = ->
 
     wizard_fields = []
 
-    for i in [0...p.fields.length]
-        v = p.fields[i]
+    for v, i in p.fields
         f = guess_field_type v, i
         wizard_sentence.fields.push f
 
