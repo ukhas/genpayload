@@ -266,14 +266,7 @@
                     </div>
                     <div>
                         <label for="wizard_field_sensor">Field type</label>
-                        <select id="wizard_field_sensor">
-                            <option value="stdtelem.time">Time (HH:MM:SS)</option>
-                            <option value="stdtelem.coordinate">Coordinate (dd or ddm)</option>
-                            <option value="base.ascii_int">Integer</option>
-                            <option value="base.ascii_float">Float</option>
-                            <option value="base.string">String</option>
-                            <option value="base.constant">Constant</option>
-                        </select>
+                        <select id="wizard_field_sensor"></select>
                     </div>
                     <div id="wizard_coordinate_format">
                         <label for="wizard_coordinate_format_select">Format</label>
@@ -366,11 +359,53 @@
         </div>
 
         <div id="sentence_edit">
-            <!-- TODO: #sentence_edit -->
-            <div class="buttons"><a id="sentence_edit_cancel" href="#">Cancel</a></div>
+            <div id="sentence_misc" class="top_labelled_form">
+                <div>
+                    <label for="sentence_protocol">Protocol</label>
+                    <input type="text" id="sentence_protocol" value="UKHAS" disabled="disabled" />
+                </div>
+                <div>
+                    <label for="sentence_callsign">Callsign</label>
+                    <input type="text" id="sentence_callsign" />
+                </div>
+                <div>
+                    <label for="sentence_checksum">Checksum type</label>
+                    <select id="sentence_checksum" />
+                        <option>crc16-ccitt</option>
+                        <option>xor</option>
+                        <option>fletcher-16</option>
+                        <option>fletcher-16-256</option>
+                    </select>
+                </div>
+            </div>
+
+            <hr />
+
+            <div>
+                <h3>fields</h3>
+
+                <div id="sentence_fields"></div>
+            </div>
+
+            <hr />
+
+            <div>
+                <h3>filters</h3>
+
+                <div id="sentence_filters"></div>
+            </div>
+
+            <hr />
+
+            <div class="buttons">
+                <a id="sentence_edit_save" href="#">Save</a>
+                <a id="sentence_edit_cancel" href="#">Cancel</a>
+            </div>
         </div>
 
         <div id="flight">
+            <h2>flight</h2>
+
             <div id="dates">
                 <!-- launch window, estimated launch time -->
             </div>

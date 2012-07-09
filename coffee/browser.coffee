@@ -10,11 +10,12 @@ browse = (type, callback) ->
     browse_callback = callback
 
     # TODO browse
+    # TODO on load, set version to max(docs with that name) + 1
 
     $("#browse_list").empty()
 
     if type is "payload_configuration"
-        e = $("<a href='#' />").text("use local test doc").click -> callback deepcopy test_doc
+        e = $("<a href='#' />").text("use local test doc").click -> browse_callback deepcopy test_doc
         $("#browse_list").append e
 
 $ ->
@@ -79,6 +80,40 @@ test_doc =
             "sensor": "base.ascii_int"
           ,
             "name": "aprs_attempts"
+            "sensor": "base.ascii_int"
+        ]
+    ,
+        "protocol": "UKHAS",
+        "checksum": "xor",
+        "callsign": "A1",
+        "fields": [
+            "name": "sentence_id"
+            "sensor": "base.ascii_int"
+          ,
+            "sensor": "stdtelem.time"
+            "name": "time"
+          ,
+            "sensor": "stdtelem.coordinate"
+            "format": "dd.dddd"
+            "name": "latitude"
+          ,
+            "sensor": "stdtelem.coordinate"
+            "format": "dd.dddd"
+            "name": "longitude"
+          ,
+            "sensor": "base.ascii_int"
+            "name": "altitude"
+          ,
+            "name": "fix_age"
+            "sensor": "base.string"
+          ,
+            "name": "satellites"
+            "sensor": "base.ascii_int"
+          ,
+            "name": "temperature"
+            "sensor": "base.string"
+          ,
+            "name": "status"
             "sensor": "base.ascii_int"
         ]
     ]

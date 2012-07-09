@@ -369,7 +369,7 @@ wizard_try_finish = ->
         wizard_nolock_start()
     else
         wizard_stage = null
-        return wizard_callback wizard_sentence
+        wizard_callback wizard_sentence
 
 # Tidy up wizard_sentence:
 #  - Create numeric_scale filters, removing numeric_scale objects from fields
@@ -504,21 +504,13 @@ wizard_nolock_done = ->
                 type: "normal"
 
     wizard_stage = null
-    return wizard_callback wizard_sentence
+    wizard_callback wizard_sentence
 
 # Attach callbacks to the #wizard_form elements
 wizard_setup_form = ->
-    form_field "#wizard_field_name",
-        nonempty: true,
-        extra: (v) -> v[0] != "_"
-
-    $("#wizard_field_name").autocomplete
-        source: (w, cb) -> cb suggest_field_names w.term
-        select: (e, ui) -> if ui.item then set_valid "#wizard_field_name", true
-        minLength: 0
-
-    # Encourage the autocomplete box to open more often
-    $("#wizard_field_name").click -> $("#wizard_field_name").autocomplete "search"
+    field_name_input $("#wizard_field_name")
+    sensor_select $("#wizard_field_sensor")
+    sensor_format_select $("#wizard_coordinate_format_select")
 
     $("#wizard_field_sensor").change ->
         v = $("#wizard_field_sensor").val()
@@ -600,6 +592,7 @@ wizard_setup_nolock_form = ->
         if $("#wizard_lockfield_ok").children().length == 0
             $("#wizard_lockfield_remove").button("disable")
 
+# Setup callbacks on page load
 $ ->
     $("#wizard_text_box").keydown (e) ->
         if e.which is 13 and wizard_stage is "paste"

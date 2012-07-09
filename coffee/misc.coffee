@@ -71,8 +71,49 @@ set_valid = (elem, valid) ->
     else
         $(elem).addClass "invalid"
 
+# Setup an input as a field name input with autocompletion & validation
+field_name_input = (elem) ->
+    form_field elem,
+        nonempty: true,
+        extra: (v) -> v[0] != "_"
+
+    elem.autocomplete
+        source: (w, cb) -> cb suggest_field_names w.term
+        select: (e, ui) -> if ui.item then set_valid elem, true
+        minLength: 0
+
+    # Encourage the autocomplete box to open more often
+    elem.click -> elem.autocomplete "search"
+
+sensor_list =
+    "stdtelem.time": "Time"
+    "stdtelem.coordinate": "Coordinate"
+    "base.ascii_int": "Integer"
+    "base.ascii_float": "Float"
+    "base.string": "String"
+    "base.constant": "Constant"
+
+# populate a <select /> with sensor types
+sensor_select = (s) ->
+    for sensor, prettyname of sensor_list
+        o = $("<option />")
+        o.attr "value", sensor
+        o.text prettyname
+        s.append o
+    return s
+
+# populate a <select /> with format types
+sensor_format_select = (s) ->
+    for t in ["dd.dddd", "ddmm.mmmm"]
+        s.append $("<option />").val(t).text(t)
+
+# parse a sensor format and ensure it is either dd.dddd or ddmm.mmmm
+parse_sensor_format = (f) ->
+    if /^d+\.d+$/.test f then "dd.dddd"
+    else if /^d+m+\.m+$/.test f then "ddmm.mmmm"
+    else null
+
 # Turn all div.button > a into jquery button sets
 $ ->
-    $(".buttons > a").button()
     $("#help_once").button()
     $(".buttons").buttonset()

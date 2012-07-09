@@ -24,6 +24,9 @@ pcfg_edit = (doc, callback) ->
     for s in doc.sentences
         $("#sentences_list").append sentences_list_item s
 
+    $("#transmissions_list").sortable "refresh"
+    $("#sentences_list").sortable "refresh"
+
 # Save the doc, and then callback to close #payload_configuration
 pcfg_save = ->
     pcfg_doc.name = $("#pcfg_name").val()
@@ -62,9 +65,10 @@ transmissions_list_item = (t) ->
     row = $("<tr />")
     row.append $("<td />").text description
 
-    buttons = $("<td />")
+    buttons = $("<td class='sortable_hide' />")
     buttons.append $("<a href='#'>Edit</a>").button().click ->
         transmission_maybe_edit row.index()
+    buttons.append ' '
     buttons.append $("<a href='#'>Delete</a>").button().click ->
         transmission_delete row.index()
     buttons.buttonset()
@@ -133,9 +137,10 @@ sentences_list_item = (s) ->
 
     row.append e
 
-    buttons = $("<td />")
+    buttons = $("<td class='sortable_hide' />")
     buttons.append $("<a href='#'>Edit</a>").button().click ->
         sentence_maybe_edit row.index()
+    buttons.append ' '
     buttons.append $("<a href='#'>Delete</a>").button().click ->
         sentence_delete row.index()
     buttons.buttonset()
@@ -162,6 +167,7 @@ transmission_new = ->
         if t
             pcfg_doc.transmissions.push t
             $("#transmissions_list").append transmissions_list_item t
+            $("#transmissions_list").sortable "refresh"
 
 # Start the transmission editor, and rollback the result if its callback reports cancellation.
 transmission_maybe_edit = (index) ->
@@ -173,12 +179,14 @@ transmission_maybe_edit = (index) ->
             pcfg_doc.transmissions[index] = et
             tr = $("#transmissions_list").children()[index]
             $(tr).replaceWith transmissions_list_item et
+            $("#transmissions_list").sortable "refresh"
 
 # Remove a transmission
 transmission_delete = (index) ->
     pcfg_doc.transmissions.pop index
     tr = $("#transmissions_list").children()[index]
     $(tr).remove()
+    $("#transmissions_list").sortable "refresh"
 
 # Create a new sentence using either some defaults or the provided doc
 # Push it onto the end of sentences and then start the editor specified by 'method'
@@ -187,7 +195,11 @@ sentence_manual = (show, method, s=null) ->
         s =
             protocol: "UKHAS"
             callsign: ""
-            fields: []
+            fields: [{name: "sentence_id", sensor: "base.ascii_int"},
+                     {name: "time", sensor: "stdtelem.time"},
+                     {name: "latitude", sensor: "stdtelem.coordinate", format: "dd.dddd"},
+                     {name: "longitude", sensor: "stdtelem.coordinate", format: "dd.dddd"},
+                     {name: "altitude", sensor: "base.ascii_int"}]
 
     toplevel show
     method (deepcopy s), (es) ->
@@ -195,6 +207,7 @@ sentence_manual = (show, method, s=null) ->
         if es
             pcfg_doc.sentences.push es
             $("#sentences_list").append sentences_list_item es
+            $("#sentences_list").sortable "refresh"
 
 # Start the browser, looking for sentences. If one is selected, pass it to
 # sentence_manual which will push it onto sentences it and start the editor.
@@ -216,12 +229,14 @@ sentence_maybe_edit = (index) ->
             pcfg_doc.sentences[index] = es
             tr = $("#sentences_list").children()[index]
             $(tr).replaceWith sentences_list_item es
+            $("#sentences_list").sortable "refresh"
 
 # Delete a sentence
 sentence_delete = (index) ->
     pcfg_doc.sentences.pop index
     tr = $("#sentences_list").children()[index]
     $(tr).remove()
+    $("#sentences_list").sortable "refresh"
 
 # Add callbacks for the #pcfg_misc form
 setup_pcfg_form = ->
@@ -240,14 +255,18 @@ setup_sortable_lists = ->
     $("#transmissions_list").sortable
         start: (event, ui) ->
             transmissions_pickup = ui.item.index()
+            $("#transmissions_list .sortable_hide").css('visibility', 'hidden')
         stop: (event, ui) ->
             array_reorder pcfg_doc.transmissions, transmissions_pickup, ui.item.index()
+            $("#transmissions_list .sortable_hide").css('visibility', 'visible')
 
     $("#sentences_list").sortable
         start: (event, ui) ->
             sentences_pickup = ui.item.index()
+            $("#sentences_list .sortable_hide").css('visibility', 'hidden')
         stop: (event, ui) ->
             array_reorder pcfg_doc.sentences, sentences_pickup, ui.item.index()
+            $("#sentences_list .sortable_hide").css('visibility', 'visible')
 
     $("#transmissions_list, #sentences_list").disableSelection()
 

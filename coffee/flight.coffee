@@ -13,5 +13,4 @@ flight_edit = (doc, callback) ->
 
     # TODO flight_edit
     alert "Not yet implemeted: flight edit"
-    callback false
-
+    flight_callback false

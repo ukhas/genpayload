@@ -1,4 +1,4 @@
-# TODO: Replace this with some couch querying?
+# Copyright (c) 2012 Daniel Richman; GNU GPL 3
 
 suggest_data_ok = [
     "altitude",
@@ -22,6 +22,7 @@ suggest_data_ok.sort()
 suggest_data_correct = {
     "ascent_rate": "ascentrate",
     "bearing": "heading",
+    "direction": "heading",
     "current_battery": "battery",
     "custom_data": "custom",
     "extra_data": "custom",

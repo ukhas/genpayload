@@ -1,6 +1,9 @@
 body { font-family: sans-serif; }
+hr { height: 3px; width: 99%; background-color: #aaf; border: 0; margin: 10px; }
+
+h1, h2, h3, h4 { margin-top: 0; margin-bottom: 0; }
+#help h2, #create h2 { margin-bottom: 15px; }
 h1, #subtitle { text-align: center; }
-h1 { margin-bottom: 0; }
 #subtitle { margin-top: 0; }
 
 body > div, #home > div
@@ -15,14 +18,7 @@ body > div, #home > div
 }
 
 #home { border: 0; padding: 0; margin: 0; }
-
-h2 { margin-top: 0; }
 #blurb p { margin-top: 2px; margin-bottom: 2px; }
-
-#payload_configuration > div { margin-top: 5px; }
-
-hr { height: 3px; width: 99%; background-color: #aaf; border: 0; margin: 10px; }
-#payload_configuration h2, #payload_configuration h3 { margin-top: 0; margin-bottom: 0; }
 
 .separate_children > div, div.top_labelled_form > div { margin-top: 15px; }
 .separate_children > div:first-child, div.top_labelled_form > div:first-child { margin-top: 0; }
@@ -43,16 +39,16 @@ input[type=text], select, #wizard_fields
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     -khtml-border-radius: 3px;
-    margin-left: 0px;
     padding: 1px 2px;
 }
 
 input[type=text].invalid, select.invalid { border-color: orange; }
 
+input[type=text] { width: 200px; }
 input[type=text].short_input { width: 100px; }
 input[type=text].long_input { width: 500px; }
 
-#create > div > h3 { display: inline-block; width: 330px; margin: 0; }
+#create > div > h3 { display: inline-block; width: 330px; }
 #create > div > .buttons { display: inline-block }
 
 .telemetry_string { font-family: monospace; }
@@ -80,3 +76,8 @@ input[type=text].long_input { width: 500px; }
 #wizard_lockfield > label { display: block; }
 #wizard_lockfield_ok, #wizard_lockfield > .buttons { display: inline-block; margin-left: 10px; }
 #wizard_lockfield_ok input { vertical-align: middle; }
+
+#sentence_fields, #sentence_filters { margin-left: 10px; }
+.sentence_sort_icon { display: inline-block !important; position: relative; top: 2px; }
+#sentence_fields > div { margin: 2px 0; }
+#sentence_fields input, #sentence_fields select { margin: 0 2px; }
