@@ -37,26 +37,27 @@ transmission_confirm = ->
         if numeric
             transmission[key] = strict_numeric transmission[key]
             if (isNaN v) or v <= 0
-                ok = false
+                throw "get error"
         transmission[key] = v
 
-    get "frequency", true
-    transmission.frequency *= 1e6
-    get "modulation"
-    get "mode"
+    try
+        get "frequency", true
+        transmission.frequency *= 1e6
+        get "modulation"
+        get "mode"
 
-    keys = switch transmission.modulation
-        when "RTTY"
-            strs: ["encoding", "parity"]
-            nums: ["stop", "shift", "baud"]
-        when "DominoEX"
-            strs: []
-            nums: ["speed"]
+        keys = switch transmission.modulation
+            when "RTTY"
+                strs: ["encoding", "parity"]
+                nums: ["stop", "shift", "baud"]
+            when "DominoEX"
+                strs: []
+                nums: ["speed"]
 
-    get key for key in keys.strs
-    get key, true for key in keys.nums
+        get key for key in keys.strs
+        get key, true for key in keys.nums
 
-    if not ok
+    catch e
         alert "There are errors in the form. Please fix them"
         return
 

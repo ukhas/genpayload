@@ -1,4 +1,9 @@
-sentence_edit
+sentence_edit: collect data, filters
+
+stop modifying stuff when the ui events fire and instead collect afterwards:
+e.g., pcfg sortable sentences list: why not just use $(blah).data to attach sentence dicts to each li
+then collect at end.
+
 flight_edit
 database access
 fx
