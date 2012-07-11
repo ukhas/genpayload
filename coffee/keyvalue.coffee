@@ -62,7 +62,7 @@ class KeyValueEdit
         if key == ""
             return true
         else if @nice_keys
-            return /^[a-z_0-9]+$/.test key
+            return nice_key_regexp.test key
         else
             return true
 

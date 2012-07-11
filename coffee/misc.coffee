@@ -7,6 +7,10 @@
 # be called once the new section is finished: success or user cancel.
 # This callback should hide and re-show the original or next section as appropriate.
 
+nice_key_regexp = /^[a-z_0-9]+$/
+callsign_regexp = /^[a-zA-Z0-9/_\\-]+$/
+callable_regexp = /^[a-z_\.0-9]+$/
+
 # hide all children of body except 'open'
 toplevel = (open) ->
     $("body > div").not(open).hide()
@@ -112,6 +116,14 @@ parse_sensor_format = (f) ->
     if /^d+\.d+$/.test f then "dd.dddd"
     else if /^d+m+\.m+$/.test f then "ddmm.mmmm"
     else null
+
+# use jquery's .data(key) on all children of elem, return the result as a pain array
+# exec: execute what .data(key) returns and store that.
+array_data_map  = (elems, key, exec=false) ->
+    a = ($(e).data(key) for e in $(elems).children())
+    if exec
+        a = (f() for f in a)
+    return a
 
 # Turn all div.button > a into jquery button sets
 $ ->

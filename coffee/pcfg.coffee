@@ -1,7 +1,6 @@
 # Copyright (c) 2012 Daniel Richman; GNU GPL 3
 
 # Current editing state
-pcfg_doc = null
 pcfg_callback_func = null
 
 # Main start point for pcfg editing. #payload_configuration should be visible.
@@ -9,7 +8,6 @@ pcfg_callback_func = null
 # has been successfully saved to the database or callback(false) is called if the user cancels.
 pcfg_edit = (doc, callback) ->
     pcfg_callback_func = callback
-    pcfg_doc = doc
 
     # fire the change events to update the validation
     $("#pcfg_name").val(doc.name).change()
@@ -29,21 +27,24 @@ pcfg_edit = (doc, callback) ->
 
 # Save the doc, and then callback to close #payload_configuration
 pcfg_save = ->
-    pcfg_doc.name = $("#pcfg_name").val()
-    pcfg_doc.version = strict_numeric $("#pcfg_version").val()
-    pcfg_doc.description = $("#pcfg_description").val()
+    doc =
+        name: $("#pcfg_name").val()
+        version: strict_numeric $("#pcfg_version").val()
+        description: $("#pcfg_description").val()
+        transmissions: (array_data_map "#transmissions_list", "transmission")
+        sentences: (array_data_map "#sentences_list", "sentence")
 
-    if pcfg_doc.description == ""
-        delete pcfg_doc.description
+    if doc.description == ""
+        delete doc.description
 
-    if pcfg_doc.name == "" or isNaN(pcfg_doc.version) or pcfg_doc.version <= 0
+    if doc.name == "" or isNaN(doc.version) or doc.version <= 0
         alert "There are errors in the form: the server would reject this"
     else
         # TODO pcfg save
         alert "Not yet implemented: pcfg_save (console.log'd doc)"
         try
-            console.log pcfg_doc
-            console.log JSON.stringify(pcfg_doc)
+            console.log doc
+            console.log JSON.stringify(doc)
         catch error
             # ignore
         pcfg_callback_func "TODO_document_id"
@@ -59,18 +60,30 @@ transmissions_list_item = (t) ->
                 when "odd", "even" then "#{t.parity} parity"
 
             description += " #{t.baud} baud #{t.shift}Hz shift #{t.encoding} #{parity} #{t.stop} stop bits"
-        when "DOMINOEX"
+        when "DominoEX"
             description += " #{t.speed}"
 
     row = $("<tr />")
+    row.data "transmission", t
+
     row.append $("<td />").text description
 
     buttons = $("<td class='sortable_hide' />")
+
     buttons.append $("<a href='#'>Edit</a>").button().click ->
-        transmission_maybe_edit row.index()
+        toplevel "#transmission_edit"
+        t = deepcopy row.data "transmission"
+        transmission_edit t, (et) ->
+            toplevel "#payload_configuration"
+            if et
+                row.replaceWith transmissions_list_item et
+                $("#transmissions_list").sortable "refresh"
+
     buttons.append ' '
     buttons.append $("<a href='#'>Delete</a>").button().click ->
-        transmission_delete row.index()
+        row.remove()
+        $("#transmissions_list").sortable "refresh"
+
     buttons.buttonset()
     row.append buttons
 
@@ -107,6 +120,8 @@ checksum_description = (n) ->
 # Create a <tr> describing the sentence dict, s, and give it Edit / Delete links
 sentences_list_item = (s) ->
     row = $("<tr />")
+    row.data "sentence", s
+
     e = $("<td />")
     e.text "UKHAS "
 
@@ -139,10 +154,19 @@ sentences_list_item = (s) ->
 
     buttons = $("<td class='sortable_hide' />")
     buttons.append $("<a href='#'>Edit</a>").button().click ->
-        sentence_maybe_edit row.index()
+        toplevel "#sentence_edit"
+        s = deepcopy row.data "sentence"
+        sentence_edit s, (es) ->
+            toplevel "#payload_configuration"
+            if es
+                row.replaceWith sentences_list_item es
+                $("#sentences_list").sortable "refresh"
+
     buttons.append ' '
     buttons.append $("<a href='#'>Delete</a>").button().click ->
-        sentence_delete row.index()
+        row.remove()
+        $("#sentences_list").sortable "refresh"
+
     buttons.buttonset()
     row.append buttons
 
@@ -158,54 +182,34 @@ default_transmission =
     parity: "none"
     stop: 2
 
-# Create a new default transmission dict, push it onto the end of transmissions, and start
-# the transmission editor.
+# Start the transmission editor, and push the result onto the end of transmissions_list if it succeeds.
 transmission_new = ->
     toplevel "#transmission_edit"
     transmission_edit (deepcopy default_transmission), (t) ->
         toplevel "#payload_configuration"
         if t
-            pcfg_doc.transmissions.push t
             $("#transmissions_list").append transmissions_list_item t
             $("#transmissions_list").sortable "refresh"
 
-# Start the transmission editor, and rollback the result if its callback reports cancellation.
-transmission_maybe_edit = (index) ->
-    toplevel "#transmission_edit"
-    t = deepcopy pcfg_doc.transmissions[index]
-    transmission_edit t, (et) ->
-        toplevel "#payload_configuration"
-        if et
-            pcfg_doc.transmissions[index] = et
-            tr = $("#transmissions_list").children()[index]
-            $(tr).replaceWith transmissions_list_item et
-            $("#transmissions_list").sortable "refresh"
-
-# Remove a transmission
-transmission_delete = (index) ->
-    pcfg_doc.transmissions.pop index
-    tr = $("#transmissions_list").children()[index]
-    $(tr).remove()
-    $("#transmissions_list").sortable "refresh"
+default_sentence =
+    protocol: "UKHAS"
+    callsign: ""
+    fields: [{name: "sentence_id", sensor: "base.ascii_int"},
+             {name: "time", sensor: "stdtelem.time"},
+             {name: "latitude", sensor: "stdtelem.coordinate", format: "dd.dddd"},
+             {name: "longitude", sensor: "stdtelem.coordinate", format: "dd.dddd"},
+             {name: "altitude", sensor: "base.ascii_int"}]
 
 # Create a new sentence using either some defaults or the provided doc
 # Push it onto the end of sentences and then start the editor specified by 'method'
 sentence_manual = (show, method, s=null) ->
     if not s
-        s =
-            protocol: "UKHAS"
-            callsign: ""
-            fields: [{name: "sentence_id", sensor: "base.ascii_int"},
-                     {name: "time", sensor: "stdtelem.time"},
-                     {name: "latitude", sensor: "stdtelem.coordinate", format: "dd.dddd"},
-                     {name: "longitude", sensor: "stdtelem.coordinate", format: "dd.dddd"},
-                     {name: "altitude", sensor: "base.ascii_int"}]
+        s = default_sentence
 
     toplevel show
     method (deepcopy s), (es) ->
         toplevel "#payload_configuration"
         if es
-            pcfg_doc.sentences.push es
             $("#sentences_list").append sentences_list_item es
             $("#sentences_list").sortable "refresh"
 
@@ -218,25 +222,6 @@ sentence_import = ->
             sentence_manual "#sentence_edit", sentence_edit, s
         else
             toplevel "#payload_configuration"
-
-# Start the sentence editor, and rollback the result if its callback reports cancellation.
-sentence_maybe_edit = (index) ->
-    toplevel "#sentence_edit"
-    s = deepcopy pcfg_doc.sentences[index]
-    sentence_edit s, (es) ->
-        toplevel "#payload_configuration"
-        if es
-            pcfg_doc.sentences[index] = es
-            tr = $("#sentences_list").children()[index]
-            $(tr).replaceWith sentences_list_item es
-            $("#sentences_list").sortable "refresh"
-
-# Delete a sentence
-sentence_delete = (index) ->
-    pcfg_doc.sentences.pop index
-    tr = $("#sentences_list").children()[index]
-    $(tr).remove()
-    $("#sentences_list").sortable "refresh"
 
 # Add callbacks for the #pcfg_misc form
 setup_pcfg_form = ->
@@ -252,23 +237,13 @@ setup_sortable_lists = ->
     transmissions_pickup = null
     sentences_pickup = null
 
-    $("#transmissions_list").sortable
-        start: (event, ui) ->
-            transmissions_pickup = ui.item.index()
-            $("#transmissions_list .sortable_hide").css('visibility', 'hidden')
-        stop: (event, ui) ->
-            array_reorder pcfg_doc.transmissions, transmissions_pickup, ui.item.index()
-            $("#transmissions_list .sortable_hide").css('visibility', 'visible')
-
-    $("#sentences_list").sortable
-        start: (event, ui) ->
-            sentences_pickup = ui.item.index()
-            $("#sentences_list .sortable_hide").css('visibility', 'hidden')
-        stop: (event, ui) ->
-            array_reorder pcfg_doc.sentences, sentences_pickup, ui.item.index()
-            $("#sentences_list .sortable_hide").css('visibility', 'visible')
-
-    $("#transmissions_list, #sentences_list").disableSelection()
+    for x in ["#transmissions_list", "#sentences_list"]
+        do (x) -> $(x).sortable
+            start: (event, ui) -> $("#{x} .sortable_hide").css('visibility', 'hidden')
+            stop: (event, ui) -> $("#{x} .sortable_hide").css('visibility', 'visible')
+            revert: true
+            tolerance: 5
+        $(x).disableSelection()
 
 $ ->
     setup_pcfg_form()

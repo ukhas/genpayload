@@ -89,15 +89,18 @@ input[type=text].long_input { width: 500px; }
 #wizard_lockfield_ok, #wizard_lockfield > .buttons { display: inline-block; margin-left: 10px; }
 #wizard_lockfield_ok input { vertical-align: middle; }
 
-#sentence_fields, #sentence_filters { margin-left: 10px; }
-.sentence_sort_icon
+.sentence_list { margin-left: 10px; }
+.sentence_icon
 {
     display: inline-block !important;
-    vertical-align: top;
     position: relative;
     top: 5px;
     vertical-align: top;
 }
-#sentence_fields > div { margin: 2px 0; }
-#sentence_fields input, #sentence_fields select { margin: 0 2px; }
-#sentence_fields .keyvalue { display: inline-block; }
+.sentence_list > div { margin: 2px 0; }
+.sentence_list input, .sentence_list select { margin: 0 2px; }
+.sentence_list .keyvalue { display: inline-block; }
+.sentence_menu { display: inline-block; vertical-align: top; }
+.sentence_menu > div { position: absolute; display: none; z-index: 1; }
+.sentence_menu:hover > div { display: block; }
+.sentence_menu > div > ul { position: relative; top: -9px; left: 5px; }

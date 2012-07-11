@@ -2,14 +2,6 @@
 
 time_regex = /^((0|1)[0-9]|2[0-3])(:|)[0-5][0-9](|\3[0-5][0-9]|60)$/
 
-sensor_pretty_names =
-    "stdtelem.time": "Time (HH:MM:SS)"
-    "stdtelem.coordinate": "Coordinate (dd or ddm)"
-    "base.ascii_int": "Integer"
-    "base.ascii_float": "Float"
-    "base.string": "String"
-    "base.constant": "Constant"
-
 wizard_callback = null
 wizard_sentence = null
 wizard_fields = null
@@ -125,7 +117,7 @@ parse_ukhas_string = (s) ->
     if not callsign.length
         return error: "Invalid callsign: zero length"
 
-    if not /^[a-zA-Z0-9/_\\-]+$/.test callsign
+    if not callsign_regexp.test callsign
         return error: "Invalid callsign: contains characters besides A-Z0-9_/. " +
                        "The server would reject it"
 
@@ -272,7 +264,7 @@ wizard_field_load = (m, f) ->
     for o in m.sensor_options
         e = $("<option />")
         e.val o
-        e.text sensor_pretty_names[o]
+        e.text sensor_list[o]
         $("#wizard_field_sensor").append e
 
     $("#wizard_field_name").val f.name

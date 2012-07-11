@@ -1,8 +1,8 @@
-sentence_edit: collect data, filters
-
-stop modifying stuff when the ui events fire and instead collect afterwards:
-e.g., pcfg sortable sentences list: why not just use $(blah).data to attach sentence dicts to each li
-then collect at end.
+sentence_edit:
+    sentence_menu - make it a class; or have some way to add/remove items.
+    inline numeric scale setup?
+    add convert-to-expert-field option
+    convert back?
 
 flight_edit
 database access
@@ -12,6 +12,7 @@ parser tester flask app
 add tips and stuff everywhere
  - what is a 'flight' (a flight train/balloon/launch), 'payload' (stuff in a box), (grouping info)
  - #sentence_edit white space to the right would be a good place to put tips on field naming and units and stuff
+ - si units
 
 maybe use em instead of px in the css? I hear it's all the rage
 maybe nice font
