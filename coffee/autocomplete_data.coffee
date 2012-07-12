@@ -14,7 +14,8 @@ suggest_data_ok = [
     "temperature_internal",
     "temperature_external",
     "temperature",
-    "satellites"
+    "satellites",
+    "speed",
 ]
 
 suggest_data_ok.sort()

@@ -249,7 +249,9 @@ wizard_jump = (index, first=false) ->
     $("#wizard_fields .highlight").removeClass "highlight"
 
     wizard_current_field = index
-    wizard_fields[wizard_current_field].elem.addClass "highlight"
+    ne = wizard_fields[wizard_current_field].elem
+    ne.removeClass "invalid"
+    ne.addClass "highlight"
 
     if index == 0
         $("#wizard_prev").button("disable")

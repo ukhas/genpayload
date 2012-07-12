@@ -151,7 +151,7 @@ save_doc = (doc, callback) ->
         success: (resp) ->
             window.onerror = olderror
             $("#saving_status").text "Saved."
-            $("#saved_id").val resp.id
+            $("#saved_id").text resp.id
             $("#save_success").show()
             # jquery.couch will add _rev and _id to doc.
         error: (status, error, reason) ->
