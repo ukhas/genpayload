@@ -40,14 +40,11 @@ pcfg_save = ->
     if doc.name == "" or isNaN(doc.version) or doc.version <= 0
         alert "There are errors in the form: the server would reject this"
     else
-        # TODO pcfg save
-        alert "Not yet implemented: pcfg_save (console.log'd doc)"
-        try
-            console.log doc
-            console.log JSON.stringify(doc)
-        catch error
-            # ignore
-        pcfg_callback_func "TODO_document_id"
+        toplevel "#saving"
+        save_doc doc, (saved) ->
+            toplevel "#payload_configuration"
+            if saved?
+                pcfg_callback_func saved
 
 # Create a <tr> that describes the transmission dict, t, and give it Edit/Delete links.
 transmissions_list_item = (t) ->

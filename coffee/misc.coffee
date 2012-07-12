@@ -125,7 +125,54 @@ array_data_map  = (elems, key, exec=false) ->
         a = (f() for f in a)
     return a
 
+database = null
+saving_doc = null
+save_callback = null
+
+save_doc = (doc, callback) ->
+    saving_doc = doc
+    save_callback = callback
+
+    $("#saving_status").text "Saving payload_configuration document..."
+    $("#saving_doc").val JSON.stringify doc
+    $("#save_success, #save_fail").hide()
+
+    olderror = window.onerror
+
+    failed = (msg) ->
+        window.onerror = olderror
+        $("#saving_status").text "Failed :-("
+        $("#save_fail_message").text msg
+        $("#save_fail").show()
+
+    window.onerror = -> failed "Unknown error"
+
+    database.saveDoc doc,
+        success: (resp) ->
+            window.onerror = olderror
+            $("#saving_status").text "Saved."
+            $("#saved_id").val resp.id
+            $("#save_success").show()
+            # jquery.couch will add _rev and _id to doc.
+        error: (status, error, reason) ->
+            failed "#{status} #{error} #{reason}"
+
+setup_save_buttons = ->
+    $("#save_done").click ->
+        save_callback saving_doc
+    $("#save_retry").click ->
+        save_doc saving_doc, save_callback
+    $("#save_back").click ->
+        save_callback null
+
 # Turn all div.button > a into jquery button sets
 $ ->
     $("#help_once").button()
     $(".buttons").buttonset()
+
+    $.ajaxSetup
+        timeout: 10000
+
+    database = $.couch.db("test_habitat")
+
+    setup_save_buttons()

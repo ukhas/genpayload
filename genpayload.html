@@ -467,5 +467,27 @@
                 <a id="flight_abandon" href="#">Abandon</a>
             </div>
         </div>
+
+        <div id="saving">
+            <h2 id="saving_status">Saving...</h2>
+
+            <p>Document: <input type='text' id='saving_doc' class='long_input' disabled='disabled' /></p>
+
+            <div id="save_success">
+                <p>Doc ID: <span id='saved_id' /></p>
+
+                <div class="buttons">
+                    <a href='#' id='save_done' />Done</a>
+                </div>
+            </div>
+
+            <div id="save_fail">
+                <p>Error: <span id='save_fail_message' /></p>
+                <div class='buttons'>
+                    <a href='#' id='save_retry'>Retry</a>
+                    <a href='#' id='save_back'>Back</a>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
