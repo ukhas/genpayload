@@ -1,9 +1,3 @@
-sentence_edit:
-    sentence_menu - make it a class; or have some way to add/remove items.
-    inline numeric scale setup?
-    add convert-to-expert-field option
-    convert back?
-
 flight_edit
 database access
 fx
@@ -17,3 +11,8 @@ add tips and stuff everywhere
 maybe use em instead of px in the css? I hear it's all the rage
 maybe nice font
 maybe html5 url/history
+
+todo
+ - custom jquery ui build
+ - minify all
+ - bundle into single file

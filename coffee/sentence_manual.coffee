@@ -188,7 +188,7 @@ sentence_field_div = (field, expert=false) ->
 
         menu.update
             convert:
-                text: "Covnert this to a normal field"
+                text: "Convert this to a normal field"
                 func: ->
                     try
                         data = kv.data()
