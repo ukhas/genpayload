@@ -98,20 +98,6 @@ is_normal_field = (f) ->
         return (typeof f.expect == "string")
 
 sentence_sort_icon = -> $("<span class='ui-icon ui-icon-arrowthick-2-n-s sentence_icon' />")
-sentence_menu = (commands) ->
-    container = $("<div class='sentence_menu' />")
-    icon = $("<span class='ui-icon ui-icon-triangle-1-s sentence_icon' />")
-    subcontainer = $("<div />")
-    menu = $("<ul />")
-    for text, func of commands
-        i = $("<a href='#' />")
-        i.text text
-        i.click func
-        menu.append ($("<li />").append i)
-    menu.menu()
-    subcontainer.append menu
-    container.append icon, subcontainer
-    return container
 
 # Create a div containing input elements that describe a field.
 # Returns the div to be appended to some document somewhere.
@@ -120,23 +106,28 @@ sentence_menu = (commands) ->
 sentence_field_div = (field, expert=false) ->
     e = $("<div />")
     e.append sentence_sort_icon()
-    e.append sentence_menu
-        "Add numeric scale filter": ->
-            try
-                source = (e.data "field_data")().name
-            catch e
-                source = ""
+    menu = new HiddenMenu
+        scale:
+            text: "Add numeric scale filter"
+            func: ->
+                try
+                    source = (e.data "field_data")().name
+                catch e
+                    source = ""
 
-            $("#sentence_post_filters").append sentence_normal_filter_div
-                filter: "common.numeric_scale"
-                source: source
-                factor: 1
-                round: 3
-            $("#sentence_post_filters").sortable "refresh"
-        "Delete": ->
-            p = e.parent()
-            e.remove()
-            p.sortable "refresh"
+                $("#sentence_post_filters").append sentence_normal_filter_div
+                    filter: "common.numeric_scale"
+                    source: source
+                    factor: 1
+                    round: 3
+                $("#sentence_post_filters").sortable "refresh"
+        delete:
+            text: "Delete"
+            func: ->
+                p = e.parent()
+                e.remove()
+                p.sortable "refresh"
+    e.append menu.container
 
     if not expert
         n = $("<input type='text' title='Field Name' placeholder='Field Name' />")
@@ -167,15 +158,22 @@ sentence_field_div = (field, expert=false) ->
         n.change()
         s.change()
 
-        e.data "field_data", ->
+        e.data "field_data", (validate=true) ->
             d = name: n.val(), sensor: s.val()
-            if d.name is "" or d.name[0] == "_"
+            if validate and (d.name is "" or d.name[0] == "_")
                 throw "invalid field name"
             if d.sensor is "stdtelem.coordinate"
                 d.format = f.val()
             if d.sensor is "base.constant"
                 d.expect = c.val()
             return d
+
+        menu.update
+            convert:
+                text: "Convert this to a custom field"
+                func: ->
+                    data = (e.data "field_data") false
+                    e.replaceWith sentence_field_div data, true
     else
         kv = new KeyValueEdit
             data: field
@@ -187,6 +185,19 @@ sentence_field_div = (field, expert=false) ->
                     else true
         e.append kv.elem
         e.data "filter_data", -> kv.data()
+
+        menu.update
+            convert:
+                text: "Covnert this to a normal field"
+                func: ->
+                    try
+                        data = kv.data()
+                        if not is_normal_field data
+                            throw "couldn't convert"
+                    catch e
+                        alert "Could not convert the field. (non-standard type, options, or validation errors)"
+                        return
+                    e.replaceWith sentence_field_div data, false
 
     return e
 
@@ -211,11 +222,14 @@ sentence_normal_filter_div = (d={}) ->
 
     e = $("<div />")
     e.append sentence_sort_icon()
-    e.append sentence_menu
-        "Delete": ->
-            p = e.parent()
-            e.remove()
-            p.sortable "refresh"
+    menu = new HiddenMenu
+        delete:
+            text: "Delete"
+            func: ->
+                p = e.parent()
+                e.remove()
+                p.sortable "refresh"
+    e.append menu.container
     e.append kv.elem
     e.data "filter_data", ->
         data = kv.data()
@@ -242,11 +256,14 @@ sentence_get_hotfix = (s) ->
 sentence_hotfix_filter_div = (d=null) ->
     e = $("<div />")
     e.append sentence_sort_icon()
-    e.append sentence_menu
-        "Delete": ->
-            p = e.parent()
-            e.remove()
-            p.sortable "refresh"
+    menu = new HiddenMenu
+        delete:
+            text: "Delete"
+            func: ->
+                p = e.parent()
+                e.remove()
+                p.sortable "refresh"
+    e.append menu.container
     i = $("<input type='text' class='long_input' placeholder='Paste output of ./sign_hotfix.py' />")
     if d != null
         i.val JSON.stringify d

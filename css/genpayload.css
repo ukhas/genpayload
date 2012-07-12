@@ -90,7 +90,7 @@ input[type=text].long_input { width: 500px; }
 #wizard_lockfield_ok input { vertical-align: middle; }
 
 .sentence_list { margin-left: 10px; }
-.sentence_icon
+.sentence_icon, .menu_icon
 {
     display: inline-block !important;
     position: relative;
@@ -100,7 +100,8 @@ input[type=text].long_input { width: 500px; }
 .sentence_list > div { margin: 2px 0; }
 .sentence_list input, .sentence_list select { margin: 0 2px; }
 .sentence_list .keyvalue { display: inline-block; }
-.sentence_menu { display: inline-block; vertical-align: top; }
-.sentence_menu > div { position: absolute; display: none; z-index: 1; }
-.sentence_menu:hover > div { display: block; }
-.sentence_menu > div > ul { position: relative; top: -9px; left: 5px; }
+
+.hidden_menu { display: inline-block; vertical-align: top; }
+.hidden_menu > div { position: absolute; display: none; z-index: 1; }
+.hidden_menu:hover > div { display: block; }
+.hidden_menu > div > ul { position: relative; top: -9px; left: 5px; }
