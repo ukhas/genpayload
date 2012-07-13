@@ -12,6 +12,7 @@ sentence_edit = (s, callback) ->
         alert "genpayload doesn't know how to configure the #{s.protocol} protocol"
         callback false
 
+    $("#sentence_description").val s.description or ""
     $("#sentence_callsign").val s.callsign
     $("#sentence_checksum").val s.checksum
 
@@ -56,6 +57,10 @@ sentence_save = (s, callback) ->
     if sentence.fields.length == 0
         alert "You should probably add atleast one field"
         return
+
+    d = $("#sentence_description").val()
+    if d != ""
+        sentence.description = d
 
     sentence_callback sentence
 

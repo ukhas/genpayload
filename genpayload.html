@@ -8,6 +8,7 @@
         <link type="text/css" href="css/redmond/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
         <link type="text/css" href="css/genpayload.css" rel="stylesheet" />
         <script type="text/javascript" src="js/json2.js"></script>
+        <script type="text/javascript" src="js/rfc3339.js"></script>
         <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
         <script type="text/javascript" src="js/jquery-ui-1.8.21.custom.min.js"></script>
         <script type="text/javascript" src="js/jquery.cookie.js"></script>
@@ -47,8 +48,9 @@
                 <h3>flight documents</h3>
                 <p><code>flight</code> documents contain a launch name, time and location, and a list of
                 <code>payload_configuration</code> documents that belong to payloads on that flight.
-                Once approved (below) a flight document appears in the habitat calendar, tracker and 
-                (after the flight window) flight archive.</p>
+                A flight document represents a single 'launch'; that is, a flight train with one or more
+                payloads attached to it. Once approved (below) a flight document appears in the habitat
+                calendar, tracker and (after the flight window) flight archive.</p>
 
                 <h4>Launch windows</h4>
                 <p>Flight documents are only valid for an amount of time, preferably as small as possible: e.g.,
@@ -117,11 +119,6 @@
                     <span class="input_extra">(need not be its callsign)</span>
                 </div>
                 <div>
-                    <label for="pcfg_version">Configuration version</label>
-                    <input type="text" id="pcfg_version" class="short_input" />
-                    <span class="input_extra">(integer)</span>
-                </div>
-                <div>
                     <label for="pcfg_description">Configuration description</label>
                     <input type="text" id="pcfg_description" class="long_input" />
                     <span class="input_extra">(free form, optional)</span>
@@ -164,6 +161,11 @@
 
         <div id="transmission_edit" class="separate_children">
             <div id="transmission_misc" class="top_labelled_form">
+                <div>
+                    <label for="transmission_description">Description</label>
+                    <input type="text" id="transmission_description" class="long_input" />
+                    <span class="input_extra">(optional; e.g., Primary, alternative, nighttime mode)</span>
+                </div>
                 <div>
                     <label for="transmission_frequency">Frequency (MHz)</label>
                     <input type="text" id="transmission_frequency" class="short_input" />
@@ -313,6 +315,12 @@
 
             <div id="wizard_misc" class="separate_children">
                 <div>
+                    <label for="wizard_description">Format name or description</label>
+                    <input type="text" id="wizard_description" class="long_input" />
+                    <span class="input_extra">(optional but strongly recommended; e.g., Normal format, No-lock
+                    format (if it's different), Long format (i.e., more fields), e.t.c.</span>
+                </div>
+                <div>
                     <label for="wizard_no_lock">When it doesn't have a lock, the payload sends</label>
                     <select id="wizard_no_lock">
                         <option value="other">other</option>
@@ -361,6 +369,12 @@
 
         <div id="sentence_edit">
             <div id="sentence_misc" class="top_labelled_form">
+                <div>
+                    <label for="sentence_description">Name or description</label>
+                    <input type="text" id="sentence_description" class="long_input" />
+                    <span class="input_extra">(optional but strongly recommended; e.g., Normal format, No-lock
+                    format (if it's different), Long format (i.e., more fields), e.t.c.</span>
+                </div>
                 <div>
                     <label for="sentence_protocol">Protocol</label>
                     <input type="text" id="sentence_protocol" value="UKHAS" disabled="disabled" />

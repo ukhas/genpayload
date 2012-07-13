@@ -11,7 +11,6 @@ pcfg_edit = (doc, callback) ->
 
     # fire the change events to update the validation
     $("#pcfg_name").val(doc.name).change()
-    $("#pcfg_version").val(doc.version).change()
     $("#pcfg_description").val(doc.description or "").change()
 
     $("#transmissions_list").empty()
@@ -28,8 +27,9 @@ pcfg_edit = (doc, callback) ->
 # Save the doc, and then callback to close #payload_configuration
 pcfg_save = ->
     doc =
+        type: "payload_configuration"
         name: $("#pcfg_name").val()
-        version: strict_numeric $("#pcfg_version").val()
+        created: (new Date()).toRFC3339()
         description: $("#pcfg_description").val()
         transmissions: (array_data_map "#transmissions_list", "transmission")
         sentences: (array_data_map "#sentences_list", "sentence")
@@ -37,7 +37,7 @@ pcfg_save = ->
     if doc.description == ""
         delete doc.description
 
-    if doc.name == "" or isNaN(doc.version) or doc.version <= 0
+    if doc.name == ""
         alert "There are errors in the form: the server would reject this"
     else
         toplevel "#saving"
@@ -59,6 +59,9 @@ transmissions_list_item = (t) ->
             description += " #{t.baud} baud #{t.shift}Hz shift #{t.encoding} #{parity} #{t.stop} stop bits"
         when "DominoEX"
             description += " #{t.speed}"
+
+    if t.description?
+        description = "#{t.description} (#{description})"
 
     row = $("<tr />")
     row.data "transmission", t
@@ -120,7 +123,10 @@ sentences_list_item = (s) ->
     row.data "sentence", s
 
     e = $("<td />")
-    e.text "UKHAS "
+    if s.description?
+        e.text "#{s.description}: UKHAS "
+    else
+        e.text "UKHAS "
 
     filtered_fields = {}
     if s.filters and s.filters.post
@@ -224,9 +230,6 @@ sentence_import = ->
 setup_pcfg_form = ->
     form_field "#pcfg_name",
         nonempty: true
-    form_field "#pcfg_version",
-        numeric: true
-        positive: true
     # #pcfg_description is optional.
 
 # Use jQuery UI's sortable, with callbacks to update the doc as items are reordered

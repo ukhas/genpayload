@@ -33,7 +33,6 @@ close_help = ->
 
 default_pcfg_doc =
     name: ""
-    version: 1
     description: ""
     type: "payload_configuration"
     sentences: []

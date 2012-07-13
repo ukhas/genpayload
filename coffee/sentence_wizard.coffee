@@ -215,7 +215,7 @@ wizard_guess = ->
         do (i) -> e.click ->
             switch wizard_stage
                 when "sentence" then wizard_jump i
-                when "no_lock" then wizard_lockfield i
+                when "second" then wizard_lockfield i
 
         if f.name is ""
             e.addClass "invalid"
@@ -358,11 +358,7 @@ wizard_try_finish = ->
             has_position = true
             break
     
-    if has_position
-        wizard_nolock_start()
-    else
-        wizard_stage = null
-        wizard_callback wizard_sentence
+    wizard_second_stage has_position
 
 # Tidy up wizard_sentence:
 #  - Create numeric_scale filters, removing numeric_scale objects from fields
@@ -410,9 +406,9 @@ wizard_numeric_scale_demo = ->
 
     $("#wizard_numeric_scale_example").text data
 
-# Start the no-lock mode wizard
-wizard_nolock_start = ->
-    wizard_stage = "no_lock"
+# if has_position, Start the no-lock mode wizard
+wizard_second_stage = (has_position) ->
+    wizard_stage = "second"
     nolock_temp = {}
 
     $("#wizard_form").hide()
@@ -421,7 +417,8 @@ wizard_nolock_start = ->
 
     $("#wizard_fields .highlight").removeClass "highlight"
 
-    $("#wizard_no_lock").val "other"
+    $("#wizard_description").val ""
+    $("#wizard_no_lock").val if has_position "other" else "n/a"
     $("#wizard_no_lock").change()
 
     $("#wizard_lockfield_ok").empty()
@@ -450,7 +447,11 @@ wizard_lockfield = (index) ->
     $("#wizard_lockfield_ok input").change()
 
 # Collect results of no lock form
-wizard_nolock_done = ->
+wizard_second_done = ->
+    d = $("#wizard_description").val()
+    if d != ""
+        wizard_sentence.description = d
+
     switch $("#wizard_no_lock").val()
         when "always"
             wizard_add_filter "post",
@@ -596,7 +597,7 @@ $ ->
         switch wizard_stage
             when "paste" then wizard_guess()
             when "sentence" then wizard_next()
-            when "no_lock" then wizard_nolock_done()
+            when "second" then wizard_second_done()
     $("#wizard_prev").click ->
         if wizard_stage is "sentence" then wizard_prev()
     wizard_setup_form()

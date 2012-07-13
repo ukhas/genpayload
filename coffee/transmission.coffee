@@ -9,6 +9,8 @@ transmission_callback = null
 transmission_edit = (t, callback) ->
     transmission_callback = callback
 
+    $("#transmission_description").val t.description or ""
+
     $("#transmission_frequency").val  t.frequency / 1e6
     $("#transmission_mode").val       t.mode
     $("#transmission_modulation").val t.modulation
@@ -60,6 +62,11 @@ transmission_confirm = ->
     catch e
         alert "There are errors in the form. Please fix them"
         return
+
+    # string key; optional
+    d = $("#transmission_description").val()
+    if d != ""
+        transmission.description = d
 
     transmission_callback transmission
 

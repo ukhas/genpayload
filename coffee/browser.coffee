@@ -10,7 +10,6 @@ browse = (type, callback) ->
     browse_callback = callback
 
     # TODO browse
-    # TODO on load, set version to max(docs with that name) + 1
 
     $("#browse_list").empty()
 
@@ -23,10 +22,12 @@ $ ->
 
 # remove this.
 test_doc =
+    type: "payload_configuration"
     name: "test doc"
-    version: 5
     description: "testing"
+    created: "2012-07-13T16:46:55.453+01:00"
     transmissions: [
+        description: "Main radio settings"
         "frequency": 434200000
         "mode": "USB"
         "modulation": "RTTY"
@@ -37,6 +38,7 @@ test_doc =
         "stop": 2
     ]
     sentences: [
+        description: "EURUS long format"
         "protocol": "UKHAS"
         "checksum": "crc16-ccitt"
         "callsign": "EURUS"

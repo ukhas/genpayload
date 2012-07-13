@@ -1,5 +1,6 @@
+browser
 flight_edit
-database access
+ - date range: have a launch date & drop down for length-surrounding for the launch window (1day, 1week, weekend,..)
 fx
 general prettyfying
 parser tester flask app
