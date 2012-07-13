@@ -99,12 +99,19 @@
         </div>
 
         <div id="browse">
-            <label for="browse_search">Search: </label><input type="text" id="browse_search" />
+            <div>
+                <label for="browse_search">Search text: </label><input type="text" id="browse_search" />
+                <span class="buttons">
+                    <a id="browse_search_go" href="#">Search</a>
+                    <a id="browse_prev" href="#">Prev Page</a>
+                    <a id="browse_next" href="#">Next Page</a>
+                    <a id="browse_cancel" href="#">Cancel</a>
+                </span>
+                <span id="browse_status"></span>
+            </div>
 
             <div id="browse_list">
             </div>
-
-            <div class="buttons"><a id="browse_cancel" href="#">Cancel</a></div>
         </div>
 
         <div id="payload_configuration">

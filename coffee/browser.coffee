@@ -2,120 +2,163 @@
 
 # Current state
 browse_callback = null
+browse_type = null
+browse_next_what = null
+browse_prev_what = null
+
+browse_per_page = 100
+
+view_names =
+    payload_configuration: "prototype_genpayload/payload_configuration_descending"
 
 # Main start point for browser. #browse should be visible. type is one of "flight",
 # "payload_configuration" or "sentence" dependig on what we want to look for. callback(doc) is called
 # if the user picks something, callback(false) otherwise.
 browse = (type, callback) ->
     browse_callback = callback
+    browse_type = type
+    browse_load()
 
-    # TODO browse
-
+# Reset browse ui
+browse_clear = ->
     $("#browse_list").empty()
+    $("#browse_status").text "Loading..."
+    $("#browse_prev").button "disable"
+    $("#browse_next").button "disable"
+    $("#browse_cancel").button "disable"
+    browse_next_what = null
+    browse_prev_what = null
 
-    if type is "payload_configuration"
-        e = $("<a href='#' />").text("use local test doc").click -> browse_callback deepcopy test_doc
-        $("#browse_list").append e
+search_low_key = (term) ->
+    return [term.toLowerCase()]
 
+search_high_key = (term) ->
+    return [term.toUpperCase() + "ZZZZZZZZ"]
+
+# Load a page of results.
+# What can contain:
+#  - search: search term
+#  - next_after: {id: "...", key: "..."}
+#  - prev_before: {id: "...", key: "..."}
+browse_load = (what={}) ->
+    browse_clear()
+
+    options =
+        limit: browse_per_page + 1
+        include_docs: true
+
+    if what.next_after?
+        options.startkey = what.next_after.key
+        options.startkey_docid = what.next_after.id
+        options.skip = 1
+
+        if what.search?
+            options.endkey = search_high_key what.search
+
+    else if what.prev_before?
+        options.startkey = what.prev_before.key
+        options.startkey_docid = what.prev_before.id
+        options.skip = 1
+        options.descending = true
+
+        if what.search?
+            options.endkey = search_low_key what.search
+
+    else
+        what.first_page = true
+
+        if what.search?
+            options.startkey = search_low_key what.search
+            options.endkey = search_high_key what.search
+
+    olderror = window.onerror
+
+    failed = (msg) ->
+        window.onerror = olderror
+        $("#browse_status").text "Error loading rows: #{msg}"
+
+    window.onerror = -> failed "Unknown error"
+
+    options.success = (resp) ->
+        window.onerror = olderror
+        [pages_before, pages_after] = browse_hack_response what, resp
+        browse_display what, resp
+        browse_setup_page_links what, resp, pages_before, pages_after
+
+    options.error = (status, error, reason) ->
+        failed "#{status} #{error} #{reason}"
+
+    database.view view_names[browse_type], options
+
+# Undoes the descending, pops the extra item off, fixes the offset.
+# Figures out if there are pages before and after; returning booleans [pages_before, pages_after]
+browse_hack_response = (what, resp) ->
+    full_response = (resp.rows.length == browse_per_page + 1)
+
+    if what.first_page
+        pages_before = false
+        pages_after = full_response
+        resp.rows.pop()
+
+    else if what.next_after?
+        pages_before = true
+        pages_after = full_response
+        resp.rows.pop()
+
+    else if what.prev_before?
+        pages_before = full_response
+        pages_after = true
+        resp.rows.pop()
+
+        resp.offset = resp.total_rows - resp.offset - 1
+        resp.rows.reverse()
+
+    else
+        throw "invalid state"
+
+    return [pages_before, pages_after]
+
+# Update the ui with the results
+browse_display = (what, resp) ->
+    if not what.search?
+        $("#browse_status").text "Rows #{resp.offset + 1}-#{resp.offset + resp.rows.length}"
+    else
+        # Can't figure out row counts when asking for subset.
+        $("#browse_status").text ""
+
+    for row in resp.rows
+        # TODO
+        $("#browse_list").append $("<div />").text "#{row.id} #{row.doc.name or ""}"
+
+    $("#browse_cancel").button "enable"
+
+# Setup the next/prev buttons, updating global variables to make them work.
+browse_setup_page_links = (what, resp, pages_before, pages_after) ->
+    if pages_before
+        $("#browse_prev").button "enable"
+        first = resp.rows[0]
+        browse_prev_what =
+            prev_before:
+                key: first.key
+                id: first.id
+        if what.search?
+            browse_prev_what.search = what.search
+
+    if pages_after
+        $("#browse_next").button "enable"
+        last = resp.rows[resp.rows.length - 1]
+        browse_next_what =
+            next_after:
+                key: last.key
+                id: last.id
+        if what.search?
+            browse_next_what.search = what.search
+
+# Setup browse ui callbacks
 $ ->
     $("#browse_cancel").click -> browse_callback false
-
-# remove this.
-test_doc =
-    type: "payload_configuration"
-    name: "test doc"
-    description: "testing"
-    created: "2012-07-13T16:46:55+01:00"
-    transmissions: [
-        description: "Main radio settings"
-        "frequency": 434200000
-        "mode": "USB"
-        "modulation": "RTTY"
-        "shift": 425
-        "encoding": "ASCII-8"
-        "baud": 50
-        "parity": "none"
-        "stop": 2
-    ]
-    sentences: [
-        description: "EURUS long format"
-        "protocol": "UKHAS"
-        "checksum": "crc16-ccitt"
-        "callsign": "EURUS"
-        "fields": [
-            "name": "sentence_id"
-            "sensor": "base.ascii_int"
-          ,
-            "name": "time"
-            "sensor": "stdtelem.time"
-          ,
-            "name": "latitude"
-            "sensor": "stdtelem.coordinate"
-            "format": "dd.dddd"
-          ,
-            "name": "longitude"
-            "sensor": "stdtelem.coordinate"
-            "format": "dd.dddd"
-          ,
-            "name": "altitude"
-            "sensor": "base.ascii_int"
-          ,
-            "name": "satellites"
-            "sensor": "base.ascii_int"
-          ,
-            "name": "gps_lock"
-            "sensor": "base.ascii_int"
-          ,
-            "name": "nav_mode"
-            "sensor": "base.ascii_int"
-          ,
-            "name": "battery"
-            "sensor": "base.ascii_int"
-          ,
-            "name": "iss_elevation"
-            "sensor": "base.ascii_int"
-          ,
-            "name": "iss_azimuth"
-            "sensor": "base.ascii_int"
-          ,
-            "name": "aprs_status"
-            "sensor": "base.ascii_int"
-          ,
-            "name": "aprs_attempts"
-            "sensor": "base.ascii_int"
-        ]
-    ,
-        "protocol": "UKHAS",
-        "checksum": "xor",
-        "callsign": "A1",
-        "fields": [
-            "name": "sentence_id"
-            "sensor": "base.ascii_int"
-          ,
-            "sensor": "stdtelem.time"
-            "name": "time"
-          ,
-            "sensor": "stdtelem.coordinate"
-            "format": "dd.dddd"
-            "name": "latitude"
-          ,
-            "sensor": "stdtelem.coordinate"
-            "format": "dd.dddd"
-            "name": "longitude"
-          ,
-            "sensor": "base.ascii_int"
-            "name": "altitude"
-          ,
-            "name": "fix_age"
-            "sensor": "base.string"
-          ,
-            "name": "satellites"
-            "sensor": "base.ascii_int"
-          ,
-            "name": "temperature"
-            "sensor": "base.string"
-          ,
-            "name": "status"
-            "sensor": "base.ascii_int"
-        ]
-    ]
+    $("#browse_next").click -> browse_load browse_next_what
+    $("#browse_prev").click -> browse_load browse_prev_what
+    $("#browse_search_go").click ->
+        search = $("#browse_search").val()
+        browse_load search: search

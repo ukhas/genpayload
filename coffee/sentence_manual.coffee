@@ -41,11 +41,14 @@ sentence_save = (s, callback) ->
                 intermediate: (array_data_map "#sentence_intermediate_filters", "filter_data", true)
                 post: (array_data_map "#sentence_post_filters", "filter_data", true)
 
+        empty = 2
         if sentence.filters.intermediate.length == 0
             delete sentence.filters.intermediate
+            empty -= 1
         if sentence.filters.post.length == 0
             delete sentence.filters.post
-        if sentence.filters.length == 0
+            empty -= 1
+        if empty == 0
             delete sentence.filters
 
         if not callsign_regexp.test sentence.callsign
