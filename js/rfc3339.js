@@ -1,6 +1,7 @@
 /*
  Internet Timestamp Generator
  Copyright (c) 2009 Sebastiaan Deckers
+ Modified 2012 Daniel Richman
  License: GNU General Public License version 3 or later
 */
 
@@ -18,7 +19,6 @@ Date.prototype.toRFC3339 = function () {
    + "T" + pad(this.getHours(), 2)
    + ":" + pad(this.getMinutes(), 2)
    + ":" + pad(this.getSeconds(), 2)
-   + "." + pad(this.getMilliseconds(), 3)
    + (offset > 0 ? "-" : "+")
    + pad(Math.floor(Math.abs(offset) / 60), 2)
    + ":" + pad(Math.abs(offset) % 60, 2);

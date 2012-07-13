@@ -25,7 +25,7 @@ test_doc =
     type: "payload_configuration"
     name: "test doc"
     description: "testing"
-    created: "2012-07-13T16:46:55.453+01:00"
+    created: "2012-07-13T16:46:55+01:00"
     transmissions: [
         description: "Main radio settings"
         "frequency": 434200000
