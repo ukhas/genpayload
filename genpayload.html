@@ -31,7 +31,22 @@
             </div>
 
             <div id="help">
-                <h2>Introduction</h2>
+                <h2>Quick start</h2>
+
+                <p><b>I've just programmed my payload, am now testing it. How do I tell habitat
+                how to parse its telemetry so that it shows up on the map?</b></p>
+
+                <p>Continue (below), then create a payload_configuration document. Add the telemetry details,
+                and the sentence format using the wizard. Save it.</p>
+                
+                <p><b>I'm going to launch a balloon soon. I want my flight to show up in the flights
+                calendar, flight archive, and be in the active flights list on the day.</b></p>
+
+                <p>Create a flight document. Add every payload that will be attached to the balloon to it.
+                Set the launch date and a launch window if you don't know exactly when you're going to
+                launch. Save, then ask on IRC for the doc to be approved.</p>
+
+                <h2>More details</h2>
 
                 <h3>payload configuration documents</h3>
                 <p><code>payload_configuration</code> documents have two purposes: firstly, they tell the habitat
@@ -64,9 +79,10 @@
                 referenced by active approved flights are given priority when parsing (otherwise the most recent
                 version is used).</p>
 
-                <h3>See also</h3>
+                <h2>See also</h2>
                 <ul>
-                    <li><a href="http://habitat.habhub.org/habitat">habitat</a></li>
+                    <li><a href="http://habitat.habhub.org/">habitat</a></li>
+                    <li><a href="http://habitat.habhub.org/logtail/">Live parser log output for debugging</a></li>
                     <li><a href="http://habhub.org">habhub</a></li>
                 </ul>
 
