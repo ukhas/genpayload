@@ -1,13 +1,13 @@
 # Copyright (c) 2012 Daniel Richman; GNU GPL 3
 
 # Current editing state
-pcfg_callback_func = null
+pcfg_callback = null
 
 # Main start point for pcfg editing. #payload_configuration should be visible.
 # Loads data from doc into the forms and enables editing. callback(doc) is called when the doc
 # has been successfully saved to the database or callback(false) is called if the user cancels.
 pcfg_edit = (doc, callback) ->
-    pcfg_callback_func = callback
+    pcfg_callback = callback
 
     # fire the change events to update the validation
     $("#pcfg_name").val(doc.name).change()
@@ -44,7 +44,7 @@ pcfg_save = ->
         save_doc doc, (saved) ->
             toplevel "#payload_configuration"
             if saved?
-                pcfg_callback_func saved
+                pcfg_callback saved
 
 # Create a <tr> that describes the transmission dict, t, and give it Edit/Delete links.
 transmissions_list_item = (t) ->
@@ -256,4 +256,4 @@ $ ->
     $("#go_import").click sentence_import
 
     $("#pcfg_save").click pcfg_save
-    $("#pcfg_abandon").click -> pcfg_callback_func false
+    $("#pcfg_abandon").click -> pcfg_callback false
