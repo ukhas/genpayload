@@ -108,4 +108,17 @@ input[type=text].long_input { width: 500px; }
 .hidden_menu > div > ul { position: relative; top: -9px; left: 5px; }
 
 #browse_status { margin-left: 50px; }
-#browse_list { margin: 25px 50px;  }
+#browse_list_table { width: 80%; margin: 25px; border-spacing: 0; }
+#browse_list > tr > td
+{
+    border-top: 2px solid #aaf;
+    margin: 0;
+    padding: 10px;
+    cursor: pointer;
+}
+#browse_list > tr { margin: 0; }
+#browse_list > tr:first-child > td { border-top: 0; }
+#browse_list > tr:hover > td { background-color: #afa; }
+
+.browse_item_doc_name, .browse_item_callsign { font-size: 1.5em; }
+.browse_item_id, .browse_item_created { font-size: 0.8em; }

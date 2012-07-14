@@ -8,8 +8,40 @@ browse_prev_what = null
 
 browse_per_page = 100
 
-view_names =
-    payload_configuration: "prototype_genpayload/payload_configuration_descending"
+browse_item_date_id = (doc, elem) ->
+    cell = $("<td />")
+    cell.append $("<div class='browse_item_id' />").text doc._id
+    datestring = ((new Date doc.time_created).toLocaleString())
+    cell.append $("<div class='browse_item_created' />").text datestring
+    elem.append cell
+
+browse_types =
+    payload_configuration:
+        view: "prototype_genpayload/payload_configuration__name__created_descending"
+        display: (row) ->
+            doc = row.doc
+
+            d = $("<tr />")
+            d.append $("<td class='browse_item_doc_name' />").text doc.name
+            browse_item_date_id doc, d
+            d.data "browse_return", doc
+            return d
+
+    sentence:
+        view: "prototype_genpayload/payload_configuration__sentence_callsign__created_descending__sentence_index"
+        display: (row) ->
+            callsign = row.key[0]
+            index = row.key[2]
+            sentence = row.doc.sentences[index]
+            doc = row.doc
+
+            d = $("<tr />")
+            d.append ($("<td class='browse_item_callsign' />").text callsign)
+            d.append ($("<td class='browse_item_from_doc_name'/>").text "from #{doc.name}")
+            browse_item_date_id doc, d
+
+            d.data "browse_return", sentence
+            return d
 
 # Main start point for browser. #browse should be visible. type is one of "flight",
 # "payload_configuration" or "sentence" dependig on what we want to look for. callback(doc) is called
@@ -17,6 +49,7 @@ view_names =
 browse = (type, callback) ->
     browse_callback = callback
     browse_type = type
+    $("#browse_search").val ""
     browse_load()
 
 # Reset browse ui
@@ -33,7 +66,7 @@ search_low_key = (term) ->
     return [term.toLowerCase()]
 
 search_high_key = (term) ->
-    return [term.toUpperCase() + "ZZZZZZZZ"]
+    return [term.toUpperCase() + "ZZZZZZZZZZZZZ"]
 
 # Load a page of results.
 # What can contain:
@@ -88,27 +121,27 @@ browse_load = (what={}) ->
     options.error = (status, error, reason) ->
         failed "#{status} #{error} #{reason}"
 
-    database.view view_names[browse_type], options
+    database.view browse_types[browse_type].view, options
 
 # Undoes the descending, pops the extra item off, fixes the offset.
 # Figures out if there are pages before and after; returning booleans [pages_before, pages_after]
 browse_hack_response = (what, resp) ->
     full_response = (resp.rows.length == browse_per_page + 1)
 
+    if full_response
+        resp.rows.pop()
+
     if what.first_page
         pages_before = false
         pages_after = full_response
-        resp.rows.pop()
 
     else if what.next_after?
         pages_before = true
         pages_after = full_response
-        resp.rows.pop()
 
     else if what.prev_before?
         pages_before = full_response
         pages_after = true
-        resp.rows.pop()
 
         resp.offset = resp.total_rows - resp.offset - 1
         resp.rows.reverse()
@@ -127,8 +160,11 @@ browse_display = (what, resp) ->
         $("#browse_status").text ""
 
     for row in resp.rows
-        # TODO
-        $("#browse_list").append $("<div />").text "#{row.id} #{row.doc.name or ""}"
+        $("#browse_list").append browse_types[browse_type].display row
+
+    $("#browse_list > tr").click ->
+        data = $(this).data "browse_return"
+        browse_callback data
 
     $("#browse_cancel").button "enable"
 

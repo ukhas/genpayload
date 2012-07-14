@@ -110,8 +110,7 @@
                 <span id="browse_status"></span>
             </div>
 
-            <div id="browse_list">
-            </div>
+            <table id="browse_list_table"><tbody id="browse_list"></tbody></table>
         </div>
 
         <div id="payload_configuration">
@@ -392,7 +391,7 @@
                 </div>
                 <div>
                     <label for="sentence_checksum">Checksum type</label>
-                    <select id="sentence_checksum" />
+                    <select id="sentence_checksum">
                         <option>crc16-ccitt</option>
                         <option>xor</option>
                         <option>fletcher-16</option>
@@ -498,7 +497,7 @@
                 <p>Doc ID: <span id='saved_id' /></p>
 
                 <div class="buttons">
-                    <a href='#' id='save_done' />Done</a>
+                    <a href='#' id='save_done'>Done</a>
                 </div>
             </div>
 
