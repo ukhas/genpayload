@@ -5,6 +5,8 @@ browse_callback = null
 browse_type = null
 browse_next_what = null
 browse_prev_what = null
+browse_search_enabled = false
+browse_search_timer = null
 
 browse_per_page = 100
 
@@ -56,9 +58,14 @@ browse = (type, callback) ->
 browse_clear = ->
     $("#browse_list").empty()
     $("#browse_status").text "Loading..."
+    $("#browse_search_go").button "disable"
     $("#browse_prev").button "disable"
     $("#browse_next").button "disable"
     $("#browse_cancel").button "disable"
+    browse_search_enabled = false
+    if browse_search_timer?
+        clearTimeout browse_search_timer
+    browse_search_timer = null
     browse_next_what = null
     browse_prev_what = null
 
@@ -168,6 +175,9 @@ browse_display = (what, resp) ->
 
     $("#browse_cancel").button "enable"
 
+    $("#browse_search_go").button "enable"
+    browse_search_enabled = true
+
 # Setup the next/prev buttons, updating global variables to make them work.
 browse_setup_page_links = (what, resp, pages_before, pages_after) ->
     if pages_before
@@ -190,6 +200,11 @@ browse_setup_page_links = (what, resp, pages_before, pages_after) ->
         if what.search?
             browse_next_what.search = what.search
 
+browse_search_on_timer = ->
+    browse_search_timer = null
+    if browse_search_enabled
+        $("#browse_search_go").click()
+
 # Setup browse ui callbacks
 $ ->
     $("#browse_cancel").click -> browse_callback false
@@ -198,3 +213,9 @@ $ ->
     $("#browse_search_go").click ->
         search = $("#browse_search").val()
         browse_load search: search
+
+
+    $("#browse_search").keydown ->
+        if browse_search_timer?
+            clearTimeout browse_search_timer
+        browse_search_timer = setTimeout browse_search_on_timer, 500
