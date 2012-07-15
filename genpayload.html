@@ -8,11 +8,14 @@
         <link type="text/css" href="css/redmond/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
         <link type="text/css" href="css/genpayload.css" rel="stylesheet" />
         <script type="text/javascript" src="js/json2.js"></script>
-        <script type="text/javascript" src="js/rfc3339.js"></script>
         <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
         <script type="text/javascript" src="js/jquery-ui-1.8.21.custom.min.js"></script>
         <script type="text/javascript" src="js/jquery.cookie.js"></script>
         <script type="text/javascript" src="js/jquery.couch.js"></script>
+        <script type="text/javascript" src="js/timezone.js"></script>
+        <script type="text/javascript" src="js/all_zones.js"></script>
+        <script type="text/javascript" src="js/init_timezone.js"></script>
+        <script type="text/javascript" src="js/rfc3339.js"></script>
         <script type="text/javascript" src="js/genpayload.js"></script>
     </head>
 
@@ -467,7 +470,7 @@
             <div class="top_labelled_form">
                 <div>
                     <label for="flight_name">Flight name</label>
-                    <input type="text" id="flight_project" />
+                    <input type="text" id="flight_name" />
                     <span class="input_extra">e.g., Dalmation launch 32 or Shark Christmas launch.</span>
                 </div>
                 <div>
@@ -488,19 +491,19 @@
                 <div>
                     <label for="launch_date">Launch Date</label>
                     <div id="launch_date"></div>
+                    <span class="input_extra">Choose the ideal or estimated launch time, then pick a launch window to cover all possibilities.</span>
                 </div>
                 <div>
                     <label for="launch_time">Time</label>
-                    <input type="text" id="launch_time" />
-                    <span class="input_extra">Choose the ideal or estimated launch time, then pick a launch window to cover all possibilities</span>
+                    <input type="text" id="launch_time" placeholder="HH:MM" />
+                    <span class="input_extra">Will use the timezone <span id="launch_timezone"></span></span>
                 </div>
                 <div>
                     <label for="launch_window">Launch window</label>
                     <select id="launch_window">
-                        <option value="10800">3 hours</option>
+                        <option value="14400">4 hours</option>
                         <option value="86400">24 hours</option>
                         <option value="172800">2 days</option>
-                        <option value="weekend">weekend</option>
                         <option value="other">other</option>
                     </select>
                     <span class="input_extra" id="launch_window_info"></span>

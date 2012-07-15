@@ -71,40 +71,32 @@ suggest_launch_data = [
     label:      "Churchill College, Cambridge, England"
     latitude:   52.2135
     longitude:  0.0964
-    altitude:   0
 ,
     label:      "EARS, Cambridge, England"
     latitude:   52.2511
     longitude:  -0.0927
-    altitude:   0
 ,
     label:      "Adelaide Airport, Adelaide, Australia"
     latitude:   -34.9499
     longitude:  138.5194
-    altitude:   0
 ,
     label:      "Brightwalton, Berkshire, England"
     latitude:   51.51143
     longitude:  -1.38870
-    altitude:   0
 ,
     label:      "Boston Spa, Leeds, England"
     latitude:   53.8997
     longitude:  -1.3629
-    altitude:   0
 ,
     label:      "Wistow, Adelaide, Australia"
     latitude:   -35.1217
     longitude:  138.8503
-    altitude:   0
 ,
-    label:      "An Creagan, County Tyrone, Northern Ireland"
-    latitude:   54.654118
-    longitude:  -7.034914
-    altitude:   0
+    label:      "Cookstown, County Tyrone, Northern Ireland"
+    latitude:   54.632162,
+    longitude:  -6.757982
 ,
     label:      "Preston St Mary, Suffolk, England"
     latitude:   52.1215
     longitude:  0.8078
-    altitude:   70
 ]

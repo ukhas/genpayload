@@ -10,6 +10,14 @@
 nice_key_regexp = /^[a-z_0-9]+$/
 callsign_regexp = /^[a-zA-Z0-9/_\\-]+$/
 callable_regexp = /^[a-z_\.0-9]+$/
+time_regex = /^((0|1)[0-9]|2[0-3])(:|)([0-5][0-9])(|\3([0-5][0-9]|60))$/
+
+time_parse = (str) ->
+    r = time_regex.exec str
+    if r?
+        return [r[1], r[4], r[6] or 0]
+    else
+        throw "invalid time"
 
 # hide all children of body except 'open'
 toplevel = (open) ->

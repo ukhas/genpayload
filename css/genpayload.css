@@ -31,6 +31,7 @@ body > div, #home > div
 div.top_labelled_form label { display: block; }
 div.top_labelled_form input, div.top_labelled_form select { display: block; margin-left: 10px; }
 div.top_labelled_form span.input_extra { display: block; font-size: 0.8em; margin-left: 10px; }
+div.top_labelled_form div.ui-datepicker-inline { margin-left: 10px; }
 
 .invalid { background-color: red !important; }
 .highlight { background-color: yellow; }
@@ -122,3 +123,5 @@ input[type=text].long_input { width: 500px; }
 
 .browse_item_doc_name, .browse_item_callsign { font-size: 1.5em; }
 .browse_item_id, .browse_item_created { font-size: 0.8em; }
+
+#launch_window_start, #launch_window_end { display: inline-block; }
