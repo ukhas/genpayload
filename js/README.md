@@ -23,7 +23,8 @@ Apache License, v2, Copyright 2010 Matthew Eernisse (mde@fleegix.org) and Open S
 These are in the public domain
 
  - json2.js http://json.org https://github.com/douglascrockford/JSON-js
- - all_zones.json (timezone database), built from http://www.iana.org/time-zones/ using [timezone-js (above)](https://github.com/mde/timezone-js/blob/master/src/node-preparse.js)
+ - all_zones.js (timezone database), built from http://www.iana.org/time-zones/ using [timezone-js (above)](https://github.com/mde/timezone-js/blob/master/src/node-preparse.js)
+ - zone_list.js (list of non deprecated zones) built from http://www.iana.org/time-zones/ zone.tab
 
 GNU GPL 3 or later, Copyright (c) 2009 Sebastiaan Deckers + 2012 Modifications.
 

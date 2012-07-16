@@ -14,6 +14,7 @@
         <script type="text/javascript" src="js/jquery.couch.js"></script>
         <script type="text/javascript" src="js/timezone.js"></script>
         <script type="text/javascript" src="js/all_zones.js"></script>
+        <script type="text/javascript" src="js/zone_list.js"></script>
         <script type="text/javascript" src="js/init_timezone.js"></script>
         <script type="text/javascript" src="js/rfc3339.js"></script>
         <script type="text/javascript" src="js/genpayload.js"></script>
@@ -36,18 +37,21 @@
             <div id="help">
                 <h2>Quick start</h2>
 
-                <p><b>I've just programmed my payload, am now testing it. How do I tell habitat
+                <p><b>I've just programmed brand new my payload, am now testing it. How do I tell habitat
                 how to parse its telemetry so that it shows up on the map?</b></p>
 
-                <p>Continue (below), then create a payload_configuration document. Add the telemetry details,
-                and the sentence format using the wizard. Save it.</p>
+                <p><a id="quick_pcfg" href='#'>Create a payload_configuration document.</a>
+                Add the telemetry details, and the sentence format using the wizard. Save it.</p>
                 
                 <p><b>I'm going to launch a balloon soon. I want my flight to show up in the flights
                 calendar, flight archive, and be in the active flights list on the day.</b></p>
 
-                <p>Create a flight document. Add every payload that will be attached to the balloon to it.
-                Set the launch date and a launch window if you don't know exactly when you're going to
-                launch. Save, then ask on IRC for the doc to be approved.</p>
+                <p><a id="quick_flight" href='#'>Create a flight document</a>. Add every payload that will be
+                attached to the balloon to it. Set the launch date and a launch window if you don't know exactly
+                when you're going to launch. Save, then ask on IRC for the doc to be approved.</p>
+
+                <p>Note that you may also create documents by copying and modifying the last document you
+                created for your payload, so you need not start from scratch each time.</p>
 
                 <h2>More details</h2>
 
@@ -62,6 +66,11 @@
                 <p>A <code>payload_configuration</code> document contains two ordered lists, one of radio and one
                 of sentence settings applicable to that version of the payload and callsign. Note that the first
                 sentence format in the list that matches successfully is used.</p>
+
+                <h4>Editing</h4>
+                <p>You can't edit documents once they're saved. You can however, very quickly load, modify
+                and save a new copy of your configuration document: habitat will try the newest version
+                first.</p>
 
                 <h3>flight documents</h3>
                 <p><code>flight</code> documents contain a launch name, time and location, and a list of
@@ -489,28 +498,31 @@
 
             <div id="dates" class="top_labelled_form">
                 <div>
+                    <label for="launch_timezone">Timezone</label>
+                    <input type="text" id="launch_timezone" />
+                    <span class="input_extra">Launch time below is interpreted in this timezone; daylight saving detected automatically from the date. <br />
+                    Some clients/trackers may display times related to this flight in this timezone rather than the user's.</span>
+                </div>
+                <div>
                     <label for="launch_date">Launch Date</label>
                     <div id="launch_date"></div>
-                    <span class="input_extra">Choose the ideal or estimated launch time, then pick a launch window to cover all possibilities.</span>
                 </div>
                 <div>
                     <label for="launch_time">Time</label>
                     <input type="text" id="launch_time" placeholder="HH:MM" />
-                    <span class="input_extra">Will use the timezone <span id="launch_timezone"></span></span>
+                    <span class="input_extra" id="launch_time_check"></span>
                 </div>
                 <div>
                     <label for="launch_window">Launch window</label>
                     <select id="launch_window">
-                        <option value="14400">4 hours</option>
-                        <option value="86400">24 hours</option>
-                        <option value="172800">2 days</option>
+                        <option value="day">Launch day</option>
+                        <option value="three">3 days surrounding</option>
                         <option value="other">other</option>
                     </select>
-                    <span class="input_extra" id="launch_window_info"></span>
-                </div>
-                <div class="launch_window_custom">
                     <div id="launch_window_start"></div>
                     <div id="launch_window_end"></div>
+                    <span class="input_extra">This period must cover the entire flight, and ideally exclude testing, so that only telemetry from the flight itself is archived. <br />
+                    <span id="launch_window_info"></span></span>
                 </div>
             </div>
 
@@ -519,7 +531,7 @@
             <div class="top_labelled_form">
                 <div>
                     <label for="launch_location_name">Launch location name</label>
-                    <input type="text" id="launch_location_name" />
+                    <input type="text" id="launch_location_name" class="long_input" />
                     <span class="input_extra">Optional. Suggested format: Place name, Area, Country</span>
                 </div>
                 <div>
@@ -529,10 +541,11 @@
                 <div>
                     <label for="launch_longitude">Launch longitude (decimal degrees)</label>
                     <input type="text" id="launch_longitude" />
+                    <span class="input_extra">-180 &lt; l &lt;= 180</span>
                 </div>
                 <div>
                     <label for="launch_altitude">Launch altitude (metres)</label>
-                    <input type="text" id="launch_longitude" />
+                    <input type="text" id="launch_altitude" />
                     <span class="input_extra">Optional: only enter it if it's significant.</span>
                 </div>
             </div>
@@ -540,8 +553,14 @@
             <hr />
 
             <div id="flight_pcfgs">
-                <div id="flight_pcfgs_list">
-                    <!-- name/description, <a href="#">Edit</a> <a href="#">Delete</a> -->
+                <h3>payloads in this flight</h3>
+
+                <table id="flight_pcfgs_list_table">
+                    <tbody id="flight_pcfgs_list"></tbody>
+                </table>
+
+                <div class="buttons">
+                    <a id="flight_pcfgs_add" href="#">Add</a>
                 </div>
             </div>
 

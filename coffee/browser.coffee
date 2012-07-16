@@ -116,6 +116,7 @@ browse_load = (what={}) ->
     failed = (msg) ->
         window.onerror = olderror
         $("#browse_status").text "Error loading rows: #{msg}"
+        $("#browse_cancel").button "enable"
 
     window.onerror = -> failed "Unknown error"
 
@@ -126,7 +127,7 @@ browse_load = (what={}) ->
         browse_setup_page_links what, resp, pages_before, pages_after
 
     options.error = (status, error, reason) ->
-        failed "#{status} #{error} #{reason}"
+        failed "#{status}, #{error}, #{reason}"
 
     database.view browse_types[browse_type].view, options
 
@@ -213,7 +214,6 @@ $ ->
     $("#browse_search_go").click ->
         search = $("#browse_search").val()
         browse_load search: search
-
 
     $("#browse_search").keydown ->
         if browse_search_timer?

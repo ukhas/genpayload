@@ -31,21 +31,11 @@ close_help = ->
     $("#show_help").show()
     $("#hide_help").hide()
 
-default_pcfg_doc =
-    name: ""
-    description: ""
-    type: "payload_configuration"
-    sentences: []
-    transmissions: []
-
-default_flight_doc = {} # TODO default flight doc
-
-# add callbacks to the go_ buttons in the create div
+# add callbacks to the go_ buttons in the create div and the quick_ links
 setup_create_actions = ->
     $("#go_pcfg_new").click ->
         toplevel "#payload_configuration"
-        d = deepcopy(default_pcfg_doc)
-        pcfg_edit d, (doc) -> toplevel "#home"
+        pcfg_edit null, (doc) -> toplevel "#home"
 
     $("#go_pcfg_modify").click ->
         toplevel "#browse"
@@ -58,8 +48,7 @@ setup_create_actions = ->
 
     $("#go_flight_new").click ->
         toplevel "#flight"
-        d = deepcopy(default_flight_doc)
-        flight_edit d, (doc) -> toplevel "#home"
+        flight_edit null, (doc) -> toplevel "#home"
 
     $("#go_flight_modify").click ->
         toplevel "#browse"
@@ -69,6 +58,16 @@ setup_create_actions = ->
                 flight_edit doc, (doc) -> toplevel "#home"
             else
                 toplevel "#home"
+
+    $("#quick_pcfg").click ->
+        close_help()
+        $("#go_pcfg_new").click()
+        $("#go_wizard").click()
+
+    $("#quick_flight").click ->
+        close_help()
+        $("#go_flight_new").click()
+        # TODO open click add new payload button
 
 $ ->
     setup_create_actions()

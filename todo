@@ -11,7 +11,9 @@ maybe use em instead of px in the css? I hear it's all the rage
 maybe nice font
 maybe html5 url/history
 
-todo
- - custom jquery ui build
- - minify all
- - bundle into single file
+custom jquery ui build (?)
+minify all the things
+bundle into single file (?)
+
+review quick start links - maybe confusing. Also really want to click Continue; maybe quickstart next page
+ if keep: maybe modify so cancel buttons work?

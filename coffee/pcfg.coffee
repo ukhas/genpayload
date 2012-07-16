@@ -9,6 +9,14 @@ pcfg_callback = null
 pcfg_edit = (doc, callback) ->
     pcfg_callback = callback
 
+    if doc == null
+        doc =
+            name: ""
+            description: ""
+            type: "payload_configuration"
+            sentences: []
+            transmissions: []
+
     # fire the change events to update the validation
     $("#pcfg_name").val(doc.name).change()
     $("#pcfg_description").val(doc.description or "").change()

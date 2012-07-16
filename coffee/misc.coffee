@@ -175,9 +175,6 @@ setup_save_buttons = ->
 
 # Turn all div.button > a into jquery button sets
 $ ->
-    $("#help_once").button()
-    $(".buttons").buttonset()
-
     $.ajaxSetup
         timeout: 10000
 
