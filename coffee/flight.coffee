@@ -7,7 +7,7 @@ flight_no_show_dates = false
 # Main start point for flight editing. #flight should be visible.
 # Loads data from doc into the forms and enables editing. callback(doc) is called when the doc
 # has been successfully saved to the database or callback(false) is called if the user cancels.
-flight_edit = (doc, callback) ->
+flight_edit = (doc, callback, pcfgs={}) ->
     flight_callback = callback
 
     if not doc?
@@ -57,9 +57,9 @@ flight_edit = (doc, callback) ->
             launch = new timezoneJS.Date(doc.launch.time, doc.launch.timezone)
             $("#launch_date").datepicker "setDate", new Date(launch.year, launch.month, launch.date)
             if launch.seconds != 0
-                $("#launch_time").val "#{launch.hours} #{launch.minutes} #{launch.seconds}"
+                $("#launch_time").val "#{launch.hours}:#{launch.minutes}:#{launch.seconds}"
             else
-                $("#launch_time").val "#{launch.hours} #{launch.minutes}"
+                $("#launch_time").val "#{launch.hours}:#{launch.minutes}"
 
             flight_launch_date_change()
             $("#launch_time, #launch_timezone").change()
@@ -73,9 +73,9 @@ flight_edit = (doc, callback) ->
             # this is a bit ugly, but simple. If there were more options, perhaps it should be reconsidered
             for attempt in $("#launch_window").children("option")
                 # select it, then see if it produces the same result:
-                $("#launch_window").val attempt.val()
+                $("#launch_window").val $(attempt).val()
                 dates = flight_get_dates()
-                if dates.data.launch.getTime() != launch.getTime()
+                if dates.data.launch_time.getTime() != launch.getTime()
                     throw "timezone fail"
 
                 if (dates.data.start.getTime() == sd.getTime()) and (dates.data.end.getTime() == ed.endTime())
@@ -86,7 +86,8 @@ flight_edit = (doc, callback) ->
     finally
         flight_no_show_dates = false
 
-    flight_add_payload p for p in doc.payloads
+    $("#flight_pcfgs_list").empty()
+    flight_add_payload pcfgs[p] for p in doc.payloads
 
     flight_show_dates()
 
@@ -260,7 +261,11 @@ flight_add_payload = (pcfg) ->
     row = $("<tr />")
 
     row.append $("<td />").text pcfg.name
-    row.append $("<td />").append ($("<div />").text pcfg._id), ($("<div />").text pcfg.time_created)
+    info = $("<td class='small' />")
+    info.append $("<div />").text pcfg._id
+    localestring = (new Date pcfg.time_created).toLocaleString()
+    info.append $("<div />").text("created " + pcfg.time_created).attr("title", localestring)
+    row.append info
     row.append $("<td />").append $("<a href='#'>Delete</a>").button().click -> row.remove()
     row.data "pcfg_id", pcfg._id
 

@@ -173,6 +173,37 @@ setup_save_buttons = ->
     $("#save_back").click ->
         save_callback null
 
+# load docs by list of ids with loading screen. #loading_docs should be visible
+loading_docs_callback = null
+
+load_docs = (docs, callback) ->
+    loading_docs_callback = callback
+
+    $("#loading_docs_back").hide()
+    olderror = window.onerror
+
+    failed = (msg) ->
+        window.onerror = olderror
+        $("#loading_docs_text").text "Failed: #{msg}"
+        $("#loading_docs_back").show()
+
+    window.onerror = -> failed "Unknown error"
+
+    database.allDocs
+        keys: docs
+        include_docs: true
+        success: (resp) ->
+            window.onerror = olderror
+            docs = {}
+            for row in resp.rows
+                docs[row.id] = row.doc
+            callback docs
+        error: (status, error, reason) ->
+            failed "#{status} #{error} #{reason}"
+
+setup_loading_docs_buttons = ->
+    $("#loading_docs_back").click -> loading_docs_callback false
+
 # Turn all div.button > a into jquery button sets
 $ ->
     $.ajaxSetup
@@ -181,3 +212,4 @@ $ ->
     database = $.couch.db("test_habitat")
 
     setup_save_buttons()
+    setup_loading_docs_buttons()

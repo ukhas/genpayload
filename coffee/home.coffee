@@ -53,9 +53,19 @@ setup_create_actions = ->
     $("#go_flight_modify").click ->
         toplevel "#browse"
         browse "flight", (doc) ->
-            if doc
+            edit_cb = (doc) -> toplevel "#home"
+
+            if doc and doc.payloads.length
+                toplevel "#loading_docs"
+                load_docs doc.payloads, (other_docs) ->
+                    if other_docs
+                        toplevel "#flight"
+                        flight_edit doc, edit_cb, other_docs
+                    else
+                        toplevel "#home"
+            else if doc
                 toplevel "#flight"
-                flight_edit doc, (doc) -> toplevel "#home"
+                flight_edit doc, edit_cb
             else
                 toplevel "#home"
 

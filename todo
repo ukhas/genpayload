@@ -1,4 +1,7 @@
-flight_edit
+really bad things are happening with rfc3339 dates.
+When parsed, the timezoneJS object.hours is UTC hours, but it's meant to be local hours.
+
+
 fx
 general prettyfying
 parser tester flask app
@@ -6,6 +9,7 @@ add tips and stuff everywhere
  - what is a 'flight' (a flight train/balloon/launch), 'payload' (stuff in a box), (grouping info)
  - #sentence_edit white space to the right would be a good place to put tips on field naming and units and stuff
  - si units
+ - move stuff from front page into editing sections?
 
 maybe use em instead of px in the css? I hear it's all the rage
 maybe nice font
@@ -15,5 +19,15 @@ custom jquery ui build (?)
 minify all the things
 bundle into single file (?)
 
+browser sorting.
+    currently:
+        [name, -created] for pcfg, pcfg.sentence[i]
+        name for flight
+    (since expect pcfgs with same name, but not for flights?)
+    could do all by created desc..., or just flight, or...
+    search so is ok.
+
 review quick start links - maybe confusing. Also really want to click Continue; maybe quickstart next page
  if keep: maybe modify so cancel buttons work?
+
+load times. make it fast, or fake it

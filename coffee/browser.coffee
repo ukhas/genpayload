@@ -10,11 +10,11 @@ browse_search_timer = null
 
 browse_per_page = 100
 
-browse_item_date_id = (doc, elem) ->
-    cell = $("<td />")
-    cell.append $("<div class='browse_item_id' />").text doc._id
-    datestring = ((new Date doc.time_created).toLocaleString())
-    cell.append $("<div class='browse_item_created' />").text datestring
+browse_item_date_id = (id, date, elem) ->
+    cell = $("<td class='small' />")
+    cell.append $("<div />").text id
+    localestring = (new Date date).toLocaleString()
+    cell.append $("<div />").text(date).attr("title", localestring)
     elem.append cell
 
 browse_types =
@@ -23,9 +23,20 @@ browse_types =
         display: (row) ->
             doc = row.doc
 
+            seen = {}
+            uniques = []
+            for s in doc.sentences
+                if seen[s.callsign]?
+                    continue
+                uniques.push s.callsign
+                seen[s.callsign] = true
+            uniques.sort()
+            callsigns = uniques.join ', '
+
             d = $("<tr />")
-            d.append $("<td class='browse_item_doc_name' />").text doc.name
-            browse_item_date_id doc, d
+            d.append $("<td class='big' />").text doc.name
+            d.append $("<td />").text callsigns
+            browse_item_date_id doc._id, doc.time_created, d
             d.data "browse_return", doc
             return d
 
@@ -38,11 +49,27 @@ browse_types =
             doc = row.doc
 
             d = $("<tr />")
-            d.append ($("<td class='browse_item_callsign' />").text callsign)
-            d.append ($("<td class='browse_item_from_doc_name'/>").text "from #{doc.name}")
-            browse_item_date_id doc, d
+            d.append $("<td class='big' />").text callsign
+            d.append $("<td />").text "from #{doc.name}"
+            browse_item_date_id "#{doc._id} #{index}", doc.time_created, d
 
             d.data "browse_return", sentence
+            return d
+
+    flight:
+        view: "prototype_genpayload/flight__name"
+        display: (row) ->
+            name = row.key
+            doc = row.doc
+
+            d = $("<tr />")
+            d.append $("<td class='big' />").text doc.name
+            i = $("<td class='small' />")
+            i.append $("<div />").text if doc.approved then "Approved" else ""
+            i.append $("<div />").text "#{doc.metadata.group or ""} #{doc.metadata.project or ""}"
+            d.append i
+            browse_item_date_id doc._id, doc.launch.time, d
+            d.data "browse_return", doc
             return d
 
 # Main start point for browser. #browse should be visible. type is one of "flight",

@@ -36,6 +36,7 @@ div.top_labelled_form div.ui-datepicker-inline { margin-left: 10px; }
 .invalid { background-color: red !important; }
 .highlight { background-color: yellow; }
 .small { font-size: 0.8em; }
+.big { font-size: 1.5em; }
 .keyvalue_json { background-color: #bdf; }
 
 input[type=text], select, #wizard_fields
@@ -122,6 +123,8 @@ input[type=text].long_input { width: 500px; }
 #browse_list > tr:hover > td { background-color: #afa; }
 
 .browse_item_doc_name, .browse_item_callsign { font-size: 1.5em; }
-.browse_item_id, .browse_item_created { font-size: 0.8em; }
+.browse_item_id, .browse_item_date { font-size: 0.8em; }
 
 #launch_window_start, #launch_window_end { display: inline-block; }
+
+#flight_pcfgs_list td { padding: 2px 15px; }
