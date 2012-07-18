@@ -13,7 +13,7 @@ browse_per_page = 100
 browse_item_date_id = (id, date, elem) ->
     cell = $("<td class='small' />")
     cell.append $("<div />").text id
-    localestring = (new Date date).toLocaleString()
+    localestring = (new timezoneJS.Date date).toString(human_date_format)
     cell.append $("<div />").text(date).attr("title", localestring)
     elem.append cell
 

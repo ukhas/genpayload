@@ -37,7 +37,7 @@ pcfg_save = ->
     doc =
         type: "payload_configuration"
         name: $("#pcfg_name").val()
-        time_created: (new Date()).toRFC3339()
+        time_created: (new timezoneJS.Date()).toRFC3339String()
         description: $("#pcfg_description").val()
         transmissions: (array_data_map "#transmissions_list", "transmission")
         sentences: (array_data_map "#sentences_list", "sentence")

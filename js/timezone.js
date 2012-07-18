@@ -81,6 +81,61 @@
     }
   }
 
+  // Provide an ISO8601/RFC3339 parser for browsers that don't support it
+  timezoneJS.parseISO = function (timestring) {
+    var pat = '^(?:([+-]?[0-9]{4,})(?:-([0-9]{2})(?:-([0-9]{2}))?)?)?' +
+      '(?:T(?:([0-9]{2})(?::([0-9]{2})(?::([0-9]{2})(?:\\.' +
+      '([0-9]{3}))?)?)?)?(Z|[-+][0-9]{2}:[0-9]{2})?)?$';
+    var match = timestring.match(pat);
+    if (match) {
+      var parts = {
+        year: match[1] || 0,
+        month:  match[2] || 1,
+        day:  match[3] || 1,
+        hour:  match[4] || 0,
+        minute:  match[5] || 0,
+        second:  match[6] || 0,
+        milli:  match[7] || 0,
+        offset:  match[8] || "Z"
+      };
+
+      var utcDate = Date.UTC(parts.year, parts.month-1, parts.day,
+        parts.hour, parts.minute, parts.second, parts.milli);
+
+      if (parts.offset !== "Z") {
+        match = parts.offset.match('([-+][0-9]{2})(?::([0-9]{2}))?');
+        if (!match) {
+          return NaN;
+        }
+        var offset = match[1]*60*60*1000+(match[2] || 0)*60*1000;
+        utcDate -= offset;
+      }
+      return new Date(utcDate);
+    }
+    return null;
+  };
+
+  var _use_ISO_parser = false;
+  try {
+    // Check support, enable parseISO if this doesn't work.
+    if ((new Date("2012-07-18T14:29:20+01:30")).getTime() !== 1342616360000)
+      throw "fail";
+  } catch (e) {
+    _use_ISO_parser = true;
+    if (typeof console !== "undefined")
+      console.log("Using replacement ISO parser");
+  }
+
+  // A quick as possible method to determine if a string, provided it is
+  // a date that new Date(str) can parse, is an ISO string.
+  var _isISOString = function (str) {
+    if (typeof str !== "string")
+        return false;
+    // If the string contains a T, and no spaces (so it couldn't belong to " GMT")
+    // then it must be an ISO8601/RFC3339 string
+    return (str.indexOf(" ") == -1 && str.indexOf("T") > 0);
+  };
+
   // Format a number to the length = digits. For ex:
   //
   // `_fixWidth(2, 2) = '02'`
@@ -128,8 +183,8 @@
     ? fleegix.xhr.send({
       url : opts.url,
       method : 'get',
-      handleSuccess : opts.success,
-      handleErr : opts.error
+      success : opts.success,
+      error : opts.error
     })
     : $.ajax({
       url : opts.url,
@@ -144,6 +199,7 @@
     var args = Array.prototype.slice.apply(arguments)
     , dt = null
     , tz = null
+    , mode = null
     , arr = [];
 
 
@@ -165,22 +221,9 @@
     if (Object.prototype.toString.call(args[0]) === '[object Array]') {
       args = args[0];
     }
-    if (typeof args[args.length - 1] === 'string' && /^[a-zA-Z]+\//gi.test(args[args.length - 1])) {
+
+    if (typeof args[args.length - 1] === 'string' && /^[a-zA-Z]+\//.test(args[args.length - 1])) {
       tz = args.pop();
-    }
-    switch (args.length) {
-      case 0:
-        dt = new Date();
-        break;
-      case 1:
-        dt = new Date(args[0]);
-        break;
-      default:
-        for (var i = 0; i < 7; i++) {
-          arr[i] = args[i] || 0;
-        }
-        dt = new Date(arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], arr[6]);
-        break;
     }
 
     this._extractTimeArray = function () {
@@ -196,13 +239,80 @@
     this.minutes = 0;
     this.seconds = 0;
     this.milliseconds = 0;
-    this.timezone = tz || null;
-    this.utc = tz === 'Etc/UTC' || tz === 'Etc/GMT';
-    //Tricky part:
-    // For the cases where there are 1/2 arguments: `timezoneJS.Date(millis, [tz])` and `timezoneJS.Date(Date, [tz])`. The
-    // Date `dt` created should be in UTC. Thus the way I detect such cases is to determine if `arr` is not populated & `tz`
-    // is specified. Because if `tz` is not specified, `dt` can be in local time.
-    this.setFromDateObjProxy(dt, !arr.length && tz);
+
+    if (args.length == 0) {
+      mode = "copy_instant";
+      dt = new Date();
+
+    } else if (args.length == 1) {
+      if ((typeof args[0]) == "number") {
+        // UTC milliseconds
+        mode = "copy_instant";
+        dt = new Date(args[0]);
+
+      } else if (_isISOString(args[0])) {
+        // If the offset is ommitted from an ISO8601/RFC3339 string, it is taken to be UTC.
+        mode = "copy_instant";
+
+        if (_use_ISO_parser) {
+          dt = timezoneJS.parseISO(args[0]);
+        } else {
+          dt = new Date(args[0]);
+        }
+
+      } else if ((typeof args[0]) == "string") {
+        // Could be an RFC2822 string with offset, which therefore represents an instant in time, or
+        // alternatively might be some abomination based on a bits of RFC2822 with parts missing, etc.
+        // Have to guess:
+
+        // remove comments and excess whitespace
+        var cleaned = args[0].replace(/\([^\(\)\/]+\)/g, '').replace(/\s+/g, ' ').replace(/^ /g, '').replace(/ $/, '');
+
+        // if "GMT" "EST" etc. present, must be an offset.
+        // If +DDDD -DDDD +DD:DD -DD:DD it could only possibly belong to an offset
+        if (/(GMT|UT(|C)|([ECMP][DS]T)|(GMT|)[\+\-]\d\d(:|)\d\d)/.test(cleaned)) {
+          mode = "copy_instant";
+        } else {
+          mode = "interpret_in_tz";
+        }
+
+        dt = new Date(args[0]);
+
+      } else if ((typeof args[0]) == "object" && (typeof args[0].getTime == "function")) {
+        // Another Date/timezoneJS.Date object.
+        mode = "copy_instant";
+        dt = new Date(args[0].getTime());
+
+      } else {
+        throw "don't understand first argument";
+      }
+    } else {
+      // years, months, [days, [hours, etc. ]
+      mode = "interpret_in_tz";
+
+      // Intepret the given year, month, .. etc in the stated timezone (or default, if null)
+      for (var i = 0; i < 7; i++) {
+        arr[i] = args[i] || 0;
+      }
+      dt = new Date(arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], arr[6]);
+    }
+
+    if (dt === null || isNaN(dt.getTime()))
+      throw "failed to create Date object from arguments (Invalid Date)";
+
+    if (mode == "copy_instant") {
+      // Copy the instant in time from now, or another Date object.
+      this.timezone = "Etc/UTC";
+      this.utc = true;
+      this.setFromDateObjProxy(dt, true);
+
+      // And then change into the requested timezone.
+      this.setTimezone(tz);
+    } else {
+      this.timezone = tz || null;
+      this.utc = tz === 'Etc/UTC' || tz === 'Etc/GMT';
+      this.setFromDateObjProxy(dt, false);
+    }
   };
 
   // Implements most of the native Date object
@@ -278,10 +388,22 @@
     toLocaleTimeString: function () {},
     toSource: function () {},
     toISOString: function () { return this.toString('yyyy-MM-ddTHH:mm:ss.SSS', 'Etc/UTC') + 'Z'; },
+    toRFC3339String: function () {
+      var offset = this.getTimezoneOffset();
+      var offset_sign = (offset > 0 ? '-' : '+');
+      offset = Math.abs(offset);
+      var offset_minutes = offset % 60
+        , offset_hours = Math.floor(offset / 60);
+      var offset_text = offset_sign + _fixWidth(offset_hours, 2) + ":" + _fixWidth(offset_minutes, 2);
+      if (this.milliseconds) {
+        return this.toString('yyyy-MM-ddTHH:mm:ss.SSS') + offset_text;
+      } else {
+        return this.toString('yyyy-MM-ddTHH:mm:ss') + offset_text;
+      }
+    },
     toJSON: function () { return this.toISOString(); },
     // Allows different format following ISO8601 format:
     toString: function (format, tz) {
-      // Default format is the same as toISOString
       if (!format) return this.toString('yyyy-MM-dd HH:mm:ss');
       var result = format;
       var tzInfo = tz ? timezoneJS.timezone.getTzInfo(new Date(this.getTime()), tz) : this.getTimezoneInfo();

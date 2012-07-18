@@ -103,10 +103,10 @@ flight_save = ->
         type: "flight"
         approved: false
         name: $("#flight_name").val()
-        start: dates.data.start.toRFC3339()
-        end: dates.data.end.toRFC3339()
+        start: dates.data.start.toRFC3339String()
+        end: dates.data.end.toRFC3339String()
         launch:
-            time: dates.data.launch_time.toRFC3339()
+            time: dates.data.launch_time.toRFC3339String()
             timezone: dates.data.timezone
             location:
                 latitude: strict_numeric $("#launch_latitude").val()
@@ -190,10 +190,9 @@ flight_get_dates = ->
 
     display = (d, utc=false) ->
         if utc
-            d.toString("yyyy-MM-dd HH:mm:ss", "Etc/UTC")
+            d.toString "yyyy-MM-dd HH:mm:ss", "Etc/UTC"
         else
-            d.toString("yyyy-MM-dd HH:mm:ss")
-    tz_details = "#{launch.timezone} #{launch.getRFC3339Offset()}"
+            d.toString human_date_format
 
     return {
         data:
@@ -205,7 +204,6 @@ flight_get_dates = ->
             launch_time: display launch
             start: display start
             end: display end
-            timezone: tz_details
         display_utc:
             launch_time: (display launch, true)
             start: (display start, true)
@@ -222,9 +220,9 @@ flight_show_dates = ->
         data = null
 
     if data?
-        $("#launch_time_check").text "Launch time: #{data.display.launch_time} (#{data.display.timezone})"
+        $("#launch_time_check").text "Launch time: #{data.display.launch_time}"
         $("#launch_time_check").attr "title", "UTC: #{data.display_utc.launch_time}"
-        $("#launch_window_info").text "Launch window: #{data.display.start} - #{data.display.end} (#{data.display.timezone})"
+        $("#launch_window_info").text "Launch window: #{data.display.start} - #{data.display.end}"
         $("#launch_window_info").attr "title", "UTC: #{data.display_utc.start} - #{data.display_utc.end}"
     else
         $("#launch_time_check, #launch_window_info").text("").attr("title", "")
@@ -263,7 +261,7 @@ flight_add_payload = (pcfg) ->
     row.append $("<td />").text pcfg.name
     info = $("<td class='small' />")
     info.append $("<div />").text pcfg._id
-    localestring = (new Date pcfg.time_created).toLocaleString()
+    localestring = (new timezoneJS.Date pcfg.time_created).toString(human_date_format)
     info.append $("<div />").text("created " + pcfg.time_created).attr("title", localestring)
     row.append info
     row.append $("<td />").append $("<a href='#'>Delete</a>").button().click -> row.remove()
