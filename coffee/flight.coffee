@@ -57,9 +57,9 @@ flight_edit = (doc, callback, pcfgs={}) ->
             launch = new timezoneJS.Date(doc.launch.time, doc.launch.timezone)
             $("#launch_date").datepicker "setDate", new Date(launch.year, launch.month, launch.date)
             if launch.seconds != 0
-                $("#launch_time").val "#{launch.hours}:#{launch.minutes}:#{launch.seconds}"
+                $("#launch_time").val launch.toString("HH:mm:ss")
             else
-                $("#launch_time").val "#{launch.hours}:#{launch.minutes}"
+                $("#launch_time").val launch.toString("HH:mm")
 
             flight_launch_date_change()
             $("#launch_time, #launch_timezone").change()
