@@ -24,9 +24,10 @@ h1, h2, h3, h4 { margin-top: 0; margin-bottom: 0; }
     -webkit-border-radius: 5px;
     -khtml-border-radius: 5px;
     min-width: 1000px;
+    background: #fff;
 }
 
-#home div{ background: #fff; }
+#home, .container{ background: transparent; }
 
 #header {
     width: 100%;
