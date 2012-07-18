@@ -81,6 +81,8 @@ flight_edit = (doc, callback, pcfgs={}) ->
                 if (dates.data.start.getTime() == sd.getTime()) and (dates.data.end.getTime() == ed.getTime())
                     break
 
+            $("#launch_window").change()
+
             # If nothing works, it will be set at other, with an approximately the right datetimes.
 
     finally
@@ -192,7 +194,7 @@ flight_get_dates = ->
         if utc
             d.toString null, "Etc/UTC"
         else
-            d.toString
+            d.toString()
 
     return {
         data:
