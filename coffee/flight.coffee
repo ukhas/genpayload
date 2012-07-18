@@ -78,7 +78,7 @@ flight_edit = (doc, callback, pcfgs={}) ->
                 if dates.data.launch_time.getTime() != launch.getTime()
                     throw "timezone fail"
 
-                if (dates.data.start.getTime() == sd.getTime()) and (dates.data.end.getTime() == ed.endTime())
+                if (dates.data.start.getTime() == sd.getTime()) and (dates.data.end.getTime() == ed.getTime())
                     break
 
             # If nothing works, it will be set at other, with an approximately the right datetimes.
@@ -190,9 +190,9 @@ flight_get_dates = ->
 
     display = (d, utc=false) ->
         if utc
-            d.toString "yyyy-MM-dd HH:mm:ss", "Etc/UTC"
+            d.toString null, "Etc/UTC"
         else
-            d.toString human_date_format
+            d.toString
 
     return {
         data:
@@ -261,7 +261,7 @@ flight_add_payload = (pcfg) ->
     row.append $("<td />").text pcfg.name
     info = $("<td class='small' />")
     info.append $("<div />").text pcfg._id
-    localestring = (new timezoneJS.Date pcfg.time_created).toString(human_date_format)
+    localestring = (new timezoneJS.Date pcfg.time_created).toString()
     info.append $("<div />").text("created " + pcfg.time_created).attr("title", localestring)
     row.append info
     row.append $("<td />").append $("<a href='#'>Delete</a>").button().click -> row.remove()

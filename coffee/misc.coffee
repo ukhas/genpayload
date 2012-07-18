@@ -11,7 +11,6 @@ nice_key_regexp = /^[a-z_0-9]+$/
 callsign_regexp = /^[a-zA-Z0-9/_\\-]+$/
 callable_regexp = /^[a-z_\.0-9]+$/
 time_regex = /^((0|1)[0-9]|2[0-3])(:|)([0-5][0-9])(|\3([0-5][0-9]|60))$/
-human_date_format = "MMM dd yyyy HH:mm:ss Z"
 
 time_parse = (str) ->
     r = time_regex.exec str

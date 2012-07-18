@@ -1,7 +1,3 @@
-really bad things are happening with rfc3339 dates.
-When parsed, the timezoneJS object.hours is UTC hours, but it's meant to be local hours.
-
-
 fx
 general prettyfying
 parser tester flask app
