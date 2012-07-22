@@ -34,61 +34,60 @@
             </div>
 
             <div id="help">
+                <h2>Wat on earth is dis?</h2>
+
+                <p>You can create two types of configuration document here:</p>
+
+                <h3>payload configuration documents</h3>
+                <p><code>payload_configuration</code> documents describe a payload (no prizes for guessing that).
+                They contain instructions to habitat: how to parse telemetry that listeners upload;
+                and radio settings: how to setup listeners' radios.
+                If you fly one payload multiple times, you shouldn't have to change payload configuration document.</p>
+
+                <h3>flight documents</h3>
+                <p><code>flight</code> documents describe the time and date of a planned flight. They allow us
+                to add the flight to the calendar, set the title on the tracker, and select only relevant
+                telemetry to go into the flight archive (i.e., exclude test data).</p>
+
+                <p>A flight document contains a list of payload configuration documents - i.e., the payloads
+                that are going to be launched. You can add more than one, if there are several payloads on one
+                balloon/flight train - but for multiple launches, create a flight document per balloon.</p>
+
                 <h2>Quick start</h2>
 
-                <p><b>I've just programmed brand new my payload, am now testing it. How do I tell habitat
-                how to parse its telemetry so that it shows up on the map?</b></p>
+                <p><b>I've just programmed my brand new payload, and am now testing it.</b></p>
 
-                <p><a id="quick_pcfg" href='#'>Create a payload_configuration document.</a>
-                Add the telemetry details, and the sentence format using the wizard. Save it.</p>
-                
-                <p><b>I'm going to launch a balloon soon. I want my flight to show up in the flights
-                calendar, flight archive, and be in the active flights list on the day.</b></p>
+                <p>You only need to create <a id="quick_pcfg" href='#'>a payload_configuration document.</a>
+                You probably want to use the "new format wizard".</p>
 
-                <p><a id="quick_flight" href='#'>Create a flight document</a>. Add every payload that will be
-                attached to the balloon to it. Set the launch date and a launch window if you don't know exactly
-                when you're going to launch. Save, then ask on IRC for the doc to be approved.</p>
+                <p><b>I'm going to launch a balloon soon.</b></p>
+
+                <p><a id="quick_flight" href='#'>Create a flight document</a>, then ask on IRC for the
+                doc to be approved.</p>
 
                 <p>Note that you may also create documents by copying and modifying the last document you
                 created for your payload, so you need not start from scratch each time.</p>
 
-                <h2>More details</h2>
+                <h2>Extra details</h2>
 
-                <h3>payload configuration documents</h3>
-                <p><code>payload_configuration</code> documents have two purposes: firstly, they tell the habitat
-                parser how to treat incoming strings of telemetry: the protocol, the checksum type it uses,
-                the number of fields, and what each field means; secondly, they contain the frequency and radio
-                mode used, which allows dl-fldigi to automatically tune and configure for that payload.
-                You should not have to change the <code>payload_configuration</code> document for your payload
-                unless you reprogram it and change the format of the telemetry it sends.</p>
+                <h3>payload configuration</h3>
+                <p>The sentence and radio settings in a payload configuration document are two ordered lists:
+                The first sentence format that matches successfully is used, and the first item in the radio
+                list is the default.</p>
 
-                <p>A <code>payload_configuration</code> document contains two ordered lists, one of radio and one
-                of sentence settings applicable to that version of the payload and callsign. Note that the first
-                sentence format in the list that matches successfully is used.</p>
+                <h3>Editing</h3>
+                <p>You can't edit documents once they're saved. You can however load modify and save a new
+                copy of your configuration document: habitat will try the newest version first.</p>
 
-                <h4>Editing</h4>
-                <p>You can't edit documents once they're saved. You can however, very quickly load, modify
-                and save a new copy of your configuration document: habitat will try the newest version
-                first.</p>
+                <h3>Launch windows</h3>
+                <p>Flight documents are only valid for an amount of time, preferably as small as possible.
+                Parsed strings that don't belong to an active flight document are treated as 'test' uploads,
+                and will only be shown in the testing section of the new tracker.</p>
 
-                <h3>flight documents</h3>
-                <p><code>flight</code> documents contain a launch name, time and location, and a list of
-                <code>payload_configuration</code> documents that belong to payloads on that flight.
-                A flight document represents a single 'launch'; that is, a flight train with one or more
-                payloads attached to it. Once approved (below) a flight document appears in the habitat
-                calendar, tracker and (after the flight window) flight archive.</p>
-
-                <h4>Launch windows</h4>
-                <p>Flight documents are only valid for an amount of time, preferably as small as possible: e.g.,
-                the 24 hours surrounding a regular flight. Parsed strings that don't belong to an active flight
-                document are treated as 'test' uploads, and will only be shown in the testing section of the
-                new tracker.</p>
-
-                <h4>Approval</h4>
-                <p>Since anyone at all can sign up and create flight documents, they must be checked before your
-                flight will appear in the main list of flights. <code>payload_configuration</code> documents
-                referenced by active approved flights are given priority when parsing (otherwise the most recent
-                version is used).</p>
+                <h3>Approval</h3>
+                <p>Since anyone at all can create flight documents, they must be checked before they appear on
+                the various websites. Payload configuration documents referenced by approved and active
+                (within the launch window) flights are given priority when parsing.</p>
 
                 <h2>See also</h2>
                 <ul>
