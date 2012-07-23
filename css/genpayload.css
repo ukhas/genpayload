@@ -60,7 +60,7 @@ input[type=text].long_input { width: 500px; }
 #create > div > .buttons { display: inline-block }
 
 .pcfg_limit_width { max-width: 700px; overflow: hidden; white-space: nowrap; }
-.telemetry_string { font-family: monospace; font-size: 0.8em; }
+.telemetry_string { font-family: monospace; }
 
 #wizard_text_box, #wizard_fields
 {

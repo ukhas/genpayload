@@ -8,7 +8,7 @@ sentence_callback = null
 sentence_edit = (s, callback) ->
     sentence_callback = callback
 
-    if s.protocol is not "UKHAS"
+    if s.protocol != "UKHAS"
         alert "genpayload doesn't know how to configure the #{s.protocol} protocol"
         callback false
 
@@ -34,6 +34,7 @@ sentence_edit = (s, callback) ->
 sentence_save = (s, callback) ->
     try
         sentence =
+            protocol: "UKHAS"
             callsign: $("#sentence_callsign").val()
             checksum: $("#sentence_checksum").val()
             fields: (array_data_map "#sentence_fields", "field_data", true)
