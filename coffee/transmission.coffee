@@ -26,7 +26,7 @@ transmission_edit = (t, callback) ->
     $("#transmission_speed").val t.speed or 22
 
     # modulation == Hellschreiber
-    $("#transmission_hellvariant").val t.variant or "feldhell"
+    $("#transmission_variant").val t.variant or "feldhell"
 
     # Update validation, open correct section
     $("#transmission_edit input, #transmission_edit select").change()
@@ -40,7 +40,7 @@ transmission_confirm = ->
     get = (key, numeric=false) ->
         v = $("#transmission_#{key}").val()
         if numeric
-            transmission[key] = strict_numeric transmission[key]
+            transmission[key] = strict_numeric v
             if (isNaN v) or v <= 0
                 throw "get error"
         else

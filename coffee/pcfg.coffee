@@ -69,6 +69,11 @@ transmissions_list_item = (t) ->
             description += " #{t.baud} baud #{t.shift}Hz shift #{t.encoding} #{parity} #{t.stop} stop bits"
         when "DominoEX"
             description += " #{t.speed}"
+        when "Hellschreiber"
+            description += switch t.variant
+                when "slowhell" then " (Slow Hell)"
+                when "feldhell" then " (Feld Hell)"
+                else ""
 
     if t.description?
         description = "#{t.description} (#{description})"
