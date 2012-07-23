@@ -15,7 +15,10 @@ time_regex = /^((0|1)[0-9]|2[0-3])(:|)([0-5][0-9])(|\3([0-5][0-9]|60))$/
 time_parse = (str) ->
     r = time_regex.exec str
     if r?
-        return [r[1], r[4], r[6] or 0]
+        h = parseInt r[1]
+        m = parseInt r[4]
+        s = (parseInt r[6]) or 0
+        return [h, m, s]
     else
         throw "invalid time"
 
@@ -23,6 +26,7 @@ time_parse = (str) ->
 toplevel = (open) ->
     $("body > div").not(open).hide()
     $(open).show()
+    return
 
 copy = (o) -> $.extend {}, o
 deepcopy = (o) -> $.extend true, {}, o
@@ -32,6 +36,7 @@ array_reorder = (array, from, to) ->
     v = array[from..from]
     array[from..from] = []
     array[to...to] = v
+    return
 
 # like parseFloat but doesn't tolerate rubbish on the end. Returns NaN if fail.
 strict_numeric = (str) ->
@@ -75,6 +80,7 @@ form_field = (elem, opts={}) ->
                 ok = false
 
         set_valid e, ok
+        return
 
 # set/remove the valid class
 set_valid = (elem, valid) ->
@@ -82,6 +88,7 @@ set_valid = (elem, valid) ->
         $(elem).removeClass "invalid"
     else
         $(elem).addClass "invalid"
+    return
 
 # Setup an input as a field name input with autocompletion & validation
 field_name_input = (elem) ->
@@ -90,12 +97,18 @@ field_name_input = (elem) ->
         extra: (v) -> v[0] != "_"
 
     elem.autocomplete
-        source: (w, cb) -> cb suggest_field_names w.term
-        select: (e, ui) -> if ui.item then set_valid elem, true
+        source: (w, cb) ->
+            cb suggest_field_names w.term
+            return
+        select: (e, ui) ->
+            if ui.item then set_valid elem, true
+            return
         minLength: 0
 
     # Encourage the autocomplete box to open more often
-    elem.click -> elem.autocomplete "search"
+    elem.click ->
+        elem.autocomplete "search"
+        return
 
 sensor_list =
     "stdtelem.time": "Time"
@@ -145,27 +158,29 @@ save_doc = (doc, callback) ->
     $("#saving_doc").val JSON.stringify doc
     $("#save_success, #save_fail").hide()
 
-    failed = (msg) ->
-        $("#saving_status").text "Failed :-("
-        $("#save_fail_message").text msg
-        $("#save_fail").show()
-
     database.saveDoc doc,
         success: (resp) ->
             $("#saving_status").text "Saved."
             $("#saved_id").text resp.id
             $("#save_success").show()
             # jquery.couch will add _rev and _id to doc.
+            return
         error: (status, error, reason) ->
-            failed "#{status} #{error} #{reason}"
+            $("#saving_status").text "Failed :-("
+            $("#save_fail_message").text "#{status} #{error} #{reason}"
+            $("#save_fail").show()
+            return
 
 setup_save_buttons = ->
     $("#save_done").click ->
         save_callback saving_doc
+        return
     $("#save_retry").click ->
         save_doc saving_doc, save_callback
+        return
     $("#save_back").click ->
         save_callback null
+        return
 
 # load docs by list of ids with loading screen. #loading_docs should be visible
 loading_docs_callback = null
@@ -175,10 +190,6 @@ load_docs = (docs, callback) ->
 
     $("#loading_docs_back").hide()
 
-    failed = (msg) ->
-        $("#loading_docs_text").text "Failed: #{msg}"
-        $("#loading_docs_back").show()
-
     database.allDocs
         keys: docs
         include_docs: true
@@ -187,11 +198,16 @@ load_docs = (docs, callback) ->
             for row in resp.rows
                 docs[row.id] = row.doc
             callback docs
+            return
         error: (status, error, reason) ->
-            failed "#{status} #{error} #{reason}"
+            $("#loading_docs_text").text "Failed: #{status} #{error} #{reason}"
+            $("#loading_docs_back").show()
+            return
 
 setup_loading_docs_buttons = ->
-    $("#loading_docs_back").click -> loading_docs_callback false
+    $("#loading_docs_back").click ->
+        loading_docs_callback false
+        return
 
 # Turn all div.button > a into jquery button sets
 $ ->
@@ -202,3 +218,4 @@ $ ->
 
     setup_save_buttons()
     setup_loading_docs_buttons()
+    return

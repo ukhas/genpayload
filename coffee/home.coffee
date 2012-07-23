@@ -8,6 +8,7 @@ setup_home = ->
     $("#help_once").change ->
         newpref = if $("#help_once").prop "checked" then "hide" else null
         $.cookie("genpayload_help", newpref, expires: 365)
+        return
 
     pref = $.cookie("genpayload_help")
 
@@ -36,6 +37,7 @@ setup_create_actions = ->
     $("#go_pcfg_new").click ->
         toplevel "#payload_configuration"
         pcfg_edit null, (doc) -> toplevel "#home"
+        return
 
     $("#go_pcfg_modify").click ->
         toplevel "#browse"
@@ -45,10 +47,12 @@ setup_create_actions = ->
                 pcfg_edit doc, (doc) -> toplevel "#home"
             else
                 toplevel "#home"
+        return
 
     $("#go_flight_new").click ->
         toplevel "#flight"
         flight_edit null, (doc) -> toplevel "#home"
+        return
 
     $("#go_flight_modify").click ->
         toplevel "#browse"
@@ -68,16 +72,18 @@ setup_create_actions = ->
                 flight_edit doc, edit_cb
             else
                 toplevel "#home"
+        return
 
     $("#quick_pcfg").click ->
         close_help()
         $("#go_pcfg_new").click()
         $("#go_wizard").click()
+        return
 
     $("#quick_flight").click ->
         close_help()
         $("#go_flight_new").click()
-        # TODO open click add new payload button
+        return
 
 $ ->
     setup_create_actions()
@@ -85,3 +91,4 @@ $ ->
     # main start point of the app
     toplevel "#home"
     setup_home()
+    return

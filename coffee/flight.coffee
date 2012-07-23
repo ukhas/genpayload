@@ -158,6 +158,8 @@ flight_save = ->
         if saved?
             flight_callback saved
 
+    return
+
 # Return object with keys launch, start, end describing the 3 dates in the flight.
 flight_get_dates = ->
     timezone = $("#launch_timezone").val()
@@ -229,6 +231,8 @@ flight_show_dates = ->
     else
         $("#launch_time_check, #launch_window_info").text("").attr("title", "")
 
+    return
+
 # onSelect of #launch_date doesn't appear to use jQuery events. flight_edit needs to call it, so...
 flight_launch_date_change = ->
     date = $("#launch_date").datepicker "getDate"
@@ -256,6 +260,7 @@ flight_launch_date_change = ->
         $("#launch_window_start, #launch_window_end").datepicker "setDate", date
 
     flight_show_dates()
+    return
 
 flight_add_payload = (pcfg) ->
     row = $("<tr />")
@@ -281,7 +286,10 @@ setup_flight_form = ->
 
     reopen_timezone = false
     $("#launch_timezone").autocomplete
-        source: (w, cb) -> cb suggest_timezone w.term
+        source: (w, cb) ->
+            cb suggest_timezone w.term
+            return
+
         select: (e, ui) ->
             if not ui.item
                 return
@@ -292,25 +300,31 @@ setup_flight_form = ->
             else
                 set_valid this, true
                 reopen_timezone = false
-                return # or coffee returns the false and jquery cancels.
+            return
 
-        open: -> reopen_timezone = false # reset it
+        open: ->
+            reopen_timezone = false # reset it
+            return
+
         close: ->
             if reopen_timezone
                 $(this).autocomplete "search"
                 reopen_timezone = false
+            return
 
         appendTo: "#launch_timezone_section" # So it may be styled differently
         minLength: 0
 
     # Encourage the autocomplete box to open more often
-    $("#launch_timezone").click -> $(this).autocomplete "search"
+    $("#launch_timezone").click ->
+        $(this).autocomplete "search"
+        return
 
     $("#launch_date").datepicker
-        onSelect: (text, inst) -> flight_launch_date_change()
+        onSelect: flight_launch_date_change
 
     $("#launch_window_start, #launch_window_end").datepicker
-        onSelect: (text, inst) -> flight_show_dates()
+        onSelect: flight_show_dates
 
     form_field "#launch_time"
         extra: (s) -> time_regex.test s
@@ -324,6 +338,7 @@ setup_flight_form = ->
         else
             $("#launch_window_start, #launch_window_end").hide()
         flight_show_dates()
+        return
 
     $("#launch_location_name").autocomplete
         source: suggest_launch_data
@@ -331,6 +346,7 @@ setup_flight_form = ->
             if ui.item
                 $("#launch_latitude").val(ui.item.latitude).change()
                 $("#launch_longitude").val(ui.item.longitude).change()
+            return
         minLength: 0
 
     $("#launch_location_name").click -> $(this).autocomplete "search"
@@ -350,8 +366,12 @@ setup_flight_form = ->
             toplevel "#flight"
             if p
                 flight_add_payload p
+        return
 
 $ ->
     setup_flight_form()
     $("#flight_save").click flight_save
-    $("#flight_abandon").click -> flight_callback false
+    $("#flight_abandon").click ->
+        flight_callback false
+        return
+    return

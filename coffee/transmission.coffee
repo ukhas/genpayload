@@ -25,6 +25,9 @@ transmission_edit = (t, callback) ->
     # modulation == DominoEX
     $("#transmission_speed").val t.speed or 22
 
+    # modulation == Hellschreiber
+    $("#transmission_hellvariant").val t.variant or "feldhell"
+
     # Update validation, open correct section
     $("#transmission_edit input, #transmission_edit select").change()
 
@@ -40,7 +43,8 @@ transmission_confirm = ->
             transmission[key] = strict_numeric transmission[key]
             if (isNaN v) or v <= 0
                 throw "get error"
-        transmission[key] = v
+        else
+            transmission[key] = v
 
     try
         get "frequency", true
@@ -55,6 +59,9 @@ transmission_confirm = ->
             when "DominoEX"
                 strs: []
                 nums: ["speed"]
+            when "Hellschreiber"
+                strs: ["variant"]
+                nums: []
 
         get key for key in keys.strs
         get key, true for key in keys.nums
@@ -69,9 +76,12 @@ transmission_confirm = ->
         transmission.description = d
 
     transmission_callback transmission
+    return
 
 # Report failure using the callback
-transmission_cancel = -> transmission_callback false
+transmission_cancel = ->
+    transmission_callback false
+    return
 
 # Add callbacks to the input elements
 setup_transmission_form = ->
@@ -83,15 +93,15 @@ setup_transmission_form = ->
 
     $("#transmission_modulation").change ->
         v = $("#transmission_modulation").val()
-        show = switch v
-            when "RTTY" then "#transmission_rtty"
-            when "DominoEX" then "#transmission_dominoex"
+        show = "#transmission_" + v.toLowerCase()
 
         $("#transmission_edit > div").not("#transmission_misc, .buttons").not(show).hide()
         $(show).show()
+        return
 
 $ ->
     setup_transmission_form()
 
     $("#transmission_confirm").click -> transmission_confirm()
     $("#transmission_cancel").click -> transmission_cancel()
+    return

@@ -117,10 +117,13 @@ input[type=text].long_input { width: 500px; }
     margin: 0;
     padding: 10px;
     cursor: pointer;
+    white-space: nowrap;
 }
 #browse_list > tr { margin: 0; }
 #browse_list > tr:first-child > td { border-top: 0; }
 #browse_list > tr:hover > td { background-color: #afa; }
+
+.browse_description { max-width: 400px; overflow-x: hidden; }
 
 .browse_item_doc_name, .browse_item_callsign { font-size: 1.5em; }
 .browse_item_id, .browse_item_date { font-size: 0.8em; }

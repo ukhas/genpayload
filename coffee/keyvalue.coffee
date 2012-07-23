@@ -20,9 +20,10 @@ class KeyValueEdit
             @add_row key, value
 
         @add_row()
+        return
 
     # handles duplicate keys and valid key names.
-    # value input disabled and creation/deletion of rows handled elsewhere
+    # value input disabling/enabling and creation/deletion of rows is handled elsewhere
     key_changed: (input) ->
         # Remove the last used key
         key = input.data "last_used_key"
@@ -105,12 +106,14 @@ class KeyValueEdit
             pre_change()
             @key_changed k
             post_change()
+            return
 
         k.keydown (e) ->
             if e.which is 9
                 pre_change()
                 # post_change() will fire later when change() is called normally.
                 # re-running pre_change() is harmless.
+            return
 
         # Show a blue background on things that we will save as not-strings
         v.change =>
@@ -122,6 +125,7 @@ class KeyValueEdit
                 v.removeClass "keyvalue_json"
 
             set_valid v, (@validator k.val(), value)
+            return
 
         if key is ""
             v.prop "disabled", true
@@ -159,4 +163,5 @@ class KeyValueEdit
 
                 d[key] = value
                 used_keys[key] = true
+            return
         return d

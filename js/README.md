@@ -14,7 +14,7 @@ Dual licensed (MIT, GPL); Copyright 2011, Klaus Hartl
 
 Apache License, v2, [CouchDB AUTHORS](https://git-wip-us.apache.org/repos/asf?p=couchdb.git;a=blob;f=AUTHORS;h=49b5ef162b53f95126b663b0e6e75f1555fd6e9a;hb=e736fa9e314034e2603ac5861692ddeab92f1dad)
 
- - jquery.couch.js [couchdb v 1.2.0 git](https://git-wip-us.apache.org/repos/asf?p=couchdb.git;a=blob;f=share/www/script/jquery.couch.js;h=4db6efa223c5a22be3512056f91e5806e0144a94;hb=e736fa9e314034e2603ac5861692ddeab92f1dad)
+ - jquery.couch.js [couchdb v 1.2.0 git](https://git-wip-us.apache.org/repos/asf?p=couchdb.git;a=blob;f=share/www/script/jquery.couch.js;h=4db6efa223c5a22be3512056f91e5806e0144a94;hb=e736fa9e314034e2603ac5861692ddeab92f1dad) (+ tiny patch to saveDoc)
 
 Apache License, v2, Copyright 2010 Matthew Eernisse (mde@fleegix.org) and Open Source Applications Foundation
 

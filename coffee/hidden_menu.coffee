@@ -28,6 +28,7 @@ class HiddenMenu
         @menu.menu()
         subcontainer.append @menu
         @container.append @icon, subcontainer
+        return
 
     update: (new_items={}) ->
         for id, item of new_items

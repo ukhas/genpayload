@@ -1,9 +1,3 @@
-Help title
-suggest_launch_data: "lots of guesswork went into some of these names. Check"
-
-Does coffee's implicit return in jquery event handlers cause problems?
- -- yes: either add 'return' (i.e., null) to all or scan for potential problems
-
 fx
 parser tester flask app
 
@@ -24,5 +18,7 @@ browser sorting.
     (since expect pcfgs with same name, but not for flights?)
     could do all by created desc..., or just flight, or...
     search so is ok.
+
+suggest_launch_data: "lots of guesswork went into some of these names. Check"
 
 load times. make it fast, or fake it

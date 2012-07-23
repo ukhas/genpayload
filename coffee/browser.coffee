@@ -20,6 +20,7 @@ browse_item_date_id = (id, date, elem) ->
 browse_types =
     payload_configuration:
         view: "prototype_genpayload/payload_configuration__name__created_descending"
+        term_key: (term) -> [term]
         display: (row) ->
             doc = row.doc
 
@@ -32,25 +33,53 @@ browse_types =
                 seen[s.callsign] = true
             uniques.sort()
             callsigns = uniques.join ', '
+            callsigns = $("<div />").text callsigns
+
+            if doc.description?
+                description = $("<div class='small browse_description' />")
+                description.text '"' + doc.description + '"'
+                description.attr "title", doc.description
+            else
+                description = null
 
             d = $("<tr />")
             d.append $("<td class='big' />").text doc.name
-            d.append $("<td />").text callsigns
+
+            c = $("<td />")
+            c.append callsigns
+            if description?
+                c.append description
+            d.append c
+
             browse_item_date_id doc._id, doc.time_created, d
+
             d.data "browse_return", doc
             return d
 
     sentence:
         view: "prototype_genpayload/payload_configuration__sentence_callsign__created_descending__sentence_index"
+        term_key: (term) -> [term]
         display: (row) ->
             callsign = row.key[0]
             index = row.key[2]
             sentence = row.doc.sentences[index]
             doc = row.doc
+            if sentence.description?
+                description = $("<div class='small browse_description' />")
+                description.text '"' + sentence.description + '"'
+                description.attr "title", doc.description
+            else
+                description = null
 
             d = $("<tr />")
             d.append $("<td class='big' />").text callsign
-            d.append $("<td />").text "from #{doc.name}"
+
+            c = $("<td />")
+            c.append $("<div />").text "from #{doc.name}"
+            if description?
+                c.append description, ' '
+            d.append c
+
             browse_item_date_id "#{doc._id} #{index}", doc.time_created, d
 
             d.data "browse_return", sentence
@@ -58,17 +87,21 @@ browse_types =
 
     flight:
         view: "prototype_genpayload/flight__name"
+        term_key: (term) -> term
         display: (row) ->
             name = row.key
             doc = row.doc
 
             d = $("<tr />")
             d.append $("<td class='big' />").text doc.name
+
             i = $("<td class='small' />")
             i.append $("<div />").text if doc.approved then "Approved" else ""
             i.append $("<div />").text "#{doc.metadata.group or ""} #{doc.metadata.project or ""}"
             d.append i
+
             browse_item_date_id doc._id, doc.launch.time, d
+
             d.data "browse_return", doc
             return d
 
@@ -97,10 +130,9 @@ browse_clear = ->
     browse_prev_what = null
 
 search_low_key = (term) ->
-    return [term.toLowerCase()]
-
+    browse_types[browse_type].term_key term.toLowerCase()
 search_high_key = (term) ->
-    return [term.toUpperCase() + "ZZZZZZZZZZZZZ"]
+    browse_types[browse_type].term_key term.toUpperCase() + "ZZZZZZZZZZZZZ"
 
 # Load a page of results.
 # What can contain:
@@ -138,17 +170,16 @@ browse_load = (what={}) ->
             options.startkey = search_low_key what.search
             options.endkey = search_high_key what.search
 
-    failed = (msg) ->
-        $("#browse_status").text "Error loading rows: #{msg}"
-        $("#browse_cancel").button "enable"
-
     options.success = (resp) ->
         [pages_before, pages_after] = browse_hack_response what, resp
         browse_display what, resp
         browse_setup_page_links what, resp, pages_before, pages_after
+        return
 
     options.error = (status, error, reason) ->
-        failed "#{status}, #{error}, #{reason}"
+        $("#browse_status").text "Error loading rows: #{status}, #{error}, #{reason}"
+        $("#browse_cancel").button "enable"
+        return
 
     database.view browse_types[browse_type].view, options
 
@@ -194,6 +225,7 @@ browse_display = (what, resp) ->
     $("#browse_list > tr").click ->
         data = $(this).data "browse_return"
         browse_callback data
+        return
 
     $("#browse_cancel").button "enable"
 
@@ -226,17 +258,32 @@ browse_search_on_timer = ->
     browse_search_timer = null
     if browse_search_enabled
         $("#browse_search_go").click()
+    return
 
 # Setup browse ui callbacks
 $ ->
-    $("#browse_cancel").click -> browse_callback false
-    $("#browse_next").click -> browse_load browse_next_what
-    $("#browse_prev").click -> browse_load browse_prev_what
+    $("#browse_cancel").click ->
+        browse_callback false
+        return
+
+    $("#browse_next").click ->
+        browse_load browse_next_what
+        return
+
+    $("#browse_prev").click ->
+        browse_load browse_prev_what
+        return
+
     $("#browse_search_go").click ->
-        search = $("#browse_search").val()
-        browse_load search: search
+        if browse_search_enabled
+            search = $("#browse_search").val()
+            browse_load search: search
+        return
 
     $("#browse_search").keydown ->
         if browse_search_timer?
             clearTimeout browse_search_timer
         browse_search_timer = setTimeout browse_search_on_timer, 500
+        return
+
+    return

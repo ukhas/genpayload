@@ -214,6 +214,7 @@ wizard_guess = ->
             switch wizard_stage
                 when "sentence" then wizard_jump i
                 when "second" then wizard_lockfield i
+            return
 
         if f.name is ""
             e.addClass "invalid"
@@ -318,13 +319,9 @@ wizard_field_save = ->
 
     return f
 
-# Next field
-wizard_next = ->
-    wizard_jump wizard_current_field + 1
-
-# Previous field
-wizard_prev = ->
-    wizard_jump wizard_current_field - 1
+# Next/previous field
+wizard_next = -> wizard_jump wizard_current_field + 1
+wizard_prev = -> wizard_jump wizard_current_field - 1
 
 # Create a filter list in wizard_sentence if neccessary, then add the filter obj
 wizard_add_filter = (type, obj) ->
@@ -403,6 +400,7 @@ wizard_numeric_scale_demo = ->
         data = "NaN"
 
     $("#wizard_numeric_scale_example").text data
+    return
 
 # if has_position, Start the no-lock mode wizard
 wizard_second_stage = (has_position) ->
@@ -514,6 +512,7 @@ wizard_setup_form = ->
             $("#wizard_numeric_scale_section").show()
         else
             $("#wizard_numeric_scale_section").hide()
+        return
 
     $("#wizard_numeric_scale").change ->
         if $("#wizard_numeric_scale").prop "checked"
@@ -521,6 +520,7 @@ wizard_setup_form = ->
             wizard_numeric_scale_demo()
         else
             $("#wizard_numeric_scale_opts").hide()
+        return
 
     $("#wizard_numeric_scale_type").change wizard_numeric_scale_demo
 
@@ -537,6 +537,7 @@ wizard_setup_form = ->
         else
             $("#wizard_numeric_scale_round_opts").hide()
         wizard_numeric_scale_demo()
+        return
 
 # Setup callbacks for no-lock form
 wizard_setup_nolock_form = ->
@@ -563,6 +564,7 @@ wizard_setup_nolock_form = ->
             $("#wizard_nolock_alwaysnotice").show()
         else
             $("#wizard_nolock_alwaysnotice").hide()
+        return
 
     $("#wizard_lockfield_add").click ->
         e = $("<input type='text' />")
@@ -578,25 +580,36 @@ wizard_setup_nolock_form = ->
 
         $("#wizard_lockfield_ok").append e, ' '
         $("#wizard_lockfield_remove").button("enable")
+        return
 
     $("#wizard_lockfield_remove").click ->
         $("#wizard_lockfield_ok").children().last().remove()
         if $("#wizard_lockfield_ok").children().length == 0
             $("#wizard_lockfield_remove").button("disable")
+        return
 
 # Setup callbacks on page load
 $ ->
     $("#wizard_text_box").keydown (e) ->
         if e.which is 13 and wizard_stage is "paste"
             wizard_guess()
-    $("#wizard_retry").click -> sentence_wizard false, wizard_callback # restart with same cb
-    $("#wizard_cancel").click -> wizard_callback false
+        return
+    $("#wizard_retry").click ->
+        sentence_wizard false, wizard_callback # restart with same cb
+        return
+    $("#wizard_cancel").click ->
+        wizard_callback false
+        return
     $("#wizard_next").click ->
         switch wizard_stage
             when "paste" then wizard_guess()
             when "sentence" then wizard_next()
             when "second" then wizard_second_done()
+        return
     $("#wizard_prev").click ->
-        if wizard_stage is "sentence" then wizard_prev()
+        if wizard_stage is "sentence"
+            wizard_prev()
+        return
     wizard_setup_form()
     wizard_setup_nolock_form()
+    return

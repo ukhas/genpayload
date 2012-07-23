@@ -6,3 +6,4 @@ $ ->
     # Adds a click event handler that kills the event if the button is disabled, so must go first.
     $("#help_once").button()
     $(".buttons").buttonset()
+    return

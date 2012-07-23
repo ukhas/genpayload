@@ -129,12 +129,14 @@ sentence_field_div = (field, expert=false) ->
                     factor: 1
                     round: 3
                 $("#sentence_post_filters").sortable "refresh"
+                return
         delete:
             text: "Delete"
             func: ->
                 p = e.parent()
                 e.remove()
                 p.sortable "refresh"
+                return
     e.append menu.container
 
     if not expert
@@ -162,6 +164,7 @@ sentence_field_div = (field, expert=false) ->
                 c.show()
             else
                 c.hide()
+            return
 
         n.change()
         s.change()
@@ -182,6 +185,7 @@ sentence_field_div = (field, expert=false) ->
                 func: ->
                     data = (e.data "field_data") false
                     e.replaceWith sentence_field_div data, true
+                    return
     else
         kv = new KeyValueEdit
             data: field
@@ -192,7 +196,7 @@ sentence_field_div = (field, expert=false) ->
                     when "sensor" then (typeof value is "string" and callable_regexp.test value)
                     else true
         e.append kv.elem
-        e.data "filter_data", -> kv.data()
+        e.data "field_data", -> kv.data()
 
         menu.update
             convert:
@@ -206,6 +210,7 @@ sentence_field_div = (field, expert=false) ->
                         alert "Could not convert the field. (non-standard type, options, or validation errors)"
                         return
                     e.replaceWith sentence_field_div data, false
+                    return
 
     return e
 
@@ -237,6 +242,7 @@ sentence_normal_filter_div = (d={}) ->
                 p = e.parent()
                 e.remove()
                 p.sortable "refresh"
+                return
     e.append menu.container
     e.append kv.elem
     e.data "filter_data", ->
@@ -271,6 +277,7 @@ sentence_hotfix_filter_div = (d=null) ->
                 p = e.parent()
                 e.remove()
                 p.sortable "refresh"
+                return
     e.append menu.container
     i = $("<input type='text' class='long_input' placeholder='Paste output of ./sign_hotfix.py' />")
     if d != null
@@ -281,6 +288,7 @@ sentence_hotfix_filter_div = (d=null) ->
             set_valid i, true
         catch e
             set_valid i, false
+        return
     i.change()
     e.append i
     e.data "filter_data", -> sentence_get_hotfix i.val()
@@ -293,20 +301,29 @@ $ ->
             name: ""
             sensor: "base.string"
         $("#sentence_fields").sortable "refresh"
+        return
     $("#sentence_fields_expert").click ->
         $("#sentence_fields").append sentence_field_div {}, true
         $("#sentence_fields").sortable "refresh"
+        return
 
     for section in ["intermediate", "post"]
         for type, func of {normal: sentence_normal_filter_div, hotfix: sentence_hotfix_filter_div}
             do (section, type, func) ->
                 $("#sentence_#{section}_#{type}_filter_add").click ->
                     $("#sentence_#{section}_filters").append func()
+                    return
 
     $("#sentence_fields, #sentence_intermediate_filters, #sentence_post_filters").sortable
         revert: true
         tolerance: 5
     $("#sentence_fields, #sentence_intermediate_filters, #sentence_post_filters").disableSelection()
 
-    $("#sentence_edit_cancel").click -> sentence_callback false
-    $("#sentence_edit_save").click -> sentence_save()
+    $("#sentence_edit_cancel").click ->
+        sentence_callback false
+        return
+    $("#sentence_edit_save").click ->
+        sentence_save()
+        return
+
+    return
