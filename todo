@@ -1,23 +1,9 @@
-fx
 parser tester flask app
 
-add tips to some places? maybe?
- - #sentence_edit white space to the right would be a good place to put tips on field naming and units and stuff
- - si units
-
-maybe html5 url/history
-
-custom jquery ui build (?)
-minify all the things
-bundle into single file (?)
-
-browser sorting.
-    currently:
-        [name, -created] for pcfg, pcfg.sentence[i]
-        name for flight
-    (since expect pcfgs with same name, but not for flights?)
-    could do all by created desc..., or just flight, or...
-    search so is ok.
+packaging
+    custom jquery ui build (?)
+    minify all the things
+    bundle into single file (?)
 
 suggest_launch_data: "lots of guesswork went into some of these names. Check"
 
