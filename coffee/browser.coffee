@@ -68,8 +68,8 @@ browse_types =
             if sentence.description?
                 description = $("<div class='small browse_description' />")
                 description.text '"' + sentence.description + '"'
-                if doc.description.length > 30
-                    description.attr "title", doc.description
+                if sentence.description.length > 30
+                    description.attr "title", sentence.description
             else
                 description = null
 
