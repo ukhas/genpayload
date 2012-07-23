@@ -58,7 +58,12 @@ pcfg_save = ->
 
 # Create a <tr> that describes the transmission dict, t, and give it Edit/Delete links.
 transmissions_list_item = (t) ->
-    description = "#{t.frequency / 1e6}MHz #{t.mode} #{t.modulation}"
+    row = $("<tr />")
+    row.data "transmission", t
+
+    e = $("<td class='pcfg_limit_width' />")
+
+    auto_description = "#{t.frequency / 1e6}MHz #{t.mode} #{t.modulation}"
 
     switch t.modulation
         when "RTTY"
@@ -66,22 +71,25 @@ transmissions_list_item = (t) ->
                 when "none" then "no parity"
                 when "odd", "even" then "#{t.parity} parity"
 
-            description += " #{t.baud} baud #{t.shift}Hz shift #{t.encoding} #{parity} #{t.stop} stop bits"
+            auto_description += " #{t.baud} baud #{t.shift}Hz shift #{t.encoding} #{parity} #{t.stop} stop bits"
         when "DominoEX"
-            description += " #{t.speed}"
+            auto_description += " #{t.speed}"
         when "Hellschreiber"
-            description += switch t.variant
+            auto_description += switch t.variant
                 when "slowhell" then " (Slow Hell)"
                 when "feldhell" then " (Feld Hell)"
                 else ""
 
     if t.description?
-        description = "#{t.description} (#{description})"
+        if t.description.length > 30
+            e.text t.description
+            e.attr "title", t.description
+        else
+            e.text "#{t.description}: #{auto_description}"
+    else
+        e.text auto_description
 
-    row = $("<tr />")
-    row.data "transmission", t
-
-    row.append $("<td />").text description
+    row.append e
 
     buttons = $("<td class='sortable_hide' />")
 
@@ -139,36 +147,44 @@ sentences_list_item = (s) ->
     row = $("<tr />")
     row.data "sentence", s
 
-    e = $("<td />")
+    e = $("<td class='pcfg_limit_width' />")
     if s.description?
-        e.text "#{s.description}: UKHAS "
-    else
-        e.text "UKHAS "
+        e.text "#{s.description}"
 
-    filtered_fields = {}
-    if s.filters and s.filters.post
-        for f in s.filters.post
-            if f.source
-                if filtered_fields[f.source]
-                    filtered_fields[f.source].push(f.filter or "hotfix")
-                else
-                    filtered_fields[f.source] = [f.filter or "hotfix"]
+        if s.description.length > 30
+            e.attr "title", s.description
 
-    t = $("<span />")
-    t.addClass "telemetry_string"
-    t.text "$$#{s.callsign}"
-    t.append ",", field_description f, filtered_fields for f in s.fields
-    t.append "*", checksum_description s.checksum
+    if s.protocol == "UKHAS" and ((not s.description?) or (s.description.length < 30))
+        if s.description?
+            e.append ": "
 
-    e.append t
-    if s.filters
-        n = 0
-        if s.filters.intermediate then n += s.filters.intermediate.length
-        if s.filters.post then n += s.filters.post.length
+        filtered_fields = {}
+        if s.filters and s.filters.post
+            for f in s.filters.post
+                if f.source
+                    if filtered_fields[f.source]
+                        filtered_fields[f.source].push(f.filter or "hotfix")
+                    else
+                        filtered_fields[f.source] = [f.filter or "hotfix"]
 
-        if n
-            n_s = if n != 1 then "s" else ""
-            e.append " (#{n} filter#{n_s})"
+        t = $("<span />")
+        t.addClass "telemetry_string"
+        t.text "$$#{s.callsign}"
+        t.append ",", field_description f, filtered_fields for f in s.fields
+        t.append "*", checksum_description s.checksum
+
+        if s.filters
+            n = 0
+            if s.filters.intermediate then n += s.filters.intermediate.length
+            if s.filters.post then n += s.filters.post.length
+
+            if n
+                n_s = if n != 1 then "s" else ""
+                e.append " (#{n} filter#{n_s})"
+
+        e.append t
+
+    e.append " (#{s.protocol})"
 
     row.append e
 

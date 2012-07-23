@@ -352,7 +352,7 @@ wizard_try_finish = ->
         if f.name in ["latitude", "longitude"]
             has_position = true
             break
-    
+
     wizard_second_stage has_position
 
 # Tidy up wizard_sentence:
