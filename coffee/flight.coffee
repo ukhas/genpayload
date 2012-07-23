@@ -279,8 +279,32 @@ setup_flight_form = ->
         nonempty: true
         extra: (s) -> s? and s != "null" and timezone_js_data.zones[s]?
 
+    reopen_timezone = false
     $("#launch_timezone").autocomplete
-        source: timezone_list
+        source: (w, cb) -> cb suggest_timezone w.term
+        select: (e, ui) ->
+            if not ui.item
+                return
+
+            if ui.item.value[-1..] == '/'
+                set_valid this, false
+                reopen_timezone = true
+            else
+                set_valid this, true
+                reopen_timezone = false
+                return # or coffee returns the false and jquery cancels.
+
+        open: -> reopen_timezone = false # reset it
+        close: ->
+            if reopen_timezone
+                $(this).autocomplete "search"
+                reopen_timezone = false
+
+        appendTo: "#launch_timezone_section" # So it may be styled differently
+        minLength: 0
+
+    # Encourage the autocomplete box to open more often
+    $("#launch_timezone").click -> $(this).autocomplete "search"
 
     $("#launch_date").datepicker
         onSelect: (text, inst) -> flight_launch_date_change()
@@ -309,7 +333,6 @@ setup_flight_form = ->
                 $("#launch_longitude").val(ui.item.longitude).change()
         minLength: 0
 
-    # Encourage the autocomplete box to open more often
     $("#launch_location_name").click -> $(this).autocomplete "search"
 
     form_field "#launch_latitude"

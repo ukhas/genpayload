@@ -1,14 +1,16 @@
+Help title
+suggest_launch_data: "lots of guesswork went into some of these names. Check"
+
+Does coffee's implicit return in jquery event handlers cause problems?
+ -- yes: either add 'return' (i.e., null) to all or scan for potential problems
+
 fx
-general prettyfying
 parser tester flask app
-add tips and stuff everywhere
- - what is a 'flight' (a flight train/balloon/launch), 'payload' (stuff in a box), (grouping info)
+
+add tips to some places? maybe?
  - #sentence_edit white space to the right would be a good place to put tips on field naming and units and stuff
  - si units
- - move stuff from front page into editing sections?
 
-maybe use em instead of px in the css? I hear it's all the rage
-maybe nice font
 maybe html5 url/history
 
 custom jquery ui build (?)
@@ -22,8 +24,5 @@ browser sorting.
     (since expect pcfgs with same name, but not for flights?)
     could do all by created desc..., or just flight, or...
     search so is ok.
-
-review quick start links - maybe confusing. Also really want to click Continue; maybe quickstart next page
- if keep: maybe modify so cancel buttons work?
 
 load times. make it fast, or fake it

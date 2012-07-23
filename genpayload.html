@@ -34,7 +34,7 @@
             </div>
 
             <div id="help">
-                <h2>Wat on earth is dis?</h2>
+                <h2>What is this?</h2>
 
                 <p>You can create two types of configuration document here:</p>
 
@@ -71,12 +71,12 @@
                 <h2>Extra details</h2>
 
                 <h3>payload configuration</h3>
-                <p>The sentence and radio settings in a payload configuration document are two ordered lists:
-                The first sentence format that matches successfully is used, and the first item in the radio
+                <p>The sentence and radio settings in a payload configuration document are ordered lists:
+                the first sentence format that matches successfully is used, and the first item in the radio
                 list is the default.</p>
 
                 <h3>Editing</h3>
-                <p>You can't edit documents once they're saved. You can however load modify and save a new
+                <p>You can't edit documents once they're saved. You can however load, modify and save a new
                 copy of your configuration document: habitat will try the newest version first.</p>
 
                 <h3>Launch windows</h3>
@@ -305,10 +305,7 @@
                     </div>
                     <div id="wizard_coordinate_format">
                         <label for="wizard_coordinate_format_select">Format</label>
-                        <select id="wizard_coordinate_format_select">
-                            <option>dd.dddd</option>
-                            <option>ddmm.mmmm</option>
-                        </select>
+                        <select id="wizard_coordinate_format_select"></select>
                     </div>
                 </div>
                 <div id="wizard_numeric_scale_section">
@@ -503,7 +500,7 @@
             <hr />
 
             <div id="dates" class="top_labelled_form">
-                <div>
+                <div id="launch_timezone_section">
                     <label for="launch_timezone">Timezone</label>
                     <input type="text" id="launch_timezone" />
                     <span class="input_extra">Launch time below is interpreted in this timezone; daylight saving detected automatically from the date. <br />

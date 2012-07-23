@@ -52,7 +52,7 @@ input[type=text], select, #wizard_fields
 
 input[type=text].invalid, select.invalid { border-color: orange; }
 
-input[type=text] { width: 200px; }
+input[type=text] { width: 250px; }
 input[type=text].short_input { width: 100px; }
 input[type=text].long_input { width: 500px; }
 
@@ -128,3 +128,11 @@ input[type=text].long_input { width: 500px; }
 #launch_window_start, #launch_window_end { display: inline-block; }
 
 #flight_pcfgs_list td { padding: 2px 15px; }
+
+#launch_timezone_section .ui-autocomplete {
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 10px;
+}
+

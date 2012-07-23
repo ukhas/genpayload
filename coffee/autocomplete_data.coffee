@@ -66,7 +66,6 @@ suggest_field_names = (what) ->
     return results
 
 # Copied from cusf-standalone-predictor/predict/sites.json
-# TODO: lots of guesswork went into some of these names. Check it
 suggest_launch_data = [
     label:      "Churchill College, Cambridge, England"
     latitude:   52.2135
@@ -100,3 +99,33 @@ suggest_launch_data = [
     latitude:   52.1215
     longitude:  0.8078
 ]
+
+# timezone_list is from js/zone_list.js
+timezone_area_list = []
+do ->
+    areas = {}
+    for zone in timezone_list
+        area = zone[...zone.indexOf('/')]
+        if areas[area]
+            continue
+
+        areas[area] = true
+        timezone_area_list.push area
+
+    timezone_area_list.sort()
+
+suggest_timezone = (what) ->
+    # match Anything/Something Europe/ and Europe :
+    if (what.indexOf "/") == -1 or what in timezone_area_list
+        suggest_from = timezone_area_list
+        item = (f) -> {label: f, value: f + '/'}
+    else
+        suggest_from = timezone_list
+        item = (f) -> f
+
+    results = []
+    for f in suggest_from
+        if f != what and (f.indexOf what) != -1
+            results.push item f
+
+    return results
