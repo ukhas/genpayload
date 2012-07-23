@@ -38,9 +38,6 @@ h1, h2, h3, h4 { margin-top: 0; margin-bottom: 0; }
 #header_inner { min-width: 1000px; margin: 0px 200px 5px 200px; text-align: right;  color: #ffffff; line-height: 65px; }
 #header_inner h1 { margin: 0; padding: 0; float: left; width: 50%; text-align: left;}
 
-#home { border: 0; padding: 0; margin: 0; }
-#blurb p { margin-top: 2px; margin-bottom: 2px; }
-
 .separate_children > div, div.top_labelled_form > div { margin-top: 15px; }
 .separate_children > div:first-child, div.top_labelled_form > div:first-child { margin-top: 0; }
 
