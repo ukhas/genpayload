@@ -6,11 +6,11 @@ body
 hr { height: 3px; width: 99%; background-color: #aaf; border: 0; margin: 10px; }
 
 h1, h2, h3, h4 { margin-top: 0; margin-bottom: 0; }
-#help h2, #create h2 { margin-bottom: 15px; }
+#help h2 { margin-bottom: 15px; }
 h1, #subtitle { text-align: center; }
 #subtitle { margin-top: 0; }
 
-body > div, #home > div
+body > div
 {
     margin: 5px 100px;
     padding: 10px;
@@ -21,9 +21,6 @@ body > div, #home > div
     -khtml-border-radius: 10px;
     min-width: 1000px;
 }
-
-#home { border: 0; padding: 0; margin: 0; }
-#blurb p { margin-top: 2px; margin-bottom: 2px; }
 
 .separate_children > div, div.top_labelled_form > div { margin-top: 15px; }
 .separate_children > div:first-child, div.top_labelled_form > div:first-child { margin-top: 0; }
@@ -56,8 +53,34 @@ input[type=text] { width: 250px; }
 input[type=text].short_input { width: 100px; }
 input[type=text].long_input { width: 500px; }
 
-#create > div > h3 { display: inline-block; width: 330px; }
-#create > div > .buttons { display: inline-block }
+#create > div
+{
+    display: block;
+    text-align: center;
+}
+
+#create > div > div
+{
+    width: 400px;
+    display: inline-block;
+    border: 2px solid black;
+    margin: 4px;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+#create > div > div:hover
+{
+    background-color: #00f;
+    cursor: pointer;
+}
+
+#home h2, #home h3, #home p { margin: 10px 0; }
+
+#go_pcfg_new:hover { background-color: #f00 !important; }
+#go_pcfg_modify:hover { background-color: #ff0 !important; }
+#go_flight_new:hover { background-color: #0f0 !important; }
+#go_flight_modify:hover { background-color: #0ff !important; }
 
 .pcfg_limit_width { max-width: 700px; overflow: hidden; white-space: nowrap; }
 .telemetry_string { font-family: monospace; }

@@ -10,7 +10,6 @@
         <script type="text/javascript" src="js/json2.js"></script>
         <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
         <script type="text/javascript" src="js/jquery-ui-1.8.21.custom.min.js"></script>
-        <script type="text/javascript" src="js/jquery.cookie.js"></script>
         <script type="text/javascript" src="js/jquery.couch.js"></script>
         <script type="text/javascript" src="js/timezone.js"></script>
         <script type="text/javascript" src="js/all_zones.js"></script>
@@ -24,104 +23,91 @@
         <p id="subtitle">flight and payload configuration document generator</p>
 
         <div id="home">
-            <div id="blurb">
-                <p>This application should hopefully make configuring habitat to parse your payload's telemetry
-                simple, and creating flight documents painless.</p>
-
-                <p>This genpayload understands the UKHAS protocol.</p>
-
-                <a id="show_help" href="#">Show help</a>
-            </div>
-
-            <div id="help">
-                <h2>What is this?</h2>
-
-                <p>You can create two types of configuration document here:</p>
-
-                <h3>payload configuration documents</h3>
-                <p><code>payload_configuration</code> documents describe a payload (no prizes for guessing that).
-                They contain instructions to habitat: how to parse telemetry that listeners upload;
-                and radio settings: how to setup listeners' radios.
-                If you fly one payload multiple times, you shouldn't have to change payload configuration document.</p>
-
-                <h3>flight documents</h3>
-                <p><code>flight</code> documents describe the time and date of a planned flight. They allow us
-                to add the flight to the calendar, set the title on the tracker, and select only relevant
-                telemetry to go into the flight archive (i.e., exclude test data).</p>
-
-                <p>A flight document contains a list of payload configuration documents - i.e., the payloads
-                that are going to be launched. You can add more than one, if there are several payloads on one
-                balloon/flight train - but for multiple launches, create a flight document per balloon.</p>
-
-                <h2>Quick start</h2>
-
-                <p><b>I've just programmed my brand new payload, and am now testing it.</b></p>
-
-                <p>You only need to create <a id="quick_pcfg" href='#'>a payload_configuration document.</a>
-                You probably want to use the "new format wizard".</p>
-
-                <p><b>I'm going to launch a balloon soon.</b></p>
-
-                <p><a id="quick_flight" href='#'>Create a flight document</a>, then ask on IRC for the
-                doc to be approved.</p>
-
-                <p>Note that you may also create documents by copying and modifying the last document you
-                created for your payload, so you need not start from scratch each time.</p>
-
-                <h2>Extra details</h2>
-
-                <h3>payload configuration</h3>
-                <p>The sentence and radio settings in a payload configuration document are ordered lists:
-                the first sentence format that matches successfully is used, and the first item in the radio
-                list is the default.</p>
-
-                <h3>Editing</h3>
-                <p>You can't edit documents once they're saved. You can however load, modify and save a new
-                copy of your configuration document: habitat will try the newest version first.</p>
-
-                <h3>Launch windows</h3>
-                <p>Flight documents are only valid for an amount of time, preferably as small as possible.
-                Parsed strings that don't belong to an active flight document are treated as 'test' uploads,
-                and will only be shown in the testing section of the new tracker.</p>
-
-                <h3>Approval</h3>
-                <p>Since anyone at all can create flight documents, they must be checked before they appear on
-                the various websites. Payload configuration documents referenced by approved and active
-                (within the launch window) flights are given priority when parsing.</p>
-
-                <h2>See also</h2>
-                <ul>
-                    <li><a href="http://habitat.habhub.org/">habitat</a></li>
-                    <li><a href="http://habitat.habhub.org/logtail/">Live parser log output for debugging</a></li>
-                    <li><a href="http://habhub.org">habhub</a></li>
-                </ul>
-
-                <div class="buttons" id="hide_help">
-                    <a href="#">Continue...</a>
-                    <input type="checkbox" id="help_once">
-                    <label for="help_once">Don't show this blurb next time</label>
-                </div>
-            </div>
-
             <div id="create">
-                <h2>Create a new:</h2>
-
                 <div>
-                    <h3>payload_configuration document</h3>
-                    <div class="buttons">
-                        <a id="go_pcfg_new" href="#">From scratch</a>
-                        <a id="go_pcfg_modify" href="#">Modify existing</a>
-                    </div>
+                    <div id="go_pcfg_new"><div>new</div><div>payload configuration</div></div>
+                    <div id="go_pcfg_modify"><div>modify existing</div><div>payload configuration</div></div>
                 </div>
-
                 <div>
-                    <h3>flight document</h3>
-                    <div class="buttons">
-                        <a id="go_flight_new" href="#">From scratch</a>
-                        <a id="go_flight_modify" href="#">Modify existing</a>
-                    </div>
+                    <div id="go_flight_new"><div>new</div><div>flight</div></div>
+                    <div id="go_flight_modify"><div>modify existing</div><div>flight</div></div>
                 </div>
             </div>
+
+            <h2>Help!</h2>
+
+            <p>You can create two types of configuration document here:</p>
+
+            <h3>payload configuration documents</h3>
+            <p><code>payload_configuration</code> documents describe a payload (no prizes for guessing that).
+            They contain instructions to habitat: how to parse telemetry that listeners upload;
+            and radio settings: how to setup listeners' radios.
+            If you fly one payload multiple times, you shouldn't have to change payload configuration document.</p>
+
+            <h3>flight documents</h3>
+            <p><code>flight</code> documents describe the time and date of a planned flight. They allow us
+            to add the flight to the calendar, set the title on the tracker, and select only relevant
+            telemetry to go into the flight archive (i.e., exclude test data).</p>
+
+            <p>A flight document contains a list of payload configuration documents - i.e., the payloads
+            that are going to be launched. You can add more than one, if there are several payloads on one
+            balloon/flight train - but for multiple launches, create a flight document per balloon.</p>
+
+            <h2>Quick start</h2>
+
+            <p><b>I've just programmed my brand new payload, and am now testing it.</b></p>
+
+            <p>You only need to create <a id="quick_pcfg" href='#'>a payload_configuration document</a>
+            using the "new format wizard".</p>
+
+            <p><b>I'm going to launch a balloon soon.</b></p>
+
+            <p><a id="quick_flight" href='#'>Create a flight document</a>, then ask on IRC for the
+            doc to be approved.</p>
+
+            <p>Note that you may also create documents by copying and modifying the last document you
+            created for your payload, so you need not start from scratch each time.</p>
+
+            <h2>Extra details</h2>
+
+            <h3>payload configuration</h3>
+            <p>The sentence and radio settings in a payload configuration document are ordered lists:
+            the first sentence format that matches successfully is used, and the first item in the radio
+            list is the default.</p>
+
+            <h3>Editing</h3>
+            <p>You can't edit documents once they're saved. You can however load, modify and save a new
+            copy of your configuration document: habitat will try the newest version first.</p>
+
+            <h3>Launch windows</h3>
+            <p>Flight documents are only valid for an amount of time, preferably as small as possible.
+            Parsed strings that don't belong to an active flight document are treated as 'test' uploads,
+            and will only be shown in the testing section of the new tracker.</p>
+
+            <h3>Approval</h3>
+            <p>Since anyone at all can create flight documents, they must be checked before they appear on
+            the various websites. Payload configuration documents referenced by approved and active
+            (within the launch window) flights are given priority when parsing.</p>
+
+            <h3>Units</h3>
+            <p>Please tell habitat how to convert all of your sensor readings into their relevant SI
+            <a href="http://en.wikipedia.org/wiki/SI_base_unit">base</a> or
+            <a href="http://en.wikipedia.org/wiki/SI_derived_unit">derived</a> unit
+            without a metric prefix
+            (except: use <a title="an accepted SI unit for temperature interval">Celsius</a> for temperature;
+            <a title="an accepted unit">degrees</a> for latitude, longitude, heading;
+            <a title="because physicists are hilarious">kilograms</a> for mass).
+            For example: Volts for battery readings,
+            <a title="the tracker may change the prefix to display pressure (and similar cases)">Pa (not kPa)</a>
+            for pressure, m/s for speed. You can scale your fields with habitat, your payload need not do
+            the conversion.</p>
+
+            <h2>See also</h2>
+            <ul>
+                <li><a href="http://habitat.habhub.org/">habitat</a></li>
+                <li><a href="http://habitat.habhub.org/logtail/">Live parser log output for debugging</a></li>
+                <li><a href="http://habhub.org">habhub</a></li>
+            </ul>
         </div>
 
         <div id="browse">
@@ -359,7 +345,7 @@
                     <label for="wizard_description">Format name or description</label>
                     <input type="text" id="wizard_description" class="long_input" />
                     <span class="input_extra">(optional but strongly recommended; e.g., Normal format, No-lock
-                    format (if it's different), Long format (i.e., more fields), e.t.c.</span>
+                    format (if it's different), Long format (i.e., more fields), and so on.</span>
                 </div>
                 <div>
                     <label for="wizard_no_lock">When it doesn't have a lock, the payload sends</label>
@@ -414,7 +400,7 @@
                     <label for="sentence_description">Name or description</label>
                     <input type="text" id="sentence_description" class="long_input" />
                     <span class="input_extra">(optional but strongly recommended; e.g., Normal format, No-lock
-                    format (if it's different), Long format (i.e., more fields), e.t.c.</span>
+                    format (if it's different), Long format (i.e., more fields), and so on.</span>
                 </div>
                 <div>
                     <label for="sentence_protocol">Protocol</label>
