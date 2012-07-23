@@ -59,6 +59,9 @@ input[type=text].long_input { width: 500px; }
 #create > div > h3 { display: inline-block; width: 330px; }
 #create > div > .buttons { display: inline-block }
 
+.pcfg_limit_width { max-width: 700px; overflow: hidden; white-space: nowrap; }
+.telemetry_string { font-family: monospace; font-size: 0.8em; }
+
 #wizard_text_box, #wizard_fields
 {
     width: 70%;
@@ -94,8 +97,6 @@ input[type=text].long_input { width: 500px; }
 .sentence_list > div { margin: 2px 0; }
 .sentence_list input, .sentence_list select { margin: 0 2px; }
 .sentence_list .keyvalue { display: inline-block; }
-.sentence_list .pcfg_limit_width { max-width: 700px; overflow: hidden; white-space: nowrap; }
-.telemetry_string { font-family: monospace; font-size: 0.8em; }
 
 .hidden_menu { display: inline-block; vertical-align: top; }
 .hidden_menu > div { position: absolute; display: none; z-index: 1; }
