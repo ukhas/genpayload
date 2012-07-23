@@ -14,7 +14,7 @@ sentence_edit = (s, callback) ->
 
     $("#sentence_description").val s.description or ""
     $("#sentence_callsign").val s.callsign
-    $("#sentence_checksum").val s.checksum
+    $("#sentence_checksum").val s.checksum or "crc16-ccitt"
 
     $("#sentence_fields, #sentence_intermediate_filters, #sentence_post_filters").empty()
 

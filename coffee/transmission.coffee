@@ -9,6 +9,10 @@ transmission_callback = null
 transmission_edit = (t, callback) ->
     transmission_callback = callback
 
+    if not t.modulation in ["RTTY", "DominoEX", "Hellschreiber"]
+        alert "genpayload doesn't know how to configure #{t.modulation}"
+        callback false
+
     $("#transmission_description").val t.description or ""
 
     $("#transmission_frequency").val  t.frequency / 1e6
@@ -26,7 +30,7 @@ transmission_edit = (t, callback) ->
     $("#transmission_speed").val t.speed or 22
 
     # modulation == Hellschreiber
-    $("#transmission_variant").val t.variant or "feldhell"
+    $("#transmission_variant").val t.variant or "slowhell"
 
     # Update validation, open correct section
     $("#transmission_edit input, #transmission_edit select").change()

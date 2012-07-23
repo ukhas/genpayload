@@ -233,6 +233,7 @@ transmission_new = ->
 default_sentence =
     protocol: "UKHAS"
     callsign: ""
+    checksum: "crc16-ccitt"
     fields: [{name: "sentence_id", sensor: "base.ascii_int"},
              {name: "time", sensor: "stdtelem.time"},
              {name: "latitude", sensor: "stdtelem.coordinate", format: "dd.dddd"},
