@@ -138,17 +138,11 @@ browse_load = (what={}) ->
             options.startkey = search_low_key what.search
             options.endkey = search_high_key what.search
 
-    olderror = window.onerror
-
     failed = (msg) ->
-        window.onerror = olderror
         $("#browse_status").text "Error loading rows: #{msg}"
         $("#browse_cancel").button "enable"
 
-    window.onerror = -> failed "Unknown error"
-
     options.success = (resp) ->
-        window.onerror = olderror
         [pages_before, pages_after] = browse_hack_response what, resp
         browse_display what, resp
         browse_setup_page_links what, resp, pages_before, pages_after

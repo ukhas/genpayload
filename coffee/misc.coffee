@@ -145,19 +145,13 @@ save_doc = (doc, callback) ->
     $("#saving_doc").val JSON.stringify doc
     $("#save_success, #save_fail").hide()
 
-    olderror = window.onerror
-
     failed = (msg) ->
-        window.onerror = olderror
         $("#saving_status").text "Failed :-("
         $("#save_fail_message").text msg
         $("#save_fail").show()
 
-    window.onerror = -> failed "Unknown error"
-
     database.saveDoc doc,
         success: (resp) ->
-            window.onerror = olderror
             $("#saving_status").text "Saved."
             $("#saved_id").text resp.id
             $("#save_success").show()
@@ -180,20 +174,15 @@ load_docs = (docs, callback) ->
     loading_docs_callback = callback
 
     $("#loading_docs_back").hide()
-    olderror = window.onerror
 
     failed = (msg) ->
-        window.onerror = olderror
         $("#loading_docs_text").text "Failed: #{msg}"
         $("#loading_docs_back").show()
-
-    window.onerror = -> failed "Unknown error"
 
     database.allDocs
         keys: docs
         include_docs: true
         success: (resp) ->
-            window.onerror = olderror
             docs = {}
             for row in resp.rows
                 docs[row.id] = row.doc
