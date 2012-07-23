@@ -24,7 +24,7 @@ time_parse = (str) ->
 
 # hide all children of body except 'open'
 toplevel = (open) ->
-    $("body > div").not(open).hide()
+    $(".container > div").not(open).hide()
     $(open).show()
     return
 
