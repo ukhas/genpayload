@@ -144,7 +144,7 @@ class KeyValueEdit
     data: ->
         d = {}
         used_keys = {}
-        @elem.children().each (index, row) =>
+        for row, index in @elem.children()
             [key, str_value] = ($(i).val() for i in $(row).children())
 
             if key != ""
