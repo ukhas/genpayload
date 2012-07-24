@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Jasmine Spec Runner</title>
+
+  <link rel="stylesheet" type="text/css" href="css/jasmine.css">
+  
+  <!-- jasmine -->
+  <script type="text/javascript" src="js/jasmine.js"></script>
+  <script type="text/javascript" src="js/jasmine-html.js"></script>
+  <script type="text/javascript" src="js/jasmine-jquery-1.3.1.js"></script>
+
+  <!-- specs -->
+  <script type="text/javascript" src="js/specs.js"></script>
+
+  <!-- genpayload dependencies (jquery also used below). -->
+  <script type="text/javascript" src="js/json2.js"></script>
+  <script type="text/javascript" src="js/jquery-1.7.2.js"></script> <!-- non min -->
+  <script type="text/javascript" src="js/jquery-ui-1.8.21.custom.min.js"></script>
+  <script type="text/javascript" src="js/jquery.couch.js"></script>
+  <script type="text/javascript" src="js/timezone.js"></script>
+  <script type="text/javascript" src="js/all_zones.js"></script>
+  <script type="text/javascript" src="js/zone_list.js"></script>
+  <script type="text/javascript" src="js/init_timezone.js"></script>
+
+  <!-- bootstrap, setup, fixtures, go -->
+  <script type="text/javascript">
+    (function() {
+      var jasmineEnv = jasmine.getEnv();
+      jasmineEnv.updateInterval = 1000;
+
+      var htmlReporter = new jasmine.HtmlReporter();
+
+      jasmineEnv.addReporter(htmlReporter);
+
+      jasmineEnv.specFilter = function(spec) {
+        return htmlReporter.specFilter(spec);
+      };
+
+      var blob = null, code = null, doc_ready = false;
+      var original_onerror = window.onerror;
+
+      // Only global modification genpayload.js makes is to window.onerror
+      beforeEach(function() {
+        var box = $("<div id='genpayload' />");
+        box.append(blob.clone());
+
+        $("body").append(box);
+
+        if (window.onerror != original_onerror)
+            throw "onerror protection failed";
+
+        spyOn($, 'ajax');
+
+        $.globalEval(code);
+      });
+
+      afterEach(function () {
+        $("#genpayload").remove();
+        window.onerror = original_onerror;
+      });
+
+      $(function() {
+        doc_ready = true;
+        loaded();
+      });
+
+      $.ajax({
+        url: "genpayload.html",
+        dataType: "text"
+      }).success(function (contents) {
+        blob = $(contents).not("script, link, title");
+        loaded();
+      });
+
+      $.ajax({
+        url: "js/genpayload.js",
+        dataType: "text"
+      }).success(function (contents) {
+        code = contents;
+        loaded();
+      });
+
+      function loaded() {
+        if (!doc_ready || blob === null || code === null)
+          return;
+
+        jasmineEnv.execute();
+      }
+    })();
+  </script>
+</head>
+
+<body>
+</body>
+</html>
