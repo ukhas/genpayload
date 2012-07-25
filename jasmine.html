@@ -51,9 +51,18 @@
         if (window.onerror != original_onerror)
             throw "onerror protection failed";
 
-        spyOn($, 'ajax');
+        spyOn($, 'ajax').andThrow("This should have been intercepted in jquery.couch");
+
+        var dbspy = spyOn($.couch, 'db').andCallFake(function () {
+            var db = jasmine.createSpyObj('couchdb', ['view', 'saveDoc']);
+            dbspy.mostRecentFakeDatabase = db;
+            return db;
+        });
 
         $.globalEval(code);
+
+        expect($.couch.db.calls.length).toEqual(1);
+        window.couchdbspy = dbspy.mostRecentFakeDatabase;
       });
 
       afterEach(function () {
