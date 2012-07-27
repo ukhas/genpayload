@@ -138,7 +138,7 @@ checksum_description = (n) ->
     e = $("<span />")
     e.text switch n
         when "xor" then "FF"
-        when "crc16-ccitt", "fletcher_16" then "FFFF"
+        else "FFFF"
     e.attr "title", "checksum type: #{n}"
     return e
 
