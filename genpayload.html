@@ -1,64 +1,103 @@
 <!DOCTYPE html>
-<!-- Copyright (c) 2012 Daniel Richman; GNU GPL 3 -->
 
-<html>
-    <head>
-        <title>habitat genpayload</title>
+<!-- habitat: web template -->
+<!-- http://habitat.habhub.org -->
+<!-- (C) Copyright 2012; GNU GPL 3-->
 
-        <link type="text/css" href="css/redmond/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
-        <link type="text/css" href="css/genpayload.css" rel="stylesheet" />
-        <script type="text/javascript" src="js/json2.js"></script>
-        <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
-        <script type="text/javascript" src="js/jquery-ui-1.8.21.custom.min.js"></script>
-        <script type="text/javascript" src="js/jquery.couch.js"></script>
-        <script type="text/javascript" src="js/timezone.js"></script>
-        <script type="text/javascript" src="js/all_zones.js"></script>
-        <script type="text/javascript" src="js/zone_list.js"></script>
-        <script type="text/javascript" src="js/init_timezone.js"></script>
-        <script type="text/javascript" src="js/genpayload.js"></script>
-    </head>
+<!-- Daniel Richman, Daniel Saul -->
 
-    <body>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
 
-        <div id="header">
-            <div id="header_inner">
-                <h1><img src="img/header_logo.png" alt="Habitat" title="Habitat" /></h1>
-                <span style="width: 50%;">gen<b>payload</b></span>
+    <meta charset="utf-8"/>
+    <title>habitat genpayload</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+    <link rel="stylesheet" href="stylesheets/base.css"/>
+    <link rel="stylesheet" href="stylesheets/skeleton.css"/>
+    <link rel="stylesheet" href="stylesheets/layout.css"/>
+
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="shortcut icon" href="images/favicon.ico" />
+
+    <link type="text/css" href="stylesheets/redmond/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
+
+    <script type="text/javascript" src="js/json2.js"></script>
+    <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.8.21.custom.min.js"></script>
+    <script type="text/javascript" src="js/jquery.couch.js"></script>
+    <script type="text/javascript" src="js/timezone.js"></script>
+    <script type="text/javascript" src="js/all_zones.js"></script>
+    <script type="text/javascript" src="js/zone_list.js"></script>
+    <script type="text/javascript" src="js/init_timezone.js"></script>
+    <script type="text/javascript" src="js/genpayload.js"></script>
+
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div class="sixteen columns">
+                <h1 class="no-margin"><img src="images/header_logo.jpg" alt="habitat" title="habitat"/></h1>
+                <span id="app_name"><b>genpayload</b></span>
             </div>
         </div>
+    </header>
 
+    <div id="grey-section">
         <div class="container">
-
-        <div id="home">
-            <div id="create">
-                <div>
-                    <div id="go_pcfg_new"><div>new</div><div>payload configuration</div></div>
-                    <div id="go_pcfg_modify"><div>start from existing</div><div>payload configuration</div></div>
-                </div>
-                <div>
-                    <div id="go_flight_new"><div>new</div><div>flight</div></div>
-                    <div id="go_flight_modify"><div>start from existing</div><div>flight</div></div>
-                </div>
+            <div class="two-thirds column">
+                <h3 class="remove-bottom" id="page_title">Loading...</h3>
+                <p class="remove-bottom" id="page_subtitle">If you can read this, the javascript isn't working :-(.</p>
             </div>
+        </div>
+    </div>
 
+    <div id="sections" class="container">
+        <form id="home">
             <h2>Help!</h2>
 
             <p>You can create two types of configuration document here:</p>
 
-            <h3>payload configuration documents</h3>
-            <p><code>payload_configuration</code> documents describe a payload (no prizes for guessing that).
-            They contain instructions to habitat: how to parse telemetry that listeners upload;
-            and radio settings: how to setup listeners' radios.
-            If you fly one payload multiple times, you shouldn't have to change payload configuration document.</p>
+            <div class="sixteen columns no-margin">
+                <h3>payload configuration documents</h3>
 
-            <h3>flight documents</h3>
-            <p><code>flight</code> documents describe the time and date of a planned flight. They allow us
-            to add the flight to the calendar, set the title on the tracker, and select only relevant
-            telemetry to go into the flight archive (i.e., exclude test data).</p>
+                <div class="eleven columns no-margin">
+                    <p><code>payload_configuration</code> documents describe a payload (no prizes for guessing that).
+                    They contain instructions to habitat: how to parse telemetry that listeners upload;
+                    and radio settings: how to setup listeners' radios.
+                    If you fly one payload multiple times, you shouldn't have to change payload configuration document.</p>
+                </div>
+                <div class="four columns offset-by-one no-margin">
+                    <button class="remove-bottom full-width" id="go_pcfg_new">create new</button>
+                    <button class="remove-bottom full-width" id="go_pcfg_modify">start from existing</button>
+                </div>
+            </div>
 
-            <p>A flight document contains a list of payload configuration documents - i.e., the payloads
-            that are going to be launched. You can add more than one, if there are several payloads on one
-            balloon/flight train - but for multiple launches, create a flight document per balloon.</p>
+            <div class="sixteen columns no-margin">
+                <h3>flight documents</h3>
+
+                <div class="eleven columns no-margin">
+                    <p><code>flight</code> documents describe the time and date of a planned flight. They allow us
+                    to add the flight to the calendar, set the title on the tracker, and select only relevant
+                    telemetry to go into the flight archive (i.e., exclude test data).</p>
+
+                    <p>A flight document contains a list of payload configuration documents - i.e., the payloads
+                    that are going to be launched. You can add more than one, if there are several payloads on one
+                    balloon/flight train - but for multiple launches, create a flight document per balloon.</p>
+                </div>
+                <div class="four columns offset-by-one no-margin">
+                    <button class="remove-bottom full-width" id="go_flight_new">create new</button>
+                    <button class="remove-bottom full-width" id="go_flight_modify">start from existing</button>
+                </div>
+            </div>
 
             <h2>Quick start</h2>
 
@@ -101,11 +140,11 @@
             <a href="http://en.wikipedia.org/wiki/SI_base_unit">base</a> or
             <a href="http://en.wikipedia.org/wiki/SI_derived_unit">derived</a> unit
             without a metric prefix
-            (except: use <a title="an accepted SI unit for temperature interval">Celsius</a> for temperature;
-            <a title="an accepted unit">degrees</a> for latitude, longitude, heading;
-            <a title="because physicists are hilarious">kilograms</a> for mass).
+            (except: use <span title="an accepted SI unit for temperature interval">Celsius</span> for temperature;
+            <span title="an accepted unit">degrees</span> for latitude, longitude, heading;
+            <span title="because physicists are hilarious">kilograms</span> for mass).
             For example: Volts for battery readings,
-            <a title="the tracker may change the prefix to display pressure (and similar cases)">Pa (not kPa)</a>
+            <span title="the tracker may change the prefix to display pressure (and similar cases)">Pa (not kPa)</span>
             for pressure, m/s for speed. You can scale your fields with habitat, your payload need not do
             the conversion.</p>
 
@@ -115,77 +154,91 @@
                 <li><a href="http://habitat.habhub.org/logtail/">Live parser log output for debugging</a></li>
                 <li><a href="http://habhub.org">habhub</a></li>
             </ul>
-        </div>
+        </form>
 
-        <div id="browse">
-            <div>
-                <label for="browse_search">Search text: </label><input type="text" id="browse_search" />
-                <span class="buttons">
-                    <a id="browse_search_go" href="#">Search</a>
-                    <a id="browse_prev" href="#">Prev Page</a>
-                    <a id="browse_next" href="#">Next Page</a>
-                    <a id="browse_cancel" href="#">Cancel</a>
-                </span>
-                <span id="browse_status"></span>
+        <form id="browse">
+            <div class="sixteen columns remove-bottom">
+                <label class="two columns alpha" for="browse_search">Search text: </label>
+                <div class="six columns">
+                    <input type="text" id="browse_search" />
+                </div>
+
+                <button class="two columns" id="browse_search_go">Search</button>
+                <button class="two columns" id="browse_prev">Prev Page</button>
+                <button class="two columns" id="browse_next">Next Page</button>
+                <button class="two columns omega" id="browse_cancel">Cancel</button>
             </div>
 
-            <table id="browse_list_table"><tbody id="browse_list"></tbody></table>
-        </div>
+            <div class="sixteen columns" id="browse_status"></div>
 
-        <div id="payload_configuration">
-            <h2>payload_configuration</h2>
+            <h3> todo: style rows of table </h3>
+
+            <table class="sixteen columns" id="browse_list_table"><tbody id="browse_list"></tbody></table>
+        </form>
+
+        <form id="payload_configuration">
+            <div id="pcfg_misc" class="sixteen columns">
+                <div class="row">
+                    <label class="two columns alpha" for="pcfg_name">Payload name</label>
+                    <div class="six columns">
+                        <input type="text" id="pcfg_name" />
+                        <img src="images/tick.png" alt="Complete" class="input_validicon" />
+                    </div>
+                    <div class="six columns offset-by-two omega">
+                        <div class="input_extra">need not be its callsign</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="two columns alpha" for="pcfg_description">Description</label>
+                    <div class="eight columns">
+                        <input type="text" id="pcfg_description" class="long" />
+                        <img src="images/tick.png" alt="Complete" class="input_validicon" />
+                    </div>
+                    <div class="six columns omega">
+                        <div class="input_extra">
+                            free form, optional <br />
+                            used only to help you find it later
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <hr />
 
-            <div id="pcfg_misc" class="top_labelled_form">
-                <div>
-                    <label for="pcfg_name">Payload name</label>
-                    <input type="text" id="pcfg_name" />
-                    <span class="input_extra">(need not be its callsign)</span>
-                </div>
-                <div>
-                    <label for="pcfg_description">Configuration description</label>
-                    <input type="text" id="pcfg_description" class="long_input" />
-                    <span class="input_extra">(free form, optional)</span>
-                </div>
-            </div>
-
-            <hr />
-
-            <div>
-                <h3>transmissions</h3>
+            <div class="sixteen columns">
+                <h5 class="add-bottom">Radio and telemetry configuration</h3>
 
                 <table><tbody id="transmissions_list"></tbody></table>
 
                 <div class="buttons">
-                    <a id="transmission_new" href="#">Add</a>
+                    <button id="transmission_new">Add</button>
                 </div>
             </div>
 
             <hr />
 
-            <div>
-                <h3>sentences</h3>
+            <div class="sixteen columns">
+                <h5 class="add-bottom">Parser configuration</h3>
 
                 <table><tbody id="sentences_list"></tbody></table>
 
                 <div class="buttons">
-                    <a id="go_wizard" href="#">New format wizard</a>
-                    <a id="go_manual" href="#">Manually add a new format</a>
-                    <a id="go_import" href="#">Copy format from another doc</a>
+                    <button id="go_wizard">New format wizard</button>
+                    <button id="go_manual">Manually add a new format</button>
+                    <button id="go_import">Copy format from another doc</button>
                 </div>
             </div>
 
             <hr />
 
-            <div class="buttons">
-                <a id="pcfg_save" href="#">Save</a>
-                <a id="pcfg_abandon" href="#">Cancel</a>
+            <div class="sixteen columns buttons">
+                <button id="pcfg_save">Save</button>
+                <button id="pcfg_abandon">Cancel</button>
             </div>
-        </div>
+        </form>
 
-        <div id="transmission_edit" class="separate_children">
-            <div id="transmission_misc" class="top_labelled_form">
+        <form id="transmission_edit" class="separate_children">
+            <div id="transmission_misc" class="sixteen columns">
                 <div>
                     <label for="transmission_description">Description</label>
                     <input type="text" id="transmission_description" class="long_input" />
@@ -215,7 +268,7 @@
                 </div>
             </div>
 
-            <div id="transmission_rtty" class="top_labelled_form">
+            <div id="transmission_rtty" class="sixteen columns">
                 <div>
                     <label for="transmission_shift">Shift (Hz)</label>
                     <input type="text" id="transmission_shift" class="short_input" />
@@ -250,7 +303,7 @@
                 </div>
             </div>
 
-            <div id="transmission_dominoex" class="top_labelled_form">
+            <div id="transmission_dominoex" class="sixteen columns">
                 <div>
                     <label for="transmission_speed">Speed</label>
                     <select id="transmission_speed">
@@ -264,7 +317,7 @@
                 </div>
             </div>
 
-            <div id="transmission_hellschreiber" class="top_labelled_form">
+            <div id="transmission_hellschreiber" class="sixteen columns">
                 <div>
                     <label for="transmission_variant">Variant</label>
                     <select id="transmission_variant">
@@ -278,12 +331,12 @@
             <hr />
 
             <div class="buttons">
-                <a id="transmission_confirm" href="#">Confirm</a>
-                <a id="transmission_cancel" href="#">Cancel</a>
+                <button id="transmission_confirm">Confirm</button>
+                <button id="transmission_cancel">Cancel</button>
             </div>
-        </div>
+        </form>
 
-        <div id="sentence_wizard">
+        <form id="sentence_wizard">
             <input type="text" id="wizard_text_box" placeholder="Please paste an example typical telemetry string" />
 
             <div class="small" id="wizard_error"></div>
@@ -299,7 +352,7 @@
             </div>
 
             <div id="wizard_form">
-                <div class="top_labelled_form">
+                <div class="sixteen columns">
                     <div>
                         <label for="wizard_field_name">Field name</label>
                         <input type="text" id="wizard_field_name" />
@@ -386,8 +439,8 @@
                     </div>
 
                     <div class="buttons">
-                        <a href="#" id="wizard_lockfield_add">Add</a>
-                        <a href="#" id="wizard_lockfield_remove">Remove</a>
+                        <button id="wizard_lockfield_add">Add</button>
+                        <button id="wizard_lockfield_remove">Remove</button>
                     </div>
                 </div>
             </div>
@@ -395,14 +448,14 @@
             <hr />
 
             <div id="wizard_buttons" class="buttons">
-                <a id="wizard_next" href="#">Next</a>
-                <a id="wizard_prev" href="#">Prev</a>
-                <a id="wizard_cancel" href="#">Cancel</a>
+                <button id="wizard_next">Next</button>
+                <button id="wizard_prev">Prev</button>
+                <button id="wizard_cancel">Cancel</button>
             </div>
-        </div>
+        </form>
 
-        <div id="sentence_edit">
-            <div id="sentence_misc" class="top_labelled_form">
+        <form id="sentence_edit">
+            <div id="sentence_misc" class="sixteen columns">
                 <div>
                     <label for="sentence_description">Name or description</label>
                     <input type="text" id="sentence_description" class="long_input" />
@@ -436,8 +489,8 @@
                 <div id="sentence_fields" class="sentence_list"></div>
 
                 <div class="buttons">
-                    <a id="sentence_fields_add">Add Normal Field</a>
-                    <a id="sentence_fields_expert">Add Custom Field</a>
+                    <button id="sentence_fields_add">Add Normal Field</button>
+                    <button id="sentence_fields_expert">Add Custom Field</button>
                 </div>
             </div>
 
@@ -449,8 +502,8 @@
                 <div id="sentence_intermediate_filters" class="sentence_list"></div>
 
                 <div class="buttons">
-                    <a id="sentence_intermediate_normal_filter_add">Add filter</a>
-                    <a id="sentence_intermediate_hotfix_filter_add">Add hotfix</a>
+                    <button id="sentence_intermediate_normal_filter_add">Add filter</button>
+                    <button id="sentence_intermediate_hotfix_filter_add">Add hotfix</button>
                 </div>
 
                 <h3>post parse filters</h3>
@@ -458,33 +511,33 @@
                 <div id="sentence_post_filters" class="sentence_list"></div>
 
                 <div class="buttons">
-                    <a id="sentence_post_normal_filter_add">Add filter</a>
-                    <a id="sentence_post_hotfix_filter_add">Add hotfix</a>
+                    <button id="sentence_post_normal_filter_add">Add filter</button>
+                    <button id="sentence_post_hotfix_filter_add">Add hotfix</button>
                 </div>
             </div>
 
             <hr />
 
             <div class="buttons">
-                <a id="sentence_edit_save" href="#">Save</a>
-                <a id="sentence_edit_cancel" href="#">Cancel</a>
+                <button id="sentence_edit_save">Save</button>
+                <button id="sentence_edit_cancel">Cancel</button>
             </div>
-        </div>
+        </form>
 
-        <div id="loading_docs">
+        <form id="loading_docs">
             <p id="loading_docs_text"></p>
 
             <div class="buttons">
-                <a id="loading_docs_back" href='#'>Back</a>
+                <button id="loading_docs_back">Back</button>
             </div>
-        </div>
+        </form>
 
-        <div id="flight">
+        <form id="flight">
             <h2>flight</h2>
 
             <hr />
 
-            <div class="top_labelled_form">
+            <div class="sixteen columns">
                 <div>
                     <label for="flight_name">Flight name</label>
                     <input type="text" id="flight_name" />
@@ -504,7 +557,7 @@
 
             <hr />
 
-            <div id="dates" class="top_labelled_form">
+            <div id="dates" class="sixteen columns">
                 <div id="launch_timezone_section">
                     <label for="launch_timezone">Timezone</label>
                     <input type="text" id="launch_timezone" />
@@ -536,7 +589,7 @@
 
             <hr />
 
-            <div class="top_labelled_form">
+            <div class="sixteen columns">
                 <div>
                     <label for="launch_location_name">Launch location name</label>
                     <input type="text" id="launch_location_name" class="long_input" />
@@ -568,19 +621,19 @@
                 </table>
 
                 <div class="buttons">
-                    <a id="flight_pcfgs_add" href="#">Add</a>
+                    <button id="flight_pcfgs_add">Add</button>
                 </div>
             </div>
 
             <hr />
 
             <div class="buttons">
-                <a id="flight_save" href="#">Save</a>
-                <a id="flight_abandon" href="#">Cancel</a>
+                <button id="flight_save">Save</button>
+                <button id="flight_abandon">Cancel</button>
             </div>
-        </div>
+        </form>
 
-        <div id="saving">
+        <form id="saving">
             <h2 id="saving_status">Saving...</h2>
 
             <p>Document: <input type='text' id='saving_doc' class='long_input' disabled='disabled' /></p>
@@ -589,19 +642,20 @@
                 <p>Doc ID: <span id='saved_id' /></p>
 
                 <div class="buttons">
-                    <a href='#' id='save_done'>Done</a>
+                    <button id='save_done'>Done</button>
                 </div>
             </div>
 
             <div id="save_fail">
                 <p>Error: <span id='save_fail_message' /></p>
                 <div class='buttons'>
-                    <a href='#' id='save_retry'>Retry</a>
-                    <a href='#' id='save_back'>Back</a>
+                    <button id='save_retry'>Retry</button>
+                    <button id='save_back'>Back</button>
                 </div>
             </div>
-        </div>
+        </form>
 
-        </div>
-    </body>
+    </div>
+
+</body>
 </html>

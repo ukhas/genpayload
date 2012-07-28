@@ -271,7 +271,7 @@ flight_add_payload = (pcfg) ->
     localestring = (new timezoneJS.Date pcfg.time_created).toString()
     info.append $("<div />").text("created " + pcfg.time_created).attr("title", localestring)
     row.append info
-    row.append $("<td />").append $("<a href='#'>Delete</a>").button().click -> row.remove()
+    row.append $("<td />").append $("<button>Delete</button>").click btn_cb -> row.remove()
     row.data "pcfg_id", pcfg._id
 
     $("#flight_pcfgs_list").append row
@@ -316,9 +316,7 @@ setup_flight_form = ->
         minLength: 0
 
     # Encourage the autocomplete box to open more often
-    $("#launch_timezone").click ->
-        $(this).autocomplete "search"
-        return
+    $("#launch_timezone").click btn_cb -> $(this).autocomplete "search"
 
     $("#launch_date").datepicker
         onSelect: flight_launch_date_change
@@ -349,7 +347,7 @@ setup_flight_form = ->
             return
         minLength: 0
 
-    $("#launch_location_name").click -> $(this).autocomplete "search"
+    $("#launch_location_name").click btn_cb -> $(this).autocomplete "search"
 
     form_field "#launch_latitude"
         nonempty: true
@@ -360,7 +358,7 @@ setup_flight_form = ->
         numeric: true
         extra: (v) -> -180 < (strict_numeric v) <= 180
 
-    $("#flight_pcfgs_add").click ->
+    $("#flight_pcfgs_add").click btn_cb ->
         toplevel "#browse"
         browse "payload_configuration", (p) ->
             toplevel "#flight"
@@ -370,8 +368,6 @@ setup_flight_form = ->
 
 $ ->
     setup_flight_form()
-    $("#flight_save").click flight_save
-    $("#flight_abandon").click ->
-        flight_callback false
-        return
+    $("#flight_save").click btn_cb -> flight_save
+    $("#flight_abandon").click (e) -> flight_callback false
     return

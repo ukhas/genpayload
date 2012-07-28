@@ -297,34 +297,27 @@ sentence_hotfix_filter_div = (d=null) ->
 
 # Setup callbacks on page load
 $ ->
-    $("#sentence_fields_add").click ->
+    $("#sentence_fields_add").click btn_cb ->
         $("#sentence_fields").append sentence_field_div
             name: ""
             sensor: "base.string"
         $("#sentence_fields").sortable "refresh"
-        return
-    $("#sentence_fields_expert").click ->
+    $("#sentence_fields_expert").click btn_cb ->
         $("#sentence_fields").append sentence_field_div {}, true
         $("#sentence_fields").sortable "refresh"
-        return
 
     for section in ["intermediate", "post"]
         for type, func of {normal: sentence_normal_filter_div, hotfix: sentence_hotfix_filter_div}
             do (section, type, func) ->
-                $("#sentence_#{section}_#{type}_filter_add").click ->
+                $("#sentence_#{section}_#{type}_filter_add").click btn_cb ->
                     $("#sentence_#{section}_filters").append func()
-                    return
 
     $("#sentence_fields, #sentence_intermediate_filters, #sentence_post_filters").sortable
         revert: true
         tolerance: 5
     $("#sentence_fields, #sentence_intermediate_filters, #sentence_post_filters").disableSelection()
 
-    $("#sentence_edit_cancel").click ->
-        sentence_callback false
-        return
-    $("#sentence_edit_save").click ->
-        sentence_save()
-        return
+    $("#sentence_edit_cancel").click btn_cb -> sentence_callback false
+    $("#sentence_edit_save").click btn_cb -> sentence_save()
 
     return

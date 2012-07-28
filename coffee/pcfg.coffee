@@ -54,7 +54,6 @@ pcfg_save = ->
             if saved?
                 pcfg_callback saved
 
-    return
 
 # Create a <tr> that describes the transmission dict, t, and give it Edit/Delete links.
 transmissions_list_item = (t) ->
@@ -93,7 +92,7 @@ transmissions_list_item = (t) ->
 
     buttons = $("<td class='sortable_hide' />")
 
-    buttons.append $("<a href='#'>Edit</a>").click ->
+    buttons.append $("<button>Edit</button>").click btn_cb ->
         toplevel "#transmission_edit"
         t = deepcopy row.data "transmission"
         transmission_edit t, (et) ->
@@ -101,15 +100,12 @@ transmissions_list_item = (t) ->
             if et
                 row.replaceWith transmissions_list_item et
                 $("#transmissions_list").sortable "refresh"
-        return
 
     buttons.append ' '
-    buttons.append $("<a href='#'>Delete</a>").click ->
+    buttons.append $("<button>Delete</button>").click btn_cb ->
         row.remove()
         $("#transmissions_list").sortable "refresh"
-        return
 
-    buttons.buttonset()
     row.append buttons
 
     return row
@@ -189,7 +185,7 @@ sentences_list_item = (s) ->
     row.append e
 
     buttons = $("<td class='sortable_hide' />")
-    buttons.append $("<a href='#'>Edit</a>").click ->
+    buttons.append $("<button>Edit</button>").click btn_cb ->
         toplevel "#sentence_edit"
         s = deepcopy row.data "sentence"
         sentence_edit s, (es) ->
@@ -197,15 +193,12 @@ sentences_list_item = (s) ->
             if es
                 row.replaceWith sentences_list_item es
                 $("#sentences_list").sortable "refresh"
-        return
 
     buttons.append ' '
-    buttons.append $("<a href='#'>Delete</a>").click ->
+    buttons.append $("<button>Delete</button>").click btn_cb ->
         row.remove()
         $("#sentences_list").sortable "refresh"
-        return
 
-    buttons.buttonset()
     row.append buttons
 
     return row
@@ -228,7 +221,6 @@ transmission_new = ->
         if t
             $("#transmissions_list").append transmissions_list_item t
             $("#transmissions_list").sortable "refresh"
-    return
 
 default_sentence =
     protocol: "UKHAS"
@@ -252,7 +244,6 @@ sentence_manual = (show, method, s=null) ->
         if es
             $("#sentences_list").append sentences_list_item es
             $("#sentences_list").sortable "refresh"
-    return
 
 # Start the browser, looking for sentences. If one is selected, pass it to
 # sentence_manual which will push it onto sentences it and start the editor.
@@ -263,7 +254,6 @@ sentence_import = ->
             sentence_manual "#sentence_edit", sentence_edit, s
         else
             toplevel "#payload_configuration"
-    return
 
 # Add callbacks for the #pcfg_misc form
 setup_pcfg_form = ->
@@ -288,15 +278,13 @@ $ ->
     setup_pcfg_form()
     setup_sortable_lists()
 
-    $("#transmission_new").click transmission_new
+    $("#transmission_new").click btn_cb transmission_new
 
-    $("#go_wizard").click -> sentence_manual "#sentence_wizard", sentence_wizard
-    $("#go_manual").click -> sentence_manual "#sentence_edit", sentence_edit
-    $("#go_import").click sentence_import
+    $("#go_wizard").click btn_cb -> sentence_manual "#sentence_wizard", sentence_wizard
+    $("#go_manual").click btn_cb -> sentence_manual "#sentence_edit", sentence_edit
+    $("#go_import").click btn_cb sentence_import
 
-    $("#pcfg_save").click pcfg_save
-    $("#pcfg_abandon").click ->
-        pcfg_callback false
-        return
+    $("#pcfg_save").click btn_cb pcfg_save
+    $("#pcfg_abandon").click btn_cb -> pcfg_callback false
 
     return

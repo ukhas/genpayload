@@ -120,10 +120,7 @@ browse = (type, callback) ->
 browse_clear = ->
     $("#browse_list").empty()
     $("#browse_status").text "Loading..."
-    $("#browse_search_go").button "disable"
-    $("#browse_prev").button "disable"
-    $("#browse_next").button "disable"
-    $("#browse_cancel").button "disable"
+    btn_disable "#browse_search_go, #browse_prev, #browse_next, #browse_cancel"
     browse_search_enabled = false
     if browse_search_timer?
         clearTimeout browse_search_timer
@@ -180,7 +177,7 @@ browse_load = (what={}) ->
 
     options.error = (status, error, reason) ->
         $("#browse_status").text "Error loading rows: #{status}, #{error}, #{reason}"
-        $("#browse_cancel").button "enable"
+        btn_enable "#browse_cancel"
         return
 
     database.view browse_types[browse_type].view, options
@@ -224,20 +221,17 @@ browse_display = (what, resp) ->
     for row in resp.rows
         $("#browse_list").append browse_types[browse_type].display row
 
-    $("#browse_list > tr").click ->
+    $("#browse_list > tr").click btn_cb ->
         data = $(this).data "browse_return"
         browse_callback data
-        return
 
-    $("#browse_cancel").button "enable"
-
-    $("#browse_search_go").button "enable"
+    btn_enable "#browse_cancel, #browse_search_go"
     browse_search_enabled = true
 
 # Setup the next/prev buttons, updating global variables to make them work.
 browse_setup_page_links = (what, resp, pages_before, pages_after) ->
     if pages_before
-        $("#browse_prev").button "enable"
+        btn_enable "#browse_prev"
         first = resp.rows[0]
         browse_prev_what =
             prev_before:
@@ -247,7 +241,7 @@ browse_setup_page_links = (what, resp, pages_before, pages_after) ->
             browse_prev_what.search = what.search
 
     if pages_after
-        $("#browse_next").button "enable"
+        btn_enable "#browse_next"
         last = resp.rows[resp.rows.length - 1]
         browse_next_what =
             next_after:
@@ -264,28 +258,18 @@ browse_search_on_timer = ->
 
 # Setup browse ui callbacks
 $ ->
-    $("#browse_cancel").click ->
-        browse_callback false
-        return
+    $("#browse_cancel").click btn_cb -> browse_callback false
+    $("#browse_next").click btn_cb -> browse_load browse_next_what
+    $("#browse_prev").click btn_cb -> browse_load browse_prev_what
 
-    $("#browse_next").click ->
-        browse_load browse_next_what
-        return
-
-    $("#browse_prev").click ->
-        browse_load browse_prev_what
-        return
-
-    $("#browse_search_go").click ->
+    $("#browse_search_go").click btn_cb ->
         if browse_search_enabled
             search = $("#browse_search").val()
             browse_load search: search
-        return
 
     $("#browse_search").keydown ->
         if browse_search_timer?
             clearTimeout browse_search_timer
         browse_search_timer = setTimeout browse_search_on_timer, 500
-        return
 
     return

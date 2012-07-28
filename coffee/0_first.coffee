@@ -15,8 +15,3 @@ window.onerror = (msg, url, line) ->
           "you should probably refresh the page. Please report this to us on IRC."
     return
 
-$ ->
-    # Adds a click event handler that kills the event if the button is disabled, so must go first.
-    $("#help_once").button()
-    $(".buttons").buttonset()
-    return

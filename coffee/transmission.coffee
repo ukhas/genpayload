@@ -80,12 +80,10 @@ transmission_confirm = ->
         transmission.description = d
 
     transmission_callback transmission
-    return
 
 # Report failure using the callback
 transmission_cancel = ->
     transmission_callback false
-    return
 
 # Add callbacks to the input elements
 setup_transmission_form = ->
@@ -106,6 +104,6 @@ setup_transmission_form = ->
 $ ->
     setup_transmission_form()
 
-    $("#transmission_confirm").click -> transmission_confirm()
-    $("#transmission_cancel").click -> transmission_cancel()
+    $("#transmission_confirm").click btn_cb transmission_confirm
+    $("#transmission_cancel").click btn_cb transmission_cancel
     return

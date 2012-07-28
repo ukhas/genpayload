@@ -44,6 +44,6 @@ class HiddenMenu
     create: (item) ->
         i = $("<a href='#' />")
         i.text item.text
-        i.click item.func
+        i.click btn_cb item.func
         item.li = $("<li />").append i
         @menu.append (item.li)

@@ -12,6 +12,7 @@ callsign_regexp = /^[a-zA-Z0-9/_\\-]+$/
 callable_regexp = /^[a-z_\.0-9]+$/
 time_regex = /^((0|1)[0-9]|2[0-3])(:|)([0-5][0-9])(|\3([0-5][0-9]|60))$/
 
+# parse a string into an array [hours, minutes, seconds]
 time_parse = (str) ->
     r = time_regex.exec str
     if r?
@@ -22,10 +23,41 @@ time_parse = (str) ->
     else
         throw "invalid time"
 
+# wrap a button click callback, disabling the default and ensuring a safe return value
+btn_cb = (func) ->
+    return (event) ->
+        event.preventDefault()
+        func()
+        return
+
+btn_disable = (elem) ->
+    $(elem).prop "disabled", true
+    $(elem).addClass "disabled"
+
+btn_enable = (elem) ->
+    $(elem).prop "disabled", false
+    $(elem).removeClass "disabled"
+
+# to populate #page_title, #page_subtitle
+page_titles =
+    "#home": ["habitat document generator", "payload_configuration and flight document editor"]
+    "#browse": ["Database browser"]
+    "#payload_configuration": ["Payload configuration"]
+    "#transmission_edit": ["Transmission", "Radio and telemetry configuration"]
+    "#sentence_wizard": ["Sentence wizard", "Parser configuration"]
+    "#sentence_edit": ["Sentence editor", "Parser configuration"]
+    "#loading_docs": ["Loading..."]
+    "#flight": ["Flight"]
+    "#saving": ["Saving..."]
+
 # hide all children of body except 'open'
 toplevel = (open) ->
-    $(".container > div").not(open).hide()
+    $("#sections > form").not(open).hide()
     $(open).show()
+
+    $("#page_title").text page_titles[open][0]
+    $("#page_subtitle").text page_titles[open][1] or ""
+
     return
 
 copy = (o) -> $.extend {}, o
@@ -106,9 +138,7 @@ field_name_input = (elem) ->
         minLength: 0
 
     # Encourage the autocomplete box to open more often
-    elem.click ->
-        elem.autocomplete "search"
-        return
+    elem.click btn_cb -> elem.autocomplete "search"
 
 sensor_list =
     "stdtelem.time": "Time"
@@ -172,15 +202,9 @@ save_doc = (doc, callback) ->
             return
 
 setup_save_buttons = ->
-    $("#save_done").click ->
-        save_callback saving_doc
-        return
-    $("#save_retry").click ->
-        save_doc saving_doc, save_callback
-        return
-    $("#save_back").click ->
-        save_callback null
-        return
+    $("#save_done").click btn_cb -> save_callback saving_doc
+    $("#save_retry").click btn_cb -> save_doc saving_doc, save_callback
+    $("#save_back").click btn_cb -> save_callback null
 
 # load docs by list of ids with loading screen. #loading_docs should be visible
 loading_docs_callback = null
@@ -205,11 +229,8 @@ load_docs = (docs, callback) ->
             return
 
 setup_loading_docs_buttons = ->
-    $("#loading_docs_back").click ->
-        loading_docs_callback false
-        return
+    $("#loading_docs_back").click btn_cb -> loading_docs_callback false
 
-# Turn all div.button > a into jquery button sets
 $ ->
     $.ajaxSetup
         timeout: 10000

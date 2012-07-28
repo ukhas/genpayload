@@ -2,12 +2,11 @@
 
 # add callbacks to the go_ buttons in the create div and the quick_ links
 setup_create_actions = ->
-    $("#go_pcfg_new").click ->
+    $("#go_pcfg_new").click btn_cb ->
         toplevel "#payload_configuration"
         pcfg_edit null, (doc) -> toplevel "#home"
-        return
 
-    $("#go_pcfg_modify").click ->
+    $("#go_pcfg_modify").click btn_cb ->
         toplevel "#browse"
         browse "payload_configuration", (doc) ->
             if doc
@@ -15,14 +14,12 @@ setup_create_actions = ->
                 pcfg_edit doc, (doc) -> toplevel "#home"
             else
                 toplevel "#home"
-        return
 
-    $("#go_flight_new").click ->
+    $("#go_flight_new").click btn_cb ->
         toplevel "#flight"
         flight_edit null, (doc) -> toplevel "#home"
-        return
 
-    $("#go_flight_modify").click ->
+    $("#go_flight_modify").click btn_cb ->
         toplevel "#browse"
         browse "flight", (doc) ->
             edit_cb = (doc) -> toplevel "#home"
@@ -40,16 +37,13 @@ setup_create_actions = ->
                 flight_edit doc, edit_cb
             else
                 toplevel "#home"
-        return
 
-    $("#quick_pcfg").click ->
+    $("#quick_pcfg").click btn_cb ->
         $("#go_pcfg_new").click()
         $("#go_wizard").click()
-        return
 
-    $("#quick_flight").click ->
+    $("#quick_flight").click btn_cb ->
         $("#go_flight_new").click()
-        return
 
 $ ->
     setup_create_actions()

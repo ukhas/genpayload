@@ -19,7 +19,7 @@ sentence_wizard = (ignored, callback) ->
     $("#wizard_form").hide()
     $("#wizard_misc").hide()
     $("#wizard_error").hide()
-    $("#wizard_prev").button("disable")
+    btn_disable "#wizard_prev"
 
     wizard_stage = "paste"
 
@@ -210,11 +210,10 @@ wizard_guess = ->
 
         e = $("<span />").text v
         $("#wizard_fields").append ',', e
-        do (i) -> e.click ->
+        do (i) -> e.click btn_cb ->
             switch wizard_stage
                 when "sentence" then wizard_jump i
                 when "second" then wizard_lockfield i
-            return
 
         if f.name is ""
             e.addClass "invalid"
@@ -253,9 +252,9 @@ wizard_jump = (index, first=false) ->
     ne.addClass "highlight"
 
     if index == 0
-        $("#wizard_prev").button("disable")
-    else if index != 0
-        $("#wizard_prev").button("enable")
+        btn_disable "#wizard_prev"
+    else
+        btn_enable "#wizard_prev"
 
     wizard_field_load wizard_fields[index], wizard_sentence.fields[index]
 
@@ -408,7 +407,7 @@ wizard_second_stage = (has_position) ->
     nolock_temp = {}
 
     $("#wizard_form").hide()
-    $("#wizard_prev").button("disable")
+    btn_disable "#wizard_prev"
     $("#wizard_misc").show()
 
     $("#wizard_fields .highlight").removeClass "highlight"
@@ -419,7 +418,7 @@ wizard_second_stage = (has_position) ->
 
     $("#wizard_lockfield_ok").empty()
     $("#wizard_lockfield_add").click()
-    $("#wizard_lockfield_remove").button("disable")
+    btn_disable "#wizard_lockfield_remove"
 
 # Set the field to use for lockfield mode. Only allows selection of int,float,string fields.
 wizard_lockfield = (index) ->
@@ -566,7 +565,7 @@ wizard_setup_nolock_form = ->
             $("#wizard_nolock_alwaysnotice").hide()
         return
 
-    $("#wizard_lockfield_add").click ->
+    $("#wizard_lockfield_add").click btn_cb ->
         e = $("<input type='text' />")
         e.addClass "short_input"
         form_field e, extra: (v) ->
@@ -579,14 +578,12 @@ wizard_setup_nolock_form = ->
         e.change()
 
         $("#wizard_lockfield_ok").append e, ' '
-        $("#wizard_lockfield_remove").button("enable")
-        return
+        btn_enable "#wizard_lockfield_remove"
 
-    $("#wizard_lockfield_remove").click ->
+    $("#wizard_lockfield_remove").click btn_cb ->
         $("#wizard_lockfield_ok").children().last().remove()
         if $("#wizard_lockfield_ok").children().length == 0
-            $("#wizard_lockfield_remove").button("disable")
-        return
+            btn_disable "#wizard_lockfield_remove"
 
 # Setup callbacks on page load
 $ ->
@@ -594,22 +591,16 @@ $ ->
         if e.which is 13 and wizard_stage is "paste"
             wizard_guess()
         return
-    $("#wizard_retry").click ->
-        sentence_wizard false, wizard_callback # restart with same cb
-        return
-    $("#wizard_cancel").click ->
-        wizard_callback false
-        return
-    $("#wizard_next").click ->
+    $("#wizard_retry").click btn_cb -> sentence_wizard false, wizard_callback # restart with same cb
+    $("#wizard_cancel").click btn_cb -> wizard_callback false
+    $("#wizard_next").click btn_cb ->
         switch wizard_stage
             when "paste" then wizard_guess()
             when "sentence" then wizard_next()
             when "second" then wizard_second_done()
-        return
-    $("#wizard_prev").click ->
+    $("#wizard_prev").click btn_cb ->
         if wizard_stage is "sentence"
             wizard_prev()
-        return
     wizard_setup_form()
     wizard_setup_nolock_form()
     return
