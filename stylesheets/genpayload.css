@@ -1,0 +1,97 @@
+.container { position: inherit; } /* fix for jquery scrollable */
+
+body { overflow-y: scroll; }    /* Stop page width jumping around */
+.btn_vmid { margin-top: 7px; }
+
+#browse_status { text-align: right; }
+.browse_item:hover { background-color: #B8E6F3; }
+.browse_item.row { margin-bottom: 15px; }
+.itemlist .row { margin-bottom: 5px; }
+.itemlist .buttons { text-align: right; }
+.browse_item h4 { margin-top: 4px; } /* Bad vertical align */
+
+.browse_item div:after {
+    /* Prevent collapsing of empty cells */
+    content: ' ';
+    height: 1px;
+    min-height: 1px;
+    visibility: hidden;
+    display: block;
+}
+
+#launch_timezone_section .ui-autocomplete {
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 10px;
+}
+
+#wizard_text_box, #wizard_fields {
+    width: 900px;
+    font-family: monospace;
+}
+
+#wizard_fields {
+    border: 1px solid #ccc;
+    padding: 3px 5px;
+    font-size: 13px;
+    margin: 0;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    border: 1px solid #CCC;
+    width: 900px;
+}
+
+@media only screen and (min-width: 768px) and (max-width: 959px) {
+    #wizard_text_box, #wizard_fields { width: 700px; }
+}
+@media only screen and (max-width: 767px) {
+    #wizard_text_box, #wizard_fields { width: 210px; }
+}
+
+#wizard_text_box, #wizard_fields, #telemetry_string { font-family: monospace; }
+#wizard_fields .highlight { background-color: yellow; }
+#wizard_fields .invalid { background-color: pink; }
+#wizard_numeric_scale_type { width: auto; }
+#wizard_numeric_scale_example { padding-top: 2px; height: 31px; }
+#sentence_wizard .form.row input[type="checkbox"] { height: 24px; }
+
+.hidden_menu { display: inline-block; vertical-align: top; }
+.hidden_menu > div { position: absolute; display: none; z-index: 1; }
+.hidden_menu:hover > div { display: block; }
+.hidden_menu > div > ul { position: relative; top: -9px; left: 5px; }
+
+/* for #wizard_lockfield_ok and KeyValueEdit and sentence_manual */
+.validated_inside.invalid {
+    background-color: pink;
+    border-color: orange;
+}
+
+.keyvalue { margin-bottom: 20px; }
+.keyvalue .row, .keyvalue .row input { margin-bottom: 0; }
+.keyvalue .row input { display: inline-block; }
+
+#sentence_edit .hotfix_box,
+.keyvalue input.long { width: 500px; }
+
+@media only screen and (max-width: 767px) {
+    #sentence_edit .hotfix_box,
+    .keyvalue input.long { width: 210px; }
+}
+
+#sentence_edit .item_icons,
+#sentence_intermediate_filters .keyvalue,
+#sentence_post_filters .keyvalue,
+#sentence_edit .hotfix_box,
+#sentence_edit .field.row input,
+#sentence_edit .field.row select { float: left; }
+
+#sentence_edit .field.row input,
+#sentence_edit .field.row select { margin-bottom: 0 }
+
+#sentence_edit .big_select {
+    /* from .form.row select */
+    padding: 5px 4px;
+    width: 220px;
+}

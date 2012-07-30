@@ -20,7 +20,7 @@
 class HiddenMenu
     constructor: (@items={}) ->
         @container = $("<div class='hidden_menu' />")
-        @icon = $("<span class='ui-icon ui-icon-triangle-1-s menu_icon' />")
+        @icon = $("<span class='ui-icon ui-icon-triangle-1-s' />")
         subcontainer = $("<div />")
         @menu = $("<ul />")
         for id, item of @items

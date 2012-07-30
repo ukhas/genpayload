@@ -11,27 +11,28 @@
 <!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
 <!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
 <head>
-
     <meta charset="utf-8"/>
+
     <title>habitat genpayload</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
-    <link rel="stylesheet" href="stylesheets/base.css"/>
-    <link rel="stylesheet" href="stylesheets/skeleton.css"/>
-    <link rel="stylesheet" href="stylesheets/layout.css"/>
+    <link rel="stylesheet" href="t/css/base.css"/>
+    <link rel="stylesheet" href="t/css/skeleton.css"/>
+    <link rel="stylesheet" href="t/css/layout.css"/>
 
     <!--[if lt IE 9]>
         <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-    <link rel="shortcut icon" href="images/favicon.ico" />
+    <link rel="shortcut icon" href="t/images/favicon.ico" />
 
-    <link type="text/css" href="stylesheets/redmond/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
+    <link rel="stylesheet" href="stylesheets/redmond/jquery-ui-1.8.21.custom.css" />
+    <link rel="stylesheet" href="stylesheets/genpayload.css" />
 
     <script type="text/javascript" src="js/json2.js"></script>
     <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
-    <script type="text/javascript" src="js/jquery-ui-1.8.21.custom.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.8.21.custom.js"></script>
     <script type="text/javascript" src="js/jquery.couch.js"></script>
     <script type="text/javascript" src="js/timezone.js"></script>
     <script type="text/javascript" src="js/all_zones.js"></script>
@@ -60,31 +61,27 @@
         </div>
     </div>
 
-    <div id="sections" class="container">
-        <form id="home">
-            <h2>Help!</h2>
+    <div id="sections">
+        <section id="home" class="container">
+            <h3 class="sixteen columns">payload configuration documents</h3>
 
-            <p>You can create two types of configuration document here:</p>
-
-            <div class="sixteen columns no-margin">
-                <h3>payload configuration documents</h3>
-
-                <div class="eleven columns no-margin">
+            <div class="sixteen columns">
+                <div class="eleven columns alpha">
                     <p><code>payload_configuration</code> documents describe a payload (no prizes for guessing that).
                     They contain instructions to habitat: how to parse telemetry that listeners upload;
                     and radio settings: how to setup listeners' radios.
                     If you fly one payload multiple times, you shouldn't have to change payload configuration document.</p>
                 </div>
-                <div class="four columns offset-by-one no-margin">
+                <div class="four columns offset-by-one omega">
                     <button class="remove-bottom full-width" id="go_pcfg_new">create new</button>
                     <button class="remove-bottom full-width" id="go_pcfg_modify">start from existing</button>
                 </div>
             </div>
 
-            <div class="sixteen columns no-margin">
-                <h3>flight documents</h3>
+            <h3 class="sixteen columns">flight documents</h3>
 
-                <div class="eleven columns no-margin">
+            <div class="sixteen columns">
+                <div class="eleven columns alpha">
                     <p><code>flight</code> documents describe the time and date of a planned flight. They allow us
                     to add the flight to the calendar, set the title on the tracker, and select only relevant
                     telemetry to go into the flight archive (i.e., exclude test data).</p>
@@ -93,111 +90,120 @@
                     that are going to be launched. You can add more than one, if there are several payloads on one
                     balloon/flight train - but for multiple launches, create a flight document per balloon.</p>
                 </div>
-                <div class="four columns offset-by-one no-margin">
+                <div class="four columns offset-by-one omega">
                     <button class="remove-bottom full-width" id="go_flight_new">create new</button>
                     <button class="remove-bottom full-width" id="go_flight_modify">start from existing</button>
                 </div>
             </div>
 
-            <h2>Quick start</h2>
+            <hr />
 
-            <p><b>I've just programmed my brand new payload, and am now testing it.</b></p>
+            <div class="sixteen columns" id="quickstart">
+                <h2>Quick start</h2>
 
-            <p>You only need to create <a id="quick_pcfg" href='#'>a payload_configuration document</a>
-            using the "new format wizard".</p>
+                <p><b>I've just programmed my brand new payload, and am now testing it.</b></p>
 
-            <p><b>I'm going to launch a balloon soon.</b></p>
+                <p>You only need to create <a id="quick_pcfg" href='#'>a payload_configuration document</a>
+                using the "new format wizard".</p>
 
-            <p><a id="quick_flight" href='#'>Create a flight document</a>, then ask on IRC for the
-            doc to be approved.</p>
+                <p><b>I'm going to launch a balloon soon.</b></p>
 
-            <p>Note that you may also create documents by copying and modifying the last document you
-            created for your payload, so you need not start from scratch each time.</p>
+                <p><a id="quick_flight" href='#'>Create a flight document</a>, then ask on IRC for the
+                doc to be approved.</p>
 
-            <h2>Extra details</h2>
+                <p>Note that you may also create documents by copying and modifying the last document you
+                created for your payload, so you need not start from scratch each time.</p>
+            </div>
 
-            <h3>payload configuration</h3>
-            <p>The sentence and radio settings in a payload configuration document are ordered lists:
-            the first sentence format that matches successfully is used, and the first item in the radio
-            list is the default.</p>
+            <hr />
 
-            <h3>Editing</h3>
-            <p>You can't edit documents once they're saved. You can however load, modify and save a new
-            copy of your configuration document: habitat will try the newest version first.</p>
+            <div class="sixteen columns" id="misc_help">
+                <h2>Extra details</h2>
 
-            <h3>Launch windows</h3>
-            <p>Flight documents are only valid for an amount of time, preferably as small as possible.
-            Parsed strings that don't belong to an active flight document are treated as 'test' uploads,
-            and will only be shown in the testing section of the new tracker.</p>
+                <h3>payload configuration</h3>
+                <p>The sentence and radio settings in a payload configuration document are ordered lists:
+                the first sentence format that matches successfully is used, and the first item in the radio
+                list is the default.</p>
 
-            <h3>Approval</h3>
-            <p>Since anyone at all can create flight documents, they must be checked before they appear on
-            the various websites. Payload configuration documents referenced by approved and active
-            (within the launch window) flights are given priority when parsing.</p>
+                <h3>Editing</h3>
+                <p>You can't edit documents once they're saved. You can however load, modify and save a new
+                copy of your configuration document: habitat will use the newest version.</p>
 
-            <h3>Units</h3>
-            <p>Please tell habitat how to convert all of your sensor readings into their relevant SI
-            <a href="http://en.wikipedia.org/wiki/SI_base_unit">base</a> or
-            <a href="http://en.wikipedia.org/wiki/SI_derived_unit">derived</a> unit
-            without a metric prefix
-            (except: use <span title="an accepted SI unit for temperature interval">Celsius</span> for temperature;
-            <span title="an accepted unit">degrees</span> for latitude, longitude, heading;
-            <span title="because physicists are hilarious">kilograms</span> for mass).
-            For example: Volts for battery readings,
-            <span title="the tracker may change the prefix to display pressure (and similar cases)">Pa (not kPa)</span>
-            for pressure, m/s for speed. You can scale your fields with habitat, your payload need not do
-            the conversion.</p>
+                <h3>Launch windows</h3>
+                <p>Flight documents are only valid for an amount of time, preferably as small as possible.
+                Parsed strings that don't belong to an active flight document are treated as 'test' uploads,
+                and will only be shown in the testing section of the new tracker.</p>
 
-            <h2>See also</h2>
-            <ul>
-                <li><a href="http://habitat.habhub.org/">habitat</a></li>
-                <li><a href="http://habitat.habhub.org/logtail/">Live parser log output for debugging</a></li>
-                <li><a href="http://habhub.org">habhub</a></li>
-            </ul>
-        </form>
+                <h3>Approval</h3>
+                <p>Since anyone at all can create flight documents, they must be checked before they appear on
+                the various websites. Payload configuration documents referenced by approved and active
+                (within the launch window) flights are given priority when parsing.</p>
 
-        <form id="browse">
+                <h3>Units</h3>
+                <p>Please tell habitat how to convert all of your sensor readings into their relevant SI
+                <a href="http://en.wikipedia.org/wiki/SI_base_unit">base</a> or
+                <a href="http://en.wikipedia.org/wiki/SI_derived_unit">derived</a> unit
+                without a metric prefix
+                (except: use <span title="an accepted SI unit for temperature interval">Celsius</span> for temperature;
+                <span title="an accepted unit">degrees</span> for latitude, longitude, heading;
+                <span title="because physicists are hilarious">kilograms</span> for mass).
+                For example: Volts for battery readings,
+                <span title="the tracker may change the prefix to display pressure (and similar cases)">Pa (not kPa)</span>
+                for pressure, m/s for speed. You can scale your fields with habitat, your payload need not do
+                the conversion.</p>
+            </div>
+
+            <hr />
+
+            <div class="sixteen columns" id="seealso">
+                <h2>See also</h2>
+                <ul>
+                    <li><a href="http://habitat.habhub.org/">habitat</a></li>
+                    <li><a href="http://habitat.habhub.org/logtail/">Live parser log output for debugging</a></li>
+                    <li><a href="http://habhub.org">habhub</a></li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="browse" class="container">
             <div class="sixteen columns remove-bottom">
                 <label class="two columns alpha" for="browse_search">Search text: </label>
                 <div class="six columns">
                     <input type="text" id="browse_search" />
                 </div>
 
-                <button class="two columns" id="browse_search_go">Search</button>
-                <button class="two columns" id="browse_prev">Prev Page</button>
-                <button class="two columns" id="browse_next">Next Page</button>
-                <button class="two columns omega" id="browse_cancel">Cancel</button>
+                <button class="remove-bottom two columns" id="browse_search_go">Search</button>
+                <button class="remove-bottom two columns" id="browse_prev">Prev Page</button>
+                <button class="remove-bottom two columns" id="browse_next">Next Page</button>
+                <button class="remove-bottom two columns omega" id="browse_cancel">Cancel</button>
             </div>
 
-            <div class="sixteen columns" id="browse_status"></div>
+            <div class="sixteen columns add-bottom" id="browse_status"></div>
 
-            <h3> todo: style rows of table </h3>
+            <div id="browse_list"></div>
+        </section>
 
-            <table class="sixteen columns" id="browse_list_table"><tbody id="browse_list"></tbody></table>
-        </form>
-
-        <form id="payload_configuration">
+        <section id="payload_configuration" class="container">
             <div id="pcfg_misc" class="sixteen columns">
-                <div class="row">
+                <div class="form row">
                     <label class="two columns alpha" for="pcfg_name">Payload name</label>
-                    <div class="six columns">
+                    <div class="seven columns validated">
                         <input type="text" id="pcfg_name" />
-                        <img src="images/tick.png" alt="Complete" class="input_validicon" />
+                        <img src="t/images/tick.png" alt="Complete" />
                     </div>
-                    <div class="six columns offset-by-two omega">
-                        <div class="input_extra">need not be its callsign</div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">Need not be its callsign.</div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="form row">
                     <label class="two columns alpha" for="pcfg_description">Description</label>
-                    <div class="eight columns">
+                    <div class="seven columns">
                         <input type="text" id="pcfg_description" class="long" />
-                        <img src="images/tick.png" alt="Complete" class="input_validicon" />
                     </div>
-                    <div class="six columns omega">
+                    <div class="six columns offset-by-one omega">
                         <div class="input_extra">
-                            free form, optional <br />
-                            used only to help you find it later
+                            Free form, optional. <br />
+                            Used only to help you find it later.
                         </div>
                     </div>
                 </div>
@@ -206,9 +212,9 @@
             <hr />
 
             <div class="sixteen columns">
-                <h5 class="add-bottom">Radio and telemetry configuration</h3>
+                <h5 class="add-bottom">Radio and telemetry configuration</h5>
 
-                <table><tbody id="transmissions_list"></tbody></table>
+                <div id="transmissions_list" class="itemlist clearfix"></div>
 
                 <div class="buttons">
                     <button id="transmission_new">Add</button>
@@ -218,9 +224,9 @@
             <hr />
 
             <div class="sixteen columns">
-                <h5 class="add-bottom">Parser configuration</h3>
+                <h5 class="add-bottom">Parser configuration</h5>
 
-                <table><tbody id="sentences_list"></tbody></table>
+                <div id="sentences_list" class="itemlist clearfix"></div>
 
                 <div class="buttons">
                     <button id="go_wizard">New format wizard</button>
@@ -235,258 +241,358 @@
                 <button id="pcfg_save">Save</button>
                 <button id="pcfg_abandon">Cancel</button>
             </div>
-        </form>
+        </section>
 
-        <form id="transmission_edit" class="separate_children">
+        <section id="transmission_edit" class="container">
             <div id="transmission_misc" class="sixteen columns">
-                <div>
-                    <label for="transmission_description">Description</label>
-                    <input type="text" id="transmission_description" class="long_input" />
-                    <span class="input_extra">(optional; e.g., Primary, alternative, nighttime mode)</span>
+                <div class="form row">
+                    <label class="two columns alpha" for="transmission_description">Description</label>
+                    <div class="seven columns">
+                        <input type="text" id="transmission_description" class="long" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">Optional; e.g., Primary, alternative, nighttime mode.</div>
+                    </div>
                 </div>
-                <div>
-                    <label for="transmission_frequency">Frequency (MHz)</label>
-                    <input type="text" id="transmission_frequency" class="short_input" />
-                    <span class="input_extra">(MHz)</span>
+                <div class="form row">
+                    <label class="two columns alpha" for="transmission_frequency">Frequency (MHz)</label>
+                    <div class="seven columns validated">
+                        <input type="text" id="transmission_frequency" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">MHz</div>
+                    </div>
                 </div>
-                <div>
-                    <label for="transmission_mode">Mode</label>
-                    <select id="transmission_mode">
-                        <option>USB</option>
-                        <option>LSB</option>
-                        <option>AM</option>
-                        <option>FM</option>
-                    </select>
+                <div class="form row">
+                    <label class="two columns alpha" for="transmission_mode">Mode</label>
+                    <div class="seven columns">
+                        <select id="transmission_mode">
+                            <option>USB</option>
+                            <option>LSB</option>
+                            <option>AM</option>
+                            <option>FM</option>
+                        </select>
+                    </div>
                 </div>
-                <div>
-                    <label for="transmission_modulation">Modulation</label>
-                    <select id="transmission_modulation">
-                        <option>RTTY</option>
-                        <option>DominoEX</option>
-                        <option>Hellschreiber</option>
-                    </select>
+                <div class="form row">
+                    <label class="two columns alpha" for="transmission_modulation">Modulation</label>
+                    <div class="seven columns">
+                        <select id="transmission_modulation">
+                            <option>RTTY</option>
+                            <option>DominoEX</option>
+                            <option>Hellschreiber</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
             <div id="transmission_rtty" class="sixteen columns">
-                <div>
-                    <label for="transmission_shift">Shift (Hz)</label>
-                    <input type="text" id="transmission_shift" class="short_input" />
+                <div class="form row">
+                    <label class="two columns alpha" for="transmission_shift">Shift (Hz)</label>
+                    <div class="seven columns validated">
+                        <input type="text" id="transmission_shift" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">Shifts supported by legacy fldigi are: 23, 85, 160,
+                        170, 182, 200, 240, 350, 425, 600 and 850.<br>
+                        Modern versions support any custom shift.</div>
+                    </div>
                 </div>
-                <div>
-                    <label for="transmission_encoding">Encoding</label>
-                    <select id="transmission_encoding">
-                        <option>BAUDOT</option>
-                        <option>ASCII-7</option>
-                        <option>ASCII-8</option>
-                    </select>
+                <div class="form row">
+                    <label class="two columns alpha" for="transmission_encoding">Encoding</label>
+                    <div class="seven columns">
+                        <select id="transmission_encoding">
+                            <option>BAUDOT</option>
+                            <option>ASCII-7</option>
+                            <option>ASCII-8</option>
+                        </select>
+                    </div>
                 </div>
-                <div>
-                    <label for="transmission_baud">Baud</label>
-                    <input type="text" id="transmission_baud" class="short_input" />
+                <div class="form row">
+                    <label class="two columns alpha" for="transmission_baud">Baud</label>
+                    <div class="seven columns validated">
+                        <input type="text" id="transmission_baud" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
+                    <div class="six offset-by-one columns omega">
+                        <div class="input_extra">fldigi supports 45, 45.45, 50, 56, 75, 100, 110, 150,
+                        200 and 300 baud</div>
+                    </div>
                 </div>
-                <div>
-                    <label for="transmission_parity">Parity</label>
-                    <select id="transmission_parity">
-                        <option>none</option>
-                        <option>odd</option>
-                        <option>even</option>
-                    </select>
+                <div class="form row">
+                    <label class="two columns alpha" for="transmission_parity">Parity</label>
+                    <div class="seven columns">
+                        <select id="transmission_parity">
+                            <option>none</option>
+                            <option>odd</option>
+                            <option>even</option>
+                        </select>
+                    </div>
                 </div>
-                <div>
-                    <label for="transmission_stop">Stop bits</label>
-                    <select id="transmission_stop">
-                        <option>1</option>
-                        <option>1.5</option>
-                        <option>2</option>
-                    </select>
+                <div class="form row">
+                    <label class="two columns alpha" for="transmission_stop">Stop bits</label>
+                    <div class="seven columns">
+                        <select id="transmission_stop">
+                            <option>1</option>
+                            <option>1.5</option>
+                            <option>2</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
             <div id="transmission_dominoex" class="sixteen columns">
-                <div>
-                    <label for="transmission_speed">Speed</label>
-                    <select id="transmission_speed">
-                        <option>4</option>
-                        <option>5</option>
-                        <option>8</option>
-                        <option>11</option>
-                        <option>16</option>
-                        <option>22</option>
-                    </select>
+                <div class="form row">
+                    <label class="two columns alpha" for="transmission_speed">Speed</label>
+                    <div class="seven columns">
+                        <select id="transmission_speed">
+                            <option>4</option>
+                            <option>5</option>
+                            <option>8</option>
+                            <option>11</option>
+                            <option>16</option>
+                            <option>22</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
             <div id="transmission_hellschreiber" class="sixteen columns">
-                <div>
-                    <label for="transmission_variant">Variant</label>
-                    <select id="transmission_variant">
-                        <option value="slowhell">Slow Hell</option>
-                        <option value="feldhell">Feld Hell</option>
-                    </select>
+                <div class="form row">
+                    <label class="two columns alpha" for="transmission_variant">Variant</label>
+                    <div class="seven columns">
+                        <select id="transmission_variant">
+                            <option value="slowhell">Slow Hell</option>
+                            <option value="feldhell">Feld Hell</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
 
             <hr />
 
-            <div class="buttons">
+            <div class="sixteen columns buttons">
                 <button id="transmission_confirm">Confirm</button>
                 <button id="transmission_cancel">Cancel</button>
             </div>
-        </form>
+        </section>
 
-        <form id="sentence_wizard">
-            <input type="text" id="wizard_text_box" placeholder="Please paste an example typical telemetry string" />
-
-            <div class="small" id="wizard_error"></div>
-
-            <div id="wizard_success">
-                <div id="wizard_fields"></div>
-                <div class="small" id="wizard_parse_info">
-                    Parse OK; callsign: <span id="wizard_callsign"></span>,
-                    checksum: <span id="wizard_checksum_type"></span>
-                </div>
-
-                <hr />
+        <section id="sentence_wizard" class="container">
+            <div class="sixteen columns remove-bottom">
+                <input class="remove-bottom" type="text" id="wizard_text_box"
+                       placeholder="Please paste an example typical telemetry string" />
             </div>
 
-            <div id="wizard_form">
-                <div class="sixteen columns">
-                    <div>
-                        <label for="wizard_field_name">Field name</label>
+            <div class="sixteen columns remove-bottom"><small id="wizard_error"></small></div>
+
+            <div class="sixteen columns remove-bottom" id="wizard_success">
+                <div id="wizard_fields"></div>
+                <div id="wizard_parse_info">
+                    <small>Parse OK; callsign: <span id="wizard_callsign"></span>,
+                    checksum: <span id="wizard_checksum_type"></span></small>
+                </div>
+            </div>
+
+            <div class="clearfix add-bottom"></div>
+
+            <hr id="wizard_success_sep" />
+
+            <div class="sixteen columns" id="wizard_form">
+                <div class="form row">
+                    <label class="two columns alpha" for="wizard_field_name">Field name</label>
+                    <div class="seven columns validated">
                         <input type="text" id="wizard_field_name" />
+                        <img src="t/images/tick.png" alt="Complete" />
                     </div>
-                    <div>
-                        <label for="wizard_field_sensor">Field type</label>
+                </div>
+                <div class="form row">
+                    <label class="two columns alpha" for="wizard_field_sensor">Field type</label>
+                    <div class="seven columns">
                         <select id="wizard_field_sensor"></select>
                     </div>
-                    <div id="wizard_coordinate_format">
-                        <label for="wizard_coordinate_format_select">Format</label>
+                </div>
+                <div class="form row" id="wizard_coordinate_format">
+                    <label class="two columns alpha" for="wizard_coordinate_format_select">Format</label>
+                    <div class="seven columns">
                         <select id="wizard_coordinate_format_select"></select>
                     </div>
                 </div>
-                <div id="wizard_numeric_scale_section">
-                    <div>
-                        <input type="checkbox" id="wizard_numeric_scale" />
-                        <label for="wizard_numeric_scale">Scale or translate this value</label>
-                    </div>
-                    <div id="wizard_numeric_scale_opts">
-                        <div>
-                            <select id="wizard_numeric_scale_type">
-                                <option value="m">Multiply</option>
-                                <option value="d">Divide</option>
-                            </select>
-                            <label for="wizard_numeric_scale_factor">by</label>
-                            <input type="text" id="wizard_numeric_scale_factor" class="short_input" />
-                        </div>
-                        <div>
-                            <label for="wizard_numeric_scale_offset">Offset:</label>
-                            <input type="text" id="wizard_numeric_scale_offset" class="short_input" />
-                        </div>
-                        <div>
-                            <label for="wizard_numeric_scale_do_round">Round?</label>
-                            <input type="checkbox" id="wizard_numeric_scale_do_round" />
 
-                            <span id="wizard_numeric_scale_round_opts">
-                                To <input type="text" id="wizard_numeric_scale_round" class="short_input" />
-                                <label for="wizard_numeric_scale_round">significant figures.</label>
-                            </span>
+                <div id="wizard_numeric_scale_section" class="clearfix">
+                    <div class="form row">
+                        <label class="two columns alpha" for="wizard_numeric_scale">Scale this?</label>
+                        <div class="seven columns">
+                            <input type="checkbox" id="wizard_numeric_scale" />
                         </div>
-                        <div id="wizard_numeric_scale_example_container">
-                            Example result: <span id="wizard_numeric_scale_example"></span>
+                    </div>
+
+                    <div id="wizard_numeric_scale_opts" class="clearfix">
+                        <div class="form row">
+                            <div class="two columns alpha">
+                                <select id="wizard_numeric_scale_type">
+                                    <option value="m">Multiply by</option>
+                                    <option value="d">Divide by</option>
+                                </select>
+                            </div>
+                            <div class="seven columns validated">
+                                <input type="text" id="wizard_numeric_scale_factor" />
+                                <img src="t/images/tick.png" alt="Complete" />
+                            </div>
+                        </div>
+                        <div class="form row">
+                            <label class="two columns alpha" for="wizard_numeric_scale_offset">Offset:</label>
+                            <div class="seven columns validated">
+                                <input type="text" id="wizard_numeric_scale_offset" />
+                                <img src="t/images/tick.png" alt="Complete" />
+                            </div>
+                        </div>
+                        <div class="form row">
+                            <label class="two columns alpha" for="wizard_numeric_scale_do_round">Round?</label>
+                            <div class="seven columns validated">
+                                <input type="checkbox" id="wizard_numeric_scale_do_round" />
+                            </div>
+                        </div>
+                        <div class="form row" id="wizard_numeric_scale_round_opts">
+                            <label class="two columns alpha" for="wizard_numeric_scale_round">Precision</label>
+                            <div class="seven columns validated">
+                                <input type="text" id="wizard_numeric_scale_round" />
+                                <img src="t/images/tick.png" alt="Complete" />
+                            </div>
+                            <div class="six columns offset-by-one omega">
+                                <div class="input_extra">i.e., number of significant figures to round to</div>
+                            </div>
+                        </div>
+                        <div class="form row">
+                            <label class="two columns alpha">Example result:</label>
+                            <div class="seven columns">
+                                <div id="wizard_numeric_scale_example"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div id="wizard_misc" class="separate_children">
-                <div>
-                    <label for="wizard_description">Format name or description</label>
-                    <input type="text" id="wizard_description" class="long_input" />
-                    <span class="input_extra">(optional but strongly recommended; e.g., Normal format, No-lock
-                    format (if it's different), Long format (i.e., more fields), and so on.</span>
+            <div id="wizard_misc" class="sixteen columns clearfix">
+                <div class="form row">
+                    <label class="two columns alpha" for="wizard_description">Description</label>
+                    <div class="seven columns">
+                        <input type="text" id="wizard_description" class="long" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">
+                            Name or short description of this sentence format. <br />
+                            Optional but strongly recommended. <br />
+                            <small>Some suggestions: Normal, No-lock mode (if it results in a
+                            different format), Long (i.e., more fields)</small>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <label for="wizard_no_lock">When it doesn't have a lock, the payload sends</label>
-                    <select id="wizard_no_lock">
-                        <option value="other">other</option>
-                        <option value="always">this format</option>
-                        <option value="lockfield">a certain value in a gps lock field</option>
-                        <option value="zeroes">latitude/longitude as 0,0</option>
-                    </select>
-                </div>
+            </div>
 
-                <div id="wizard_nolock_othernotice">
-                    <p class="small">Other: Includes sending another format, such as empty or "!!!.!!!!!" fields.
-                    You should add the 'no-lock' format as another sentence format after you have finished this one.</p>
-                </div>
-
-                <div id="wizard_nolock_alwaysnotice">
-                    <p class="small">Any latitude longitude or altitude, if present, will be marked invalid.
-                    Other parsed data, like temperature, can still be used and plotted.</p>
-                </div>
-
-                <div id="wizard_select_lockfield">
-                    <p>Please click on the field to test above</p>
-                </div>
-
-                <div id="wizard_lockfield">
-                    <label>The following values in the <span id="wizard_lockfield_which"></span>
-                    field are ok/indicate a lock:</label>
-
-                    <div id="wizard_lockfield_ok">
+            <div id="wizard_no_lock_section" class="sixteen columns clearfix">
+                <div class="form row">
+                    <label class="four columns alpha" for="wizard_no_lock">
+                        When without a lock, <span title="the payload">it</span> sends
+                    </label>
+                    <div class="six columns">
+                        <select id="wizard_no_lock">
+                            <option value="other">other</option>
+                            <option value="always">this format</option>
+                            <option value="lockfield">a certain value in a gps lock field</option>
+                            <option value="zeroes">latitude/longitude as 0,0</option>
+                        </select>
                     </div>
 
-                    <div class="buttons">
-                        <button id="wizard_lockfield_add">Add</button>
-                        <button id="wizard_lockfield_remove">Remove</button>
+                    <div class="six columns omega">
+                        <div class="input_extra" id="wizard_nolock_othernotice">
+                            Other: Includes sending another format, such as empty or "!!!.!!!!!" fields.
+                            You should add the 'no-lock' format as another sentence format after you have finished this one.
+                        </div>
+                        <div class="input_extra" id="wizard_nolock_alwaysnotice">
+                            Any latitude longitude or altitude, if present, will be marked invalid.
+                            Other parsed data, like temperature, can still be used and plotted.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form row" id="wizard_select_lockfield">
+                    Please click on the field that should be tested above
+                </div>
+
+                <div class="form row" id="wizard_lockfield">
+                    <label class="four columns alpha" for="wizard_lockfield_ok">
+                        Good values
+                    </label>
+                    <div class="six columns validated">
+                        <input type="text" id="wizard_lockfield_ok" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
+                    <div class="six columns omega">
+                        <div class="input_extra">
+                            Comma separated <br />
+                            Iff <span id="wizard_lockfield_which"></span> matches one of
+                            these values, the fix is marked as valid.
+                        </div>
                     </div>
                 </div>
             </div>
 
             <hr />
 
-            <div id="wizard_buttons" class="buttons">
-                <button id="wizard_next">Next</button>
+            <div id="wizard_buttons" class="sixteen columns buttons">
                 <button id="wizard_prev">Prev</button>
+                <button id="wizard_next">Next</button>
                 <button id="wizard_cancel">Cancel</button>
             </div>
-        </form>
+        </section>
 
-        <form id="sentence_edit">
+        <section id="sentence_edit" class="container">
             <div id="sentence_misc" class="sixteen columns">
-                <div>
-                    <label for="sentence_description">Name or description</label>
-                    <input type="text" id="sentence_description" class="long_input" />
-                    <span class="input_extra">(optional but strongly recommended; e.g., Normal format, No-lock
-                    format (if it's different), Long format (i.e., more fields), and so on.</span>
+                <div class="form row">
+                    <label class="two columns alpha" for="sentence_description">Description</label>
+                    <div class="seven columns">
+                        <input type="text" id="sentence_description" class="long" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">Optional but strongly recommended; e.g., Normal format, No-lock
+                        format (if it's different), Long format (i.e., more fields), and so on.</div>
+                    </div>
                 </div>
-                <div>
-                    <label for="sentence_protocol">Protocol</label>
-                    <input type="text" id="sentence_protocol" value="UKHAS" disabled="disabled" />
+                <div class="form row">
+                    <label class="two columns alpha" for="sentence_protocol">Protocol</label>
+                    <div class="seven columns">
+                        <input type="text" id="sentence_protocol" value="UKHAS" disabled="disabled" />
+                    </div>
                 </div>
-                <div>
-                    <label for="sentence_callsign">Callsign</label>
-                    <input type="text" id="sentence_callsign" />
+                <div class="form row">
+                    <label class="two columns alpha" for="sentence_callsign">Callsign</label>
+                    <div class="seven columns validated">
+                        <input type="text" id="sentence_callsign" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
                 </div>
-                <div>
-                    <label for="sentence_checksum">Checksum type</label>
-                    <select id="sentence_checksum">
-                        <option>crc16-ccitt</option>
-                        <option>xor</option>
-                        <option>fletcher-16</option>
-                        <option>fletcher-16-256</option>
-                    </select>
+                <div class="form row">
+                    <label class="two columns alpha" for="sentence_checksum">Checksum type</label>
+                    <div class="seven columns">
+                        <select id="sentence_checksum">
+                            <option>crc16-ccitt</option>
+                            <option>xor</option>
+                            <option>fletcher-16</option>
+                            <option>fletcher-16-256</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
             <hr />
 
-            <div>
-                <h3>fields</h3>
+            <div class="sixteen columns">
+                <h5 class='add-bottom'>fields</h5>
 
-                <div id="sentence_fields" class="sentence_list"></div>
+                <div id="sentence_fields" class="itemlist clearfix add-bottom"></div>
 
                 <div class="buttons">
                     <button id="sentence_fields_add">Add Normal Field</button>
@@ -496,19 +602,21 @@
 
             <hr />
 
-            <div>
-                <h3>intermediate filters</h3>
+            <div class="sixteen columns">
+                <h5 class='add-bottom'>intermediate filters</h5>
 
-                <div id="sentence_intermediate_filters" class="sentence_list"></div>
+                <div id="sentence_intermediate_filters" class="itemlist clearfix"></div>
 
                 <div class="buttons">
                     <button id="sentence_intermediate_normal_filter_add">Add filter</button>
                     <button id="sentence_intermediate_hotfix_filter_add">Add hotfix</button>
                 </div>
+            </div>
 
-                <h3>post parse filters</h3>
+            <div class="sixteen columns">
+                <h5 class='add-bottom'>post parse filters</h5>
 
-                <div id="sentence_post_filters" class="sentence_list"></div>
+                <div id="sentence_post_filters" class="itemlist clearfix"></div>
 
                 <div class="buttons">
                     <button id="sentence_post_normal_filter_add">Add filter</button>
@@ -518,62 +626,82 @@
 
             <hr />
 
-            <div class="buttons">
+            <div class="sixteen columns buttons">
                 <button id="sentence_edit_save">Save</button>
                 <button id="sentence_edit_cancel">Cancel</button>
             </div>
-        </form>
+        </section>
 
-        <form id="loading_docs">
-            <p id="loading_docs_text"></p>
+        <section id="loading_docs">
+            <div class="sixteen columns" id="loading_docs_text"></div>
 
-            <div class="buttons">
+            <div class="sixteen columns buttons">
                 <button id="loading_docs_back">Back</button>
             </div>
-        </form>
+        </section>
 
-        <form id="flight">
-            <h2>flight</h2>
-
-            <hr />
-
+        <section id="flight">
             <div class="sixteen columns">
-                <div>
-                    <label for="flight_name">Flight name</label>
-                    <input type="text" id="flight_name" />
-                    <span class="input_extra">e.g., Dalmation launch 32 or Shark Christmas launch.</span>
+                <div class="row">
+                    <label class="two columns alpha" for="flight_name">Flight name</label>
+                    <div class="seven columns validated">
+                        <input type="text" id="flight_name" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">e.g., Dalmation launch 32 or Shark Christmas launch.</div>
+                    </div>
                 </div>
-                <div>
-                    <label for="flight_project">Project name</label>
-                    <input type="text" id="flight_project" />
-                    <span class="input_extra">Optional, but highly recommended.</span>
+                <div class="row">
+                    <label class="two columns alpha" for="flight_project">Project name</label>
+                    <div class="seven columns">
+                        <input type="text" id="flight_project" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">Optional, but highly recommended.</div>
+                    </div>
                 </div>
-                <div>
-                    <label for="flight_group">Group/team/organisation name</label>
-                    <input type="text" id="flight_group" />
-                    <span class="input_extra">Or your name, if you're working alone :-(. Optional, also recommended.</span>
+                <div class="row">
+                    <label class="two columns alpha" for="flight_group">Group name</label>
+                    <div class="seven columns">
+                        <input type="text" id="flight_group" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">Or your name, if you're working alone :-(. Optional, also recommended.</div>
+                    </div>
                 </div>
             </div>
 
             <hr />
 
             <div id="dates" class="sixteen columns">
-                <div id="launch_timezone_section">
-                    <label for="launch_timezone">Timezone</label>
-                    <input type="text" id="launch_timezone" />
-                    <span class="input_extra">Launch time below is interpreted in this timezone; daylight saving detected automatically from the date. <br />
-                    Some clients/trackers may display times related to this flight in this timezone rather than the user's.</span>
+                <div class="row" id="launch_timezone_section">
+                    <label class="two columns alpha" for="launch_timezone">Timezone</label>
+                    <div class="seven columns validated">
+                        <input type="text" id="launch_timezone" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">Launch time below is interpreted in this timezone; daylight saving detected automatically from the date. <br />
+                        Some clients/trackers may display times related to this flight in this timezone rather than the user's.</div>
+                    </div>
                 </div>
-                <div>
-                    <label for="launch_date">Launch Date</label>
+                <div class="row">
+                    <label class="two columns alpha" for="launch_date">Launch Date</label>
                     <div id="launch_date"></div>
                 </div>
-                <div>
-                    <label for="launch_time">Time</label>
-                    <input type="text" id="launch_time" placeholder="HH:MM" />
-                    <span class="input_extra" id="launch_time_check"></span>
+                <div class="row">
+                    <label class="two columns alpha" for="launch_time">Time</label>
+                    <div class="seven columns validated">
+                        <input type="text" id="launch_time" placeholder="HH:MM" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra" id="launch_time_check"></div>
+                    </div>
                 </div>
                 <div>
+                    <!-- todo -->
                     <label for="launch_window">Launch window</label>
                     <select id="launch_window">
                         <option value="day">Launch day</option>
@@ -590,32 +718,53 @@
             <hr />
 
             <div class="sixteen columns">
-                <div>
-                    <label for="launch_location_name">Launch location name</label>
-                    <input type="text" id="launch_location_name" class="long_input" />
-                    <span class="input_extra">Optional. Suggested format: Place name, Area, Country</span>
+                <div class="row">
+                    <label class="two columns alpha" for="launch_location_name">Launch location</label>
+                    <div class="seven columns">
+                        <input type="text" id="launch_location_name" class="long" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">Optional. Suggested format: Place name, Area, Country</div>
+                    </div>
                 </div>
-                <div>
-                    <label for="launch_latitude">Launch latitude (decimal degrees)</label>
-                    <input type="text" id="launch_latitude" />
+                <div class="row">
+                    <label class="two columns alpha" for="launch_latitude">Latitude</label>
+                    <div class="seven columns validated">
+                        <input type="text" id="launch_latitude" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">decimal degrees</div>
+                    </div>
                 </div>
-                <div>
-                    <label for="launch_longitude">Launch longitude (decimal degrees)</label>
-                    <input type="text" id="launch_longitude" />
-                    <span class="input_extra">-180 &lt; l &lt;= 180</span>
+                <div class="row">
+                    <label class="two columns alpha" for="launch_longitude">Longitude</label>
+                    <div class="seven columns validated">
+                        <input type="text" id="launch_longitude" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">decimal degrees<br />-180 &lt; l &lt;= 180</div>
+                    </div>
                 </div>
-                <div>
-                    <label for="launch_altitude">Launch altitude (metres)</label>
-                    <input type="text" id="launch_altitude" />
-                    <span class="input_extra">Optional: only enter it if it's significant.</span>
+                <div class="row">
+                    <label class="two columns alpha" for="launch_altitude">Altitude</label>
+                    <div class="seven columns validated">
+                        <input type="text" id="launch_altitude" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">metres<br />Optional: only enter it if it's significant.</div>
+                    </div>
                 </div>
             </div>
 
             <hr />
 
-            <div id="flight_pcfgs">
-                <h3>payloads in this flight</h3>
+            <div class="sixteen columns" id="flight_pcfgs">
+                <h5>payloads in this flight</h5>
 
+                <!-- todo: table <div id="flight_pcfgs_list" class="itemlist clearfix"> -->
                 <table id="flight_pcfgs_list_table">
                     <tbody id="flight_pcfgs_list"></tbody>
                 </table>
@@ -627,33 +776,36 @@
 
             <hr />
 
-            <div class="buttons">
+            <div class="sixteen columns buttons">
                 <button id="flight_save">Save</button>
                 <button id="flight_abandon">Cancel</button>
             </div>
-        </form>
+        </section>
 
-        <form id="saving">
-            <h2 id="saving_status">Saving...</h2>
+        <section id="saving">
+            <div class="sixteen columns">
+                <label class="two columns alpha" for="saving_doc">Document:</label>
+                <div class="seven columns">
+                    <input type='text' id='saving_doc' class='long' disabled='disabled' />
+                </div>
+            </div>
 
-            <p>Document: <input type='text' id='saving_doc' class='long_input' disabled='disabled' /></p>
-
-            <div id="save_success">
-                <p>Doc ID: <span id='saved_id' /></p>
+            <div class="sixteen columns" id="save_success">
+                <p>Doc ID: <span id='saved_id'></span></p>
 
                 <div class="buttons">
                     <button id='save_done'>Done</button>
                 </div>
             </div>
 
-            <div id="save_fail">
-                <p>Error: <span id='save_fail_message' /></p>
+            <div class="sixteen columns" id="save_fail">
+                <p>Error: <span id='save_fail_message'></span></p>
                 <div class='buttons'>
                     <button id='save_retry'>Retry</button>
                     <button id='save_back'>Back</button>
                 </div>
             </div>
-        </form>
+        </section>
 
     </div>
 

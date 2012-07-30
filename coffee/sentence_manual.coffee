@@ -113,8 +113,10 @@ sentence_sort_icon = -> $("<span class='ui-icon ui-icon-arrowthick-2-n-s sentenc
 # A function is attached to the element using jquery's .data(); key 'field_data', which returns
 # the field object from the form.
 sentence_field_div = (field, expert=false) ->
-    e = $("<div />")
-    e.append sentence_sort_icon()
+    e = $("<div class='field row' />")
+
+    i = $("<div class='item_icons' />")
+    i.append sentence_sort_icon()
     menu = new HiddenMenu
         scale:
             text: "Add numeric scale filter"
@@ -138,16 +140,17 @@ sentence_field_div = (field, expert=false) ->
                 e.remove()
                 p.sortable "refresh"
                 return
-    e.append menu.container
+    i.append menu.container
+    e.append i
 
     if not expert
-        n = $("<input type='text' title='Field Name' placeholder='Field Name' />")
+        n = $("<input type='text' title='Field Name' placeholder='Field Name' class='validated_inside' />")
         field_name_input n
-        s = $("<select />")
+        s = $("<select class='big_select' />")
         sensor_select s
-        f = $("<select />")
+        f = $("<select class='big_select' />")
         sensor_format_select f
-        c = $("<input type='text' title='Expected Value' placeholder='Value' />")
+        c = $("<input type='text' title='Expected Value' placeholder='Value' class='validated_inside' />")
         e.append n, s, f, c
 
         n.val field.name
@@ -234,8 +237,11 @@ sentence_normal_filter_div = (d={}) ->
                 when "filter" then (typeof value is "string" and callable_regexp.test value)
                 else true
 
-    e = $("<div />")
-    e.append sentence_sort_icon()
+    e = $("<div class='row' />")
+
+    i = $("<div class='item_icons' />")
+    i.append sentence_sort_icon()
+
     menu = new HiddenMenu
         delete:
             text: "Delete"
@@ -244,7 +250,11 @@ sentence_normal_filter_div = (d={}) ->
                 e.remove()
                 p.sortable "refresh"
                 return
-    e.append menu.container
+
+    i.append menu.container
+
+    e.append i
+
     e.append kv.elem
     e.data "filter_data", ->
         data = kv.data()
@@ -269,8 +279,10 @@ sentence_get_hotfix = (s) ->
 
 # Create an item to be inserted into a filters list
 sentence_hotfix_filter_div = (d=null) ->
-    e = $("<div />")
-    e.append sentence_sort_icon()
+    e = $("<div class='row' />")
+
+    c = $("<div class='item_icons' />")
+    c.append sentence_sort_icon()
     menu = new HiddenMenu
         delete:
             text: "Delete"
@@ -279,8 +291,11 @@ sentence_hotfix_filter_div = (d=null) ->
                 e.remove()
                 p.sortable "refresh"
                 return
-    e.append menu.container
-    i = $("<input type='text' class='long_input' placeholder='Paste output of ./sign_hotfix.py' />")
+    c.append menu.container
+
+    e.append c
+
+    i = $("<input type='text' placeholder='Paste output of ./sign_hotfix.py' class='validated_inside hotfix_box' />")
     if d != null
         i.val JSON.stringify d
     i.change ->

@@ -55,12 +55,12 @@ pcfg_save = ->
                 pcfg_callback saved
 
 
-# Create a <tr> that describes the transmission dict, t, and give it Edit/Delete links.
+# Create a row that describes the transmission dict, t, and give it Edit/Delete links.
 transmissions_list_item = (t) ->
-    row = $("<tr />")
+    row = $("<div class='row' />")
     row.data "transmission", t
 
-    e = $("<td class='pcfg_limit_width' />")
+    e = $("<div class='thirteen columns alpha long_protection btn_vmid' />")
 
     auto_description = "#{t.frequency / 1e6}MHz #{t.mode} #{t.modulation}"
 
@@ -90,9 +90,9 @@ transmissions_list_item = (t) ->
 
     row.append e
 
-    buttons = $("<td class='sortable_hide' />")
+    buttons = $("<div class='three columns omega sortable_hide buttons' />")
 
-    buttons.append $("<button>Edit</button>").click btn_cb ->
+    buttons.append $("<button class='remove-bottom'>Edit</button>").click btn_cb ->
         toplevel "#transmission_edit"
         t = deepcopy row.data "transmission"
         transmission_edit t, (et) ->
@@ -102,7 +102,7 @@ transmissions_list_item = (t) ->
                 $("#transmissions_list").sortable "refresh"
 
     buttons.append ' '
-    buttons.append $("<button>Delete</button>").click btn_cb ->
+    buttons.append $("<button class='remove-bottom'>Delete</button>").click btn_cb ->
         row.remove()
         $("#transmissions_list").sortable "refresh"
 
@@ -138,12 +138,12 @@ checksum_description = (n) ->
     e.attr "title", "checksum type: #{n}"
     return e
 
-# Create a <tr> describing the sentence dict, s, and give it Edit / Delete links
+# Create a row describing the sentence dict, s, and give it Edit / Delete links
 sentences_list_item = (s) ->
-    row = $("<tr />")
+    row = $("<div class='row' />")
     row.data "sentence", s
 
-    e = $("<td class='pcfg_limit_width' />")
+    e = $("<div class='thirteen columns alpha long_protection btn_vmid' />")
     if s.description?
         e.text "#{s.description}"
 
@@ -176,7 +176,7 @@ sentences_list_item = (s) ->
 
             if n
                 n_s = if n != 1 then "s" else ""
-                e.append " (#{n} filter#{n_s})"
+                e.append " (#{n} filter#{n_s}) "
 
         e.append t
 
@@ -184,8 +184,8 @@ sentences_list_item = (s) ->
 
     row.append e
 
-    buttons = $("<td class='sortable_hide' />")
-    buttons.append $("<button>Edit</button>").click btn_cb ->
+    buttons = $("<div class='three columns omega sortable_hide buttons' />")
+    buttons.append $("<button class='remove-bottom'>Edit</button>").click btn_cb ->
         toplevel "#sentence_edit"
         s = deepcopy row.data "sentence"
         sentence_edit s, (es) ->
@@ -195,7 +195,7 @@ sentences_list_item = (s) ->
                 $("#sentences_list").sortable "refresh"
 
     buttons.append ' '
-    buttons.append $("<button>Delete</button>").click btn_cb ->
+    buttons.append $("<button class='remove-bottom'>Delete</button>").click btn_cb ->
         row.remove()
         $("#sentences_list").sortable "refresh"
 

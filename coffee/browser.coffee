@@ -10,12 +10,23 @@ browse_search_timer = null
 
 browse_per_page = 100
 
-browse_item_date_id = (id, date, elem) ->
-    cell = $("<td class='small' />")
-    cell.append $("<div />").text id
+# Creates and returns a row for #browse_list. first: text, placed in a h3. second: elements.
+# third cell is created automatically.
+browse_row = (first, second, id, date) ->
+    append_array = (elem, things) ->
+        elem.append t for t in things
+        return elem
+
+    r = $("<div class='sixteen columns row browse_item' />")
+    r.append $("<div class='four columns alpha' />").append ($("<h4 />").text first)
+    r.append append_array $("<div class='eight columns' />"), second
+    r.append append_array $("<div class='four columns omega' />"), browse_item_date_id id, date
+    return r
+
+browse_item_date_id = (id, date) ->
     localestring = (new timezoneJS.Date date).toString()
-    cell.append $("<div />").text(date).attr("title", localestring)
-    elem.append cell
+    return [($("<div />").append $("<small />").text id),
+            ($("<div />").append $("<small />").text(date).attr("title", localestring))]
 
 browse_types =
     payload_configuration:
@@ -33,27 +44,16 @@ browse_types =
                 seen[s.callsign] = true
             uniques.sort()
             callsigns = uniques.join ', '
-            callsigns = $("<div />").text callsigns
+            second = [$("<div />").text callsigns]
 
             if doc.description?
-                description = $("<div class='small browse_description' />")
+                description = $("<small class='long_protection' />")
                 description.text '"' + doc.description + '"'
                 if doc.description.length > 30
                     description.attr "title", doc.description
-            else
-                description = null
+                second.push $("<div />").append description
 
-            d = $("<tr />")
-            d.append $("<td class='big' />").text doc.name
-
-            c = $("<td />")
-            c.append callsigns
-            if description?
-                c.append description
-            d.append c
-
-            browse_item_date_id doc._id, doc.time_created, d
-
+            d = browse_row doc.name, second, doc._id, doc.time_created
             d.data "browse_return", doc
             return d
 
@@ -65,25 +65,16 @@ browse_types =
             index = row.key[2]
             sentence = row.doc.sentences[index]
             doc = row.doc
+
+            second = [$("<div />").text "from #{doc.name}"]
             if sentence.description?
-                description = $("<div class='small browse_description' />")
+                description = $("<small class='long_protection' />")
                 description.text '"' + sentence.description + '"'
                 if sentence.description.length > 30
                     description.attr "title", sentence.description
-            else
-                description = null
+                second.push $("<div />").append description
 
-            d = $("<tr />")
-            d.append $("<td class='big' />").text callsign
-
-            c = $("<td />")
-            c.append $("<div />").text "from #{doc.name}"
-            if description?
-                c.append description, ' '
-            d.append c
-
-            browse_item_date_id "#{doc._id} #{index}", doc.time_created, d
-
+            d = browse_row callsign, second, "#{doc._id} #{index}", doc.time_created
             d.data "browse_return", sentence
             return d
 
@@ -94,16 +85,10 @@ browse_types =
             name = row.key
             doc = row.doc
 
-            d = $("<tr />")
-            d.append $("<td class='big' />").text doc.name
+            second = [($("<div />").text if doc.approved then "Approved" else ""),
+                      ($("<div />").text "#{doc.metadata.group or ""} #{doc.metadata.project or ""}")]
 
-            i = $("<td class='small' />")
-            i.append $("<div />").text if doc.approved then "Approved" else ""
-            i.append $("<div />").text "#{doc.metadata.group or ""} #{doc.metadata.project or ""}"
-            d.append i
-
-            browse_item_date_id doc._id, doc.launch.time, d
-
+            d = browse_row doc.name, second, doc._id, doc.launch.time
             d.data "browse_return", doc
             return d
 
@@ -144,6 +129,9 @@ browse_load = (what={}) ->
     options =
         limit: browse_per_page + 1
         include_docs: true
+
+    if what.search? and what.search == ""
+        delete what.search
 
     if what.next_after?
         options.startkey = what.next_after.key
@@ -202,7 +190,7 @@ browse_hack_response = (what, resp) ->
         pages_before = full_response
         pages_after = true
 
-        resp.offset = resp.total_rows - resp.offset - 1
+        resp.offset = resp.total_rows - resp.offset - resp.rows.length
         resp.rows.reverse()
 
     else
@@ -221,7 +209,7 @@ browse_display = (what, resp) ->
     for row in resp.rows
         $("#browse_list").append browse_types[browse_type].display row
 
-    $("#browse_list > tr").click btn_cb ->
+    $("#browse_list > div.row").click btn_cb ->
         data = $(this).data "browse_return"
         browse_callback data
 

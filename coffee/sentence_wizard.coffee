@@ -15,9 +15,10 @@ sentence_wizard = (ignored, callback) ->
 
     $("#wizard_text_box").val ""
     $("#wizard_text_box").show()
-    $("#wizard_success").hide()
+    $("#wizard_success, #wizard_success_sep").hide()
     $("#wizard_form").hide()
     $("#wizard_misc").hide()
+    $("#wizard_no_lock_section").hide()
     $("#wizard_error").hide()
     btn_disable "#wizard_prev"
 
@@ -193,7 +194,7 @@ wizard_guess = ->
         callsign: p.callsign
         fields: []
 
-    $("#wizard_success").show()
+    $("#wizard_success, #wizard_success_sep").show()
     $("#wizard_callsign").text p.callsign
     $("#wizard_checksum_type").text p.checksum_type
 
@@ -213,7 +214,7 @@ wizard_guess = ->
         do (i) -> e.click btn_cb ->
             switch wizard_stage
                 when "sentence" then wizard_jump i
-                when "second" then wizard_lockfield i
+                when "second+no_lock" then wizard_lockfield i
 
         if f.name is ""
             e.addClass "invalid"
@@ -413,12 +414,14 @@ wizard_second_stage = (has_position) ->
     $("#wizard_fields .highlight").removeClass "highlight"
 
     $("#wizard_description").val ""
-    $("#wizard_no_lock").val if has_position "other" else "n/a"
-    $("#wizard_no_lock").change()
 
-    $("#wizard_lockfield_ok").empty()
-    $("#wizard_lockfield_add").click()
-    btn_disable "#wizard_lockfield_remove"
+    if has_position
+        wizard_stage = "second+no_lock"
+
+        $("#wizard_no_lock_section").show()
+
+        $("#wizard_no_lock").val "other"
+        $("#wizard_no_lock").change()
 
 # Set the field to use for lockfield mode. Only allows selection of int,float,string fields.
 wizard_lockfield = (index) ->
@@ -433,20 +436,42 @@ wizard_lockfield = (index) ->
     e = wizard_fields[index].elem
     e.addClass "highlight"
 
+    if not nolock_temp.lockfield?
+        $("#wizard_select_lockfield").hide()
+        $("#wizard_lockfield").show()
+
     nolock_temp.lockfield = f
     nolock_temp.lockfield_elem = e
 
-    $("#wizard_select_lockfield").hide()
-    $("#wizard_lockfield").show()
     $("#wizard_lockfield_which").text nolock_temp.lockfield.name
-    $("#wizard_lockfield_ok input").change()
+    $("#wizard_lockfield_ok").change()
 
-# Collect results of no lock form
-wizard_second_done = ->
-    d = $("#wizard_description").val()
-    if d != ""
-        wizard_sentence.description = d
+# Split and parse #wizard_lockfield_ok
+wizard_lockfield_ok_parse = ->
+    if not nolock_temp.lockfield?
+        return false
 
+    lf = nolock_temp.lockfield
+
+    cast_func = switch lf.sensor
+        when "base.ascii_int" then strict_integer
+        when "base.ascii_float" then strict_numeric
+        else (s) -> s
+    verify_func = switch lf.sensor
+        when "base.ascii_int", "base.ascii_float" then (v) -> not isNaN v
+        else (v) -> true
+
+    ok = $("#wizard_lockfield_ok").val().split ","
+    ok = (cast_func v for v in ok)
+
+    for v in ok
+        if not verify_func v
+            return false
+
+    return ok
+
+# Get no_lock form results and add the relevant filter
+wizard_no_lock_done = ->
     switch $("#wizard_no_lock").val()
         when "always"
             wizard_add_filter "post",
@@ -455,28 +480,14 @@ wizard_second_done = ->
         when "lockfield"
             if not nolock_temp.lockfield?
                 alert "Please select the field that indicates a lock by clicking on it"
-                return
+                return false
 
             lf = nolock_temp.lockfield
+            ok = wizard_lockfield_ok_parse()
 
-            cast_func = switch lf.sensor
-                when "base.ascii_int" then strict_integer
-                when "base.ascii_float" then strict_numeric
-                else (s) -> s
-            verify_func = switch lf.sensor
-                when "base.ascii_int", "base.ascii_float" then (v) -> not isNaN v
-                else (v) -> true
-
-            ok = (cast_func $(e).val() for e in $("#wizard_lockfield_ok input"))
-
-            for v in ok
-                if not verify_func v
-                    alert "There are errors in your form. Please fix them"
-                    return
-
-            if not ok.length
-                alert "Please add atleast one value that indicates a good fix"
-                return
+            if ok is false
+                alert "There are errors in your form. Please fix them"
+                return false
 
             f =
                 filter: "common.invalid_gps_lock"
@@ -491,6 +502,18 @@ wizard_second_done = ->
             wizard_add_filter "post",
                 filter: "common.invalid_location_zero"
                 type: "normal"
+
+    return true
+
+# Collect results of misc & no lock form
+wizard_second_done = ->
+    d = $("#wizard_description").val()
+    if d != ""
+        wizard_sentence.description = d
+
+    if wizard_stage is "second+no_lock"
+        if not wizard_no_lock_done()
+            return
 
     wizard_stage = null
     wizard_callback wizard_sentence
@@ -546,14 +569,11 @@ wizard_setup_nolock_form = ->
             if nolock_temp.lockfield_elem?
                 nolock_temp.lockfield_elem.addClass "highlight"
                 $("#wizard_lockfield").show()
-                $("#wizard_lockfield_buttons").show()
-                $("#wizard_select_lockfield").hide()
             else
                 $("#wizard_select_lockfield").show()
         else
             $("#wizard_fields .highlight").removeClass "highlight"
             $("#wizard_lockfield").hide()
-            $("#wizard_lockfield_buttons").hide()
             $("#wizard_select_lockfield").hide()
         if v is "other"
             $("#wizard_nolock_othernotice").show()
@@ -565,25 +585,10 @@ wizard_setup_nolock_form = ->
             $("#wizard_nolock_alwaysnotice").hide()
         return
 
-    $("#wizard_lockfield_add").click btn_cb ->
-        e = $("<input type='text' />")
-        e.addClass "short_input"
-        form_field e, extra: (v) ->
-            if not nolock_temp.lockfield?
-                return true
-            switch nolock_temp.lockfield.sensor
-                when "base.ascii_int" then return not isNaN strict_integer v
-                when "base.ascii_float" then return not isNaN strict_numeric v
-                else return true
-        e.change()
-
-        $("#wizard_lockfield_ok").append e, ' '
-        btn_enable "#wizard_lockfield_remove"
-
-    $("#wizard_lockfield_remove").click btn_cb ->
-        $("#wizard_lockfield_ok").children().last().remove()
-        if $("#wizard_lockfield_ok").children().length == 0
-            btn_disable "#wizard_lockfield_remove"
+    form_field "#wizard_lockfield_ok",
+        extra: ->
+            if wizard_stage != "second+no_lock" then return false
+            return wizard_lockfield_ok_parse() != false
 
 # Setup callbacks on page load
 $ ->
@@ -597,7 +602,7 @@ $ ->
         switch wizard_stage
             when "paste" then wizard_guess()
             when "sentence" then wizard_next()
-            when "second" then wizard_second_done()
+            when "second", "second+no_lock" then wizard_second_done()
     $("#wizard_prev").click btn_cb ->
         if wizard_stage is "sentence"
             wizard_prev()

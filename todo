@@ -1,4 +1,42 @@
-parser tester flask app
+habitat-template
+done:
+    general page stuff
+    buttons
+    browser
+    payload_configuration
+    transmission edit
+    sentence wizard
+    sentence edit
+
+todo:
+    loading docs
+    flight
+    saving
+
+    pass tidy check
+    grep todo.
+
+    check for stuff in .container not in a columns class.
+    2_keyvalue and sentence_manual create <inputs. Check they don't try
+        to use set_valid on them
+
+
+ensure keyvalue, sentence_edit work well on mobile.
+
+use habitat-template in a submodule properly
+bug: convert (from expert) to normal field doesn't appear to work properly
+
+
+
+code:
+    export functions and stop using --join
+    check comments on functions
+    check large functions, etc.
+
+features:
+    parser tester flask app
+    assert shift > 0 in rtty
+
 
 packaging
     custom jquery ui build (?)

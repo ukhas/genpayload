@@ -27,7 +27,7 @@ time_parse = (str) ->
 btn_cb = (func) ->
     return (event) ->
         event.preventDefault()
-        func()
+        func.call this, event
         return
 
 btn_disable = (elem) ->
@@ -52,7 +52,7 @@ page_titles =
 
 # hide all children of body except 'open'
 toplevel = (open) ->
-    $("#sections > form").not(open).hide()
+    $("#sections > section").not(open).hide()
     $(open).show()
 
     $("#page_title").text page_titles[open][0]
@@ -116,10 +116,23 @@ form_field = (elem, opts={}) ->
 
 # set/remove the valid class
 set_valid = (elem, valid) ->
-    if valid
-        $(elem).removeClass "invalid"
+    e = $(elem)
+    if e.parent().is(".validated")
+        i = e.siblings("img")
+        if valid
+            i.attr "alt", "OK"
+            i.attr "src", "t/images/tick.png"
+        else
+            i.attr "alt", "Error"
+            i.attr "src", "t/images/exclamationmark.png"
+    else if e.is(".validated_inside")
+        if valid
+            e.removeClass "invalid"
+        else
+            e.addClass "invalid"
     else
-        $(elem).addClass "invalid"
+        throw "not validated"
+
     return
 
 # Setup an input as a field name input with autocompletion & validation

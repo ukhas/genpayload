@@ -69,15 +69,15 @@ class KeyValueEdit
 
     # add a row. key, value, required used by constructor
     add_row: (key="", value="", required=false) ->
-        row = $("<div />")
+        row = $("<div class='row' />")
         kill_row = false
 
-        k = $("<input type='text' title='Key' placeholder='Key' />")
+        k = $("<input type='text' title='Key' placeholder='Key' class='validated_inside' />")
         k.val key
         if required
             k.prop "disabled", true
 
-        v = $("<input type='text' title='Value' placeholder='Value' class='long_input' />")
+        v = $("<input type='text' title='Value' placeholder='Value' class='validated_inside long' />")
 
         # If change just enabled the value input, need to enable it ASAP (i.e., on keydown
         # before the browser picks the next focus) so that it will focus on the value.

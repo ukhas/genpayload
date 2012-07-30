@@ -36,7 +36,9 @@ flight_edit = (doc, callback, pcfgs={}) ->
 
     $("#launch_latitude").val doc.launch.location.latitude
     $("#launch_longitude").val doc.launch.location.longitude
-    $("#launch_latitude, #launch_longitude").change()
+    a = doc.launch.location.altitude
+    $("#launch_altitude").val if a? then a else ""
+    $("#launch_latitude, #launch_longitude, #launch_altitude").change()
 
     try
         flight_no_show_dates = true
@@ -358,6 +360,20 @@ setup_flight_form = ->
         numeric: true
         extra: (v) -> -180 < (strict_numeric v) <= 180
 
+    # Three states: empty, valid value, invalid value. Special handling.
+    e = $("#launch_altitude")
+    e.change ->
+        v = e.val()
+        i = $(e).siblings("img")
+
+        if v == ""
+            i.hide()
+        else
+            i.show()
+
+            v = strict_numeric v
+            set_valid e, not isNaN(v)
+
     $("#flight_pcfgs_add").click btn_cb ->
         toplevel "#browse"
         browse "payload_configuration", (p) ->
@@ -368,6 +384,6 @@ setup_flight_form = ->
 
 $ ->
     setup_flight_form()
-    $("#flight_save").click btn_cb -> flight_save
-    $("#flight_abandon").click (e) -> flight_callback false
+    $("#flight_save").click btn_cb flight_save
+    $("#flight_abandon").click btn_cb -> flight_callback false
     return
