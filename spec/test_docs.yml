@@ -1,0 +1,48 @@
+pcfg1:
+    type: "payload_configuration"
+    name: "Test payload 1"
+    transmissions:
+      - frequency: 10000
+        mode: "LSB"
+        modulation: "RTTY"
+        shift: 200
+        encoding: "ASCII-7"
+        baud: 300
+        parity: "even"
+        stop: 1
+        description: "Fast RTTY"
+      - frequency: 20000
+        mode: "USB"
+        modulation: "DominoEX"
+        speed: 11
+      - frequency: 30000
+        mode: "FM"
+        modulation: "Hellschreiber"
+        variant: "feldhell"
+        description: "Moderately long description. Testing, one two three"
+    sentences:
+      - protocol: "UKHAS"
+        checksum: "crc16-ccitt"
+        callsign: "MOO"
+        description: "Normal format"
+        fields:
+          - name: "sentence_id"
+            sensor: "base.ascii_int"
+          - name: "time"
+            sensor: "stdtelem.time"
+          - name: "latitude"
+            sensor: "stdtelem.coordinate"
+            format: "dd.dddd"
+          - name: "longitude"
+            sensor: "stdtelem.coordinate"
+            format: "dd.dddd"
+          - name: "altitude"
+            sensor: "base.ascii_int"
+          - name: "temperature"
+            sensor: "base.ascii_float"
+        filters:
+            post:
+              - type: "normal"
+                name: "common.invalid_location_zero"
+    metadata:
+        description: "Test doc one"

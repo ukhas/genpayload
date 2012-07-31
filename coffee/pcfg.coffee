@@ -12,14 +12,22 @@ pcfg_edit = (doc, callback) ->
     if doc == null
         doc =
             name: ""
-            description: ""
             type: "payload_configuration"
             sentences: []
             transmissions: []
+            metadata:
+                description: ""
 
     # fire the change events to update the validation
     $("#pcfg_name").val(doc.name).change()
-    $("#pcfg_description").val(doc.description or "").change()
+
+    description =
+        if doc.metadata? and doc.metadata.description?
+            doc.metadata.description
+        else
+            ""
+
+    $("#pcfg_description").val(description).change()
 
     $("#transmissions_list").empty()
     $("#sentences_list").empty()
@@ -38,12 +46,13 @@ pcfg_save = ->
         type: "payload_configuration"
         name: $("#pcfg_name").val()
         time_created: (new timezoneJS.Date()).toRFC3339String()
-        description: $("#pcfg_description").val()
+        metadata:
+            description: $("#pcfg_description").val()
         transmissions: (array_data_map "#transmissions_list", "transmission")
         sentences: (array_data_map "#sentences_list", "sentence")
 
     if doc.description == ""
-        delete doc.description
+        delete doc.metadata
 
     if doc.name == ""
         alert "There are errors in the form: the server would reject this"
@@ -70,7 +79,7 @@ transmissions_list_item = (t) ->
                 when "none" then "no parity"
                 when "odd", "even" then "#{t.parity} parity"
 
-            auto_description += " #{t.baud} baud #{t.shift}Hz shift #{t.encoding} #{parity} #{t.stop} stop bits"
+            auto_description += " #{t.baud} baud #{t.shift}Hz shift #{t.encoding} #{parity} #{maybe_plural t.stop, "stop bit"}"
         when "DominoEX"
             auto_description += " #{t.speed}"
         when "Hellschreiber"

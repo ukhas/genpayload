@@ -4,8 +4,6 @@ describe "#home", ->
         expect($(".container > div").not("#home")).toBeHidden()
 
     it "should have 4 {new,copy and edit} {pcfg, flight} links", ->
-        # TODO: when proper namespacing/exposing is added, have this check that the
-        # correct browse type is chosen.
         for [id, goto, back] in [["#go_pcfg_new", "#payload_configuration", "#pcfg_abandon"],
                                  ["#go_pcfg_modify", "#browse", "#browse_cancel"],
                                  ["#go_flight_new", "#flight", "#flight_abandon"],
@@ -18,6 +16,6 @@ describe "#home", ->
             if back is "#browse_cancel"
                 expect(couchdbspy.view).toHaveBeenCalled()
                 couchdbspy.view.mostRecentCall.args[1].error "nyan", "nyan", "nyan"
-            expect($(back).button("option", "disabled")).toBe(false)
+            expect($(back).is(".disabled")).toBe(false)
             $(back).click()
             expect($("#home")).toBeVisible()

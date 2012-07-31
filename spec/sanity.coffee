@@ -17,8 +17,8 @@ describe "The spec helper", ->
     it "should reload genpayload for each test", ->
         if not ran_first_test
             throw "This test cannot be run alone"
-        expect($("#go_pcfg_new").length).toBe(1)
-        expect($("div.container").length).toBe(1)
+        expect($("#go_pcfg_new").length).toBe(1) # i.e., reloaded
+        expect($("h1").length).toBe(1) # i.e., not loaded twice
 
     it "should execute genpayload.js each time", ->
         # executing genpayload.js reattaches the event to the new element
