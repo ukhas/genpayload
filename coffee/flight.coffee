@@ -228,10 +228,12 @@ flight_show_dates = ->
     if data?
         $("#launch_time_check").text "Launch time: #{data.display.launch_time}"
         $("#launch_time_check").attr "title", "UTC: #{data.display_utc.launch_time}"
+        $("#launch_time_check").parent().show()
         $("#launch_window_info").text "Launch window: #{data.display.start} - #{data.display.end}"
         $("#launch_window_info").attr "title", "UTC: #{data.display_utc.start} - #{data.display_utc.end}"
     else
         $("#launch_time_check, #launch_window_info").text("").attr("title", "")
+        $("#launch_time_check").parent().hide()
 
     return
 
@@ -330,6 +332,7 @@ setup_flight_form = ->
 
     $("#launch_date").datepicker
         onSelect: flight_launch_date_change
+        minDate: "+0"
 
     $("#launch_window_start, #launch_window_end").datepicker
         onSelect: flight_show_dates
