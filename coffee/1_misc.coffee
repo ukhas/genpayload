@@ -114,17 +114,19 @@ form_field = (elem, opts={}) ->
         set_valid e, ok
         return
 
+set_valid_img = (i, valid) ->
+    if valid
+        i.attr "alt", "OK"
+        i.attr "src", "t/images/tick.png"
+    else
+        i.attr "alt", "Error"
+        i.attr "src", "t/images/exclamationmark.png"
+
 # set/remove the valid class
 set_valid = (elem, valid) ->
     e = $(elem)
     if e.parent().is(".validated")
-        i = e.siblings("img")
-        if valid
-            i.attr "alt", "OK"
-            i.attr "src", "t/images/tick.png"
-        else
-            i.attr "alt", "Error"
-            i.attr "src", "t/images/exclamationmark.png"
+        set_valid_img e.siblings("img"), valid
     else if e.is(".validated_inside")
         if valid
             e.removeClass "invalid"

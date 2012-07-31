@@ -70,21 +70,29 @@ body { overflow-y: scroll; }    /* Stop page width jumping around */
 
 #sentence_edit .hotfix_box,
 .keyvalue input.long { width: 500px; }
+.keyvalue .row img { padding: 3px 0 0 10px; }
+
+.keyvalue_json { background-color: #eff !important }
 
 @media only screen and (max-width: 767px) {
     #sentence_edit .hotfix_box,
     .keyvalue input.long { width: 210px; }
+    .keyvalue .row { margin-bottom: 5px; }
 }
 
 #sentence_edit .item_icons,
+#sentence_fields .normal_field,
+#sentence_fields .keyvalue,
 #sentence_intermediate_filters .keyvalue,
 #sentence_post_filters .keyvalue,
 #sentence_edit .hotfix_box,
-#sentence_edit .field.row input,
-#sentence_edit .field.row select { float: left; }
+#sentence_fields .normal_field input,
+#sentence_fields .normal_field select { float: left; }
 
-#sentence_edit .field.row input,
-#sentence_edit .field.row select { margin-bottom: 0 }
+#sentence_fields .normal_field input,
+#sentence_fields .normal_field select { margin-bottom: 0 }
+
+#sentence_fields .keyvalue { margin-bottom: 5px; }
 
 #sentence_edit .big_select {
     /* from .form.row select */

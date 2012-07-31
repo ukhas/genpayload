@@ -1,6 +1,5 @@
-ensure keyvalue, sentence_edit work well on mobile.
-bug: convert (from expert) to normal field doesn't appear to work properly
-check out using validated (i.e., not validated_inside) on keyvalue.
+clean up keyvalue. Maybe Row class?
+
 consider setting minDate on #launch_date to now
 parser tester flask app
 assert shift > 0 in rtty

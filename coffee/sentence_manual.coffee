@@ -113,7 +113,7 @@ sentence_sort_icon = -> $("<span class='ui-icon ui-icon-arrowthick-2-n-s sentenc
 # A function is attached to the element using jquery's .data(); key 'field_data', which returns
 # the field object from the form.
 sentence_field_div = (field, expert=false) ->
-    e = $("<div class='field row' />")
+    m = $("<div class='row' />")
 
     i = $("<div class='item_icons' />")
     i.append sentence_sort_icon()
@@ -141,9 +141,11 @@ sentence_field_div = (field, expert=false) ->
                 p.sortable "refresh"
                 return
     i.append menu.container
-    e.append i
+    m.append i
+
 
     if not expert
+        e = $("<div class='normal_field'>")
         n = $("<input type='text' title='Field Name' placeholder='Field Name' class='validated_inside' />")
         field_name_input n
         s = $("<select class='big_select' />")
@@ -188,7 +190,7 @@ sentence_field_div = (field, expert=false) ->
                 text: "Convert this to a custom field"
                 func: ->
                     data = (e.data "field_data") false
-                    e.replaceWith sentence_field_div data, true
+                    m.replaceWith sentence_field_div data, true
                     return
     else
         kv = new KeyValueEdit
@@ -199,7 +201,7 @@ sentence_field_div = (field, expert=false) ->
                     when "name" then (typeof value is "string" and nice_key_regexp.test value)
                     when "sensor" then (typeof value is "string" and callable_regexp.test value)
                     else true
-        e.append kv.elem
+        e = kv.elem
         e.data "field_data", -> kv.data()
 
         menu.update
@@ -213,10 +215,12 @@ sentence_field_div = (field, expert=false) ->
                     catch e
                         alert "Could not convert the field. (non-standard type, options, or validation errors)"
                         return
-                    e.replaceWith sentence_field_div data, false
+                    m.replaceWith sentence_field_div data, false
                     return
 
-    return e
+    m.append e
+
+    return m
 
 # Create an item to be inserted into a filters list
 sentence_filter_div = (d) ->

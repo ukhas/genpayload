@@ -24,23 +24,23 @@ class KeyValueEdit
 
     # handles duplicate keys and valid key names.
     # value input disabling/enabling and creation/deletion of rows is handled elsewhere
-    key_changed: (input) ->
+    key_changed: (row, k, v) ->
         # Remove the last used key
-        key = input.data "last_used_key"
+        key = row.data "last_used_key"
         if key? and key != ""
             a = @used_keys[key]
 
             if a.length == 1
                 delete @used_keys[key]
             else
-                index = a.indexOf input
+                index = a.indexOf row
                 a[index..index] = []
 
                 if a.length == 1
-                    set_valid a[0], @valid_key a[0].val()
+                    @set_part_valid a[0], "key", @valid_key a[0].val()
 
         # Add and check the new one
-        key = input.val()
+        key = k.val()
         ok = @valid_key key
 
         if key != ""
@@ -48,15 +48,18 @@ class KeyValueEdit
 
             if a?
                 if a.length == 1
-                    set_valid a[0], false
+                    @set_part_valid a[0], "key", false
 
-                a.push input
+                a.push row
                 ok = false
             else
-                @used_keys[key] = [input]
+                @used_keys[key] = [row]
 
-        input.data "last_used_key", key
-        set_valid input, ok
+        row.data "last_used_key", key
+        @set_part_valid row, "key", ok
+
+        # @validator might have changed
+        v.change()
 
     # is this a valid (string) key
     valid_key: (key) ->
@@ -70,7 +73,6 @@ class KeyValueEdit
     # add a row. key, value, required used by constructor
     add_row: (key="", value="", required=false) ->
         row = $("<div class='row' />")
-        kill_row = false
 
         k = $("<input type='text' title='Key' placeholder='Key' class='validated_inside' />")
         k.val key
@@ -78,6 +80,27 @@ class KeyValueEdit
             k.prop "disabled", true
 
         v = $("<input type='text' title='Value' placeholder='Value' class='validated_inside long' />")
+
+        if key is ""
+            v.prop "disabled", true
+        else
+            if (typeof value) is "string"
+                v.val value
+            else
+                v.val JSON.stringify value
+
+        @add_row_events row, k, v
+
+        row.append k, v, $("<img />")
+
+        @key_changed row, k, v
+        v.change()
+
+        @elem.append row
+
+    # add events to deal with tab, val changing
+    add_row_events: (row, k, v) ->
+        kill_row = false
 
         # If change just enabled the value input, need to enable it ASAP (i.e., on keydown
         # before the browser picks the next focus) so that it will focus on the value.
@@ -88,7 +111,7 @@ class KeyValueEdit
                 if row.is(':last-child')
                     v.prop "disabled", true
                     v.val ""
-                    set_valid v, true
+                    @set_part_valid row, "value", true
                 else
                     if not kill_row
                         v.remove()
@@ -104,7 +127,7 @@ class KeyValueEdit
 
         k.change =>
             pre_change()
-            @key_changed k
+            @key_changed row, k, v
             post_change()
             return
 
@@ -124,22 +147,15 @@ class KeyValueEdit
                 value = v.val()
                 v.removeClass "keyvalue_json"
 
-            set_valid v, (@validator k.val(), value)
+            @set_part_valid row, "value", (@validator k.val(), value)
             return
 
-        if key is ""
-            v.prop "disabled", true
-        else
-            if (typeof value) is "string"
-                v.val value
-            else
-                v.val JSON.stringify value
+    set_part_valid: (row, part, part_valid) ->
+        row.data("valid_#{part}", part_valid)
+        console.log([row, part, part_valid, row.data("valid_key"), row.data("valid_value")])
 
-        @key_changed k
-        v.change()
-
-        row.append k, v
-        @elem.append row
+        valid = (row.data("valid_key") and row.data("valid_value"))
+        set_valid_img row.children("img"), valid
 
     data: ->
         d = {}
