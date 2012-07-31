@@ -44,14 +44,14 @@ browse_types =
                 seen[s.callsign] = true
             uniques.sort()
             callsigns = uniques.join ', '
-            second = [$("<div />").text callsigns]
+            second = [$("<div class='nocollapse' />").text callsigns]
 
             if doc.description?
                 description = $("<small class='long_protection' />")
                 description.text '"' + doc.description + '"'
                 if doc.description.length > 30
                     description.attr "title", doc.description
-                second.push $("<div />").append description
+                second.push $("<div class='nocollapse' />").append description
 
             d = browse_row doc.name, second, doc._id, doc.time_created
             d.data "browse_return", doc
@@ -66,13 +66,13 @@ browse_types =
             sentence = row.doc.sentences[index]
             doc = row.doc
 
-            second = [$("<div />").text "from #{doc.name}"]
+            second = [$("<div class='nocollapse' />").text "from #{doc.name}"]
             if sentence.description?
                 description = $("<small class='long_protection' />")
                 description.text '"' + sentence.description + '"'
                 if sentence.description.length > 30
                     description.attr "title", sentence.description
-                second.push $("<div />").append description
+                second.push $("<div class='nocollapse' />").append description
 
             d = browse_row callsign, second, "#{doc._id} #{index}", doc.time_created
             d.data "browse_return", sentence
@@ -85,8 +85,8 @@ browse_types =
             name = row.key
             doc = row.doc
 
-            second = [($("<div />").text if doc.approved then "Approved" else ""),
-                      ($("<div />").text "#{doc.metadata.group or ""} #{doc.metadata.project or ""}")]
+            second = [($("<div class='nocollapse' />").text if doc.approved then "Approved" else ""),
+                      ($("<div class='nocollapse' />").text "#{doc.metadata.group or ""} #{doc.metadata.project or ""}")]
 
             d = browse_row doc.name, second, doc._id, doc.launch.time
             d.data "browse_return", doc

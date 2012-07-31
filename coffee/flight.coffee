@@ -265,15 +265,23 @@ flight_launch_date_change = ->
     return
 
 flight_add_payload = (pcfg) ->
-    row = $("<tr />")
+    row = $("<div class='row' />")
 
-    row.append $("<td />").text pcfg.name
-    info = $("<td class='small' />")
-    info.append $("<div />").text pcfg._id
+    row.append $("<div class='four columns alpha' />").append $("<h4 />").text pcfg.name
+
+    interesting_info = $("<div class='four columns' />")
+    interesting_info.append $("<div />").text maybe_plural pcfg.sentences.length, "sentence"
+    interesting_info.append $("<div />").text maybe_plural pcfg.transmissions.length, "transmission"
+    row.append interesting_info
+
+    boring_info = $("<div class='four columns' />")
+    boring_info.append $("<div />").append $("<small />").text pcfg._id
     localestring = (new timezoneJS.Date pcfg.time_created).toString()
-    info.append $("<div />").text("created " + pcfg.time_created).attr("title", localestring)
-    row.append info
-    row.append $("<td />").append $("<button>Delete</button>").click btn_cb -> row.remove()
+    boring_info.append $("<div />").append $("<small />")
+           .text("created " + pcfg.time_created).attr("title", localestring)
+    row.append boring_info
+
+    row.append $("<div class='four columns omega buttons' />").append $("<button>Delete</button>").click btn_cb -> row.remove()
     row.data "pcfg_id", pcfg._id
 
     $("#flight_pcfgs_list").append row

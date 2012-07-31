@@ -163,5 +163,4 @@ class KeyValueEdit
 
                 d[key] = value
                 used_keys[key] = true
-            return
         return d

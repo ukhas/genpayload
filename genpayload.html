@@ -27,8 +27,8 @@
 
     <link rel="shortcut icon" href="t/images/favicon.ico" />
 
-    <link rel="stylesheet" href="stylesheets/redmond/jquery-ui-1.8.21.custom.css" />
-    <link rel="stylesheet" href="stylesheets/genpayload.css" />
+    <link rel="stylesheet" href="css/redmond/jquery-ui-1.8.21.custom.css" />
+    <link rel="stylesheet" href="css/genpayload.css" />
 
     <script type="text/javascript" src="js/json2.js"></script>
     <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
@@ -46,7 +46,7 @@
     <header>
         <div class="container">
             <div class="sixteen columns">
-                <h1 class="no-margin"><img src="images/header_logo.jpg" alt="habitat" title="habitat"/></h1>
+                <h1 class="no-margin"><img src="t/images/header_logo.jpg" alt="habitat" title="habitat"/></h1>
                 <span id="app_name"><b>genpayload</b></span>
             </div>
         </div>
@@ -296,7 +296,7 @@
                     </div>
                     <div class="six columns offset-by-one omega">
                         <div class="input_extra">Shifts supported by legacy fldigi are: 23, 85, 160,
-                        170, 182, 200, 240, 350, 425, 600 and 850.<br>
+                        170, 182, 200, 240, 350, 425, 600 and 850.<br />
                         Modern versions support any custom shift.</div>
                     </div>
                 </div>
@@ -632,7 +632,7 @@
             </div>
         </section>
 
-        <section id="loading_docs">
+        <section id="loading_docs" class="container">
             <div class="sixteen columns" id="loading_docs_text"></div>
 
             <div class="sixteen columns buttons">
@@ -640,9 +640,9 @@
             </div>
         </section>
 
-        <section id="flight">
+        <section id="flight" class="container">
             <div class="sixteen columns">
-                <div class="row">
+                <div class="form row">
                     <label class="two columns alpha" for="flight_name">Flight name</label>
                     <div class="seven columns validated">
                         <input type="text" id="flight_name" />
@@ -652,7 +652,7 @@
                         <div class="input_extra">e.g., Dalmation launch 32 or Shark Christmas launch.</div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="form row">
                     <label class="two columns alpha" for="flight_project">Project name</label>
                     <div class="seven columns">
                         <input type="text" id="flight_project" />
@@ -661,7 +661,7 @@
                         <div class="input_extra">Optional, but highly recommended.</div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="form row">
                     <label class="two columns alpha" for="flight_group">Group name</label>
                     <div class="seven columns">
                         <input type="text" id="flight_group" />
@@ -675,7 +675,7 @@
             <hr />
 
             <div id="dates" class="sixteen columns">
-                <div class="row" id="launch_timezone_section">
+                <div class="form row" id="launch_timezone_section">
                     <label class="two columns alpha" for="launch_timezone">Timezone</label>
                     <div class="seven columns validated">
                         <input type="text" id="launch_timezone" />
@@ -686,39 +686,50 @@
                         Some clients/trackers may display times related to this flight in this timezone rather than the user's.</div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="form row">
                     <label class="two columns alpha" for="launch_date">Launch Date</label>
-                    <div id="launch_date"></div>
+                    <div class="seven columns"><div id="launch_date"></div></div>
                 </div>
-                <div class="row">
+                <div class="form row">
                     <label class="two columns alpha" for="launch_time">Time</label>
                     <div class="seven columns validated">
                         <input type="text" id="launch_time" placeholder="HH:MM" />
                         <img src="t/images/tick.png" alt="Complete" />
                     </div>
                     <div class="six columns offset-by-one omega">
-                        <div class="input_extra" id="launch_time_check"></div>
+                        <div class="input_extra"><small id="launch_time_check"></small></div>
+                    </div>
+                </div>
+                <div class="form row">
+                    <label class="two columns alpha" for="launch_window">Launch window</label>
+                    <div class="seven columns">
+                        <select id="launch_window">
+                            <option value="day">Launch day</option>
+                            <option value="three">3 days surrounding</option>
+                            <option value="other">other</option>
+                        </select>
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">
+                            This period must cover the entire flight, and ideally exclude testing,
+                            so that only telemetry from the flight itself is archived. <br />
+                            <small id="launch_window_info"></small>
+                        </div>
                     </div>
                 </div>
                 <div>
-                    <!-- todo -->
-                    <label for="launch_window">Launch window</label>
-                    <select id="launch_window">
-                        <option value="day">Launch day</option>
-                        <option value="three">3 days surrounding</option>
-                        <option value="other">other</option>
-                    </select>
-                    <div id="launch_window_start"></div>
-                    <div id="launch_window_end"></div>
-                    <span class="input_extra">This period must cover the entire flight, and ideally exclude testing, so that only telemetry from the flight itself is archived. <br />
-                    <span id="launch_window_info"></span></span>
+                    <label class="two columns alpha" for="launch_window_start">Custom window</label>
+                    <div class="seven columns">
+                        <div id="launch_window_start"></div>
+                        <div id="launch_window_end"></div>
+                    </div>
                 </div>
             </div>
 
             <hr />
 
             <div class="sixteen columns">
-                <div class="row">
+                <div class="form row">
                     <label class="two columns alpha" for="launch_location_name">Launch location</label>
                     <div class="seven columns">
                         <input type="text" id="launch_location_name" class="long" />
@@ -727,7 +738,7 @@
                         <div class="input_extra">Optional. Suggested format: Place name, Area, Country</div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="form row">
                     <label class="two columns alpha" for="launch_latitude">Latitude</label>
                     <div class="seven columns validated">
                         <input type="text" id="launch_latitude" />
@@ -737,7 +748,7 @@
                         <div class="input_extra">decimal degrees</div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="form row">
                     <label class="two columns alpha" for="launch_longitude">Longitude</label>
                     <div class="seven columns validated">
                         <input type="text" id="launch_longitude" />
@@ -747,7 +758,7 @@
                         <div class="input_extra">decimal degrees<br />-180 &lt; l &lt;= 180</div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="form row">
                     <label class="two columns alpha" for="launch_altitude">Altitude</label>
                     <div class="seven columns validated">
                         <input type="text" id="launch_altitude" />
@@ -762,12 +773,9 @@
             <hr />
 
             <div class="sixteen columns" id="flight_pcfgs">
-                <h5>payloads in this flight</h5>
+                <h5 class="add-bottom">payloads in this flight</h5>
 
-                <!-- todo: table <div id="flight_pcfgs_list" class="itemlist clearfix"> -->
-                <table id="flight_pcfgs_list_table">
-                    <tbody id="flight_pcfgs_list"></tbody>
-                </table>
+                <div id="flight_pcfgs_list" class="itemlist clearfix"></div>
 
                 <div class="buttons">
                     <button id="flight_pcfgs_add">Add</button>
@@ -782,27 +790,40 @@
             </div>
         </section>
 
-        <section id="saving">
+        <section id="saving" class="container">
             <div class="sixteen columns">
-                <label class="two columns alpha" for="saving_doc">Document:</label>
-                <div class="seven columns">
-                    <input type='text' id='saving_doc' class='long' disabled='disabled' />
+                <div class="form row">
+                    <label class="two columns alpha" for="saving_doc">Document:</label>
+                    <div class="seven columns">
+                        <input type='text' id='saving_doc' class='long' disabled='disabled' />
+                    </div>
                 </div>
-            </div>
 
-            <div class="sixteen columns" id="save_success">
-                <p>Doc ID: <span id='saved_id'></span></p>
+                <div id="save_success">
+                    <div class="form row">
+                        <label class="two columns alpha">Doc ID:</label>
+                        <div class="seven columns">
+                            <span id='saved_id'></span>
+                        </div>
+                    </div>
 
-                <div class="buttons">
-                    <button id='save_done'>Done</button>
+                    <div class="form row">
+                        <button id='save_done'>Done</button>
+                    </div>
                 </div>
-            </div>
+    
+                <div id="save_fail">
+                    <div class="form row">
+                        <label class="tow columns alpha">Error:</label>
+                        <div class="seven columns">
+                            <span id='save_fail_message'></span>
+                        </div>
+                    </div>
 
-            <div class="sixteen columns" id="save_fail">
-                <p>Error: <span id='save_fail_message'></span></p>
-                <div class='buttons'>
-                    <button id='save_retry'>Retry</button>
-                    <button id='save_back'>Back</button>
+                    <div class="form row">
+                        <button id='save_retry'>Retry</button>
+                        <button id='save_back'>Back</button>
+                    </div>
                 </div>
             </div>
         </section>

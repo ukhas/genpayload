@@ -16,9 +16,9 @@ time_regex = /^((0|1)[0-9]|2[0-3])(:|)([0-5][0-9])(|\3([0-5][0-9]|60))$/
 time_parse = (str) ->
     r = time_regex.exec str
     if r?
-        h = parseInt r[1]
-        m = parseInt r[4]
-        s = (parseInt r[6]) or 0
+        h = strict_integer r[1]
+        m = strict_integer r[4]
+        s = (strict_integer r[6]) or 0
         return [h, m, s]
     else
         throw "invalid time"
@@ -70,14 +70,14 @@ array_reorder = (array, from, to) ->
     array[to...to] = v
     return
 
-# like parseFloat but doesn't tolerate rubbish on the end. Returns NaN if fail.
+# like parseFloat but doesn't tolerate rubbish on the end and always parses base 10. Returns NaN if fail.
 strict_numeric = (str) ->
     if not /[0-9]/.test str
         return NaN # catch empty strings
     else
         return +str
 
-# Again, doesn't tolerate rubbish.
+# Again, doesn't tolerate rubbish, base 10 only
 strict_integer = (str) ->
     v = strict_numeric str
     if isNaN v
@@ -222,9 +222,14 @@ setup_save_buttons = ->
 # load docs by list of ids with loading screen. #loading_docs should be visible
 loading_docs_callback = null
 
+load_docs_error = (status, error, reason) ->
+    $("#loading_docs_text").text "Failed: #{status} #{error} #{reason}"
+    $("#loading_docs_back").show()
+
 load_docs = (docs, callback) ->
     loading_docs_callback = callback
 
+    $("#loading_docs_text").show
     $("#loading_docs_back").hide()
 
     database.allDocs
@@ -233,16 +238,20 @@ load_docs = (docs, callback) ->
         success: (resp) ->
             docs = {}
             for row in resp.rows
+                if row.error?
+                    load_docs_error "200", "doc missing", row.key
                 docs[row.id] = row.doc
             callback docs
             return
-        error: (status, error, reason) ->
-            $("#loading_docs_text").text "Failed: #{status} #{error} #{reason}"
-            $("#loading_docs_back").show()
-            return
+        error: load_docs_error
 
 setup_loading_docs_buttons = ->
     $("#loading_docs_back").click btn_cb -> loading_docs_callback false
+
+maybe_plural = (number, thing, plural=null) ->
+    if plural is null then plural = thing + "s"
+    if number is 1 then return "#{number} #{thing}"
+    else return "#{number} #{plural}"
 
 $ ->
     $.ajaxSetup

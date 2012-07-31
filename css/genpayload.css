@@ -10,13 +10,9 @@ body { overflow-y: scroll; }    /* Stop page width jumping around */
 .itemlist .buttons { text-align: right; }
 .browse_item h4 { margin-top: 4px; } /* Bad vertical align */
 
-.browse_item div:after {
-    /* Prevent collapsing of empty cells */
-    content: ' ';
-    height: 1px;
-    min-height: 1px;
-    visibility: hidden;
-    display: block;
+.browse_item div.nocollapse:after {
+    /* &nbsp; prevent collapsing of empty cells */
+    content: '\00A0'
 }
 
 #launch_timezone_section .ui-autocomplete {
@@ -95,3 +91,5 @@ body { overflow-y: scroll; }    /* Stop page width jumping around */
     padding: 5px 4px;
     width: 220px;
 }
+
+#launch_window_start, #launch_window_end { display: inline-block; }
