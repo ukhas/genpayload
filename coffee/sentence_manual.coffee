@@ -143,7 +143,6 @@ sentence_field_div = (field, expert=false) ->
     i.append menu.container
     m.append i
 
-
     if not expert
         e = $("<div class='normal_field'>")
         n = $("<input type='text' title='Field Name' placeholder='Field Name' class='validated_inside' />")
@@ -177,7 +176,7 @@ sentence_field_div = (field, expert=false) ->
 
         e.data "field_data", (validate=true) ->
             d = name: n.val(), sensor: s.val()
-            if validate and (d.name is "" or d.name[0] == "_")
+            if validate and not is_valid_field_name value
                 throw "invalid field name"
             if d.sensor is "stdtelem.coordinate"
                 d.format = f.val()
@@ -198,8 +197,9 @@ sentence_field_div = (field, expert=false) ->
             required: ["name", "sensor"]
             validator: (key, value) ->
                 switch key
-                    when "name" then (typeof value is "string" and nice_key_regexp.test value)
-                    when "sensor" then (typeof value is "string" and callable_regexp.test value)
+                    when "name" then is_valid_field_name value
+                    when "sensor" then (typeof value is "string" and
+                                        callable_regexp.test value)
                     else true
         e = kv.elem
         e.data "field_data", -> kv.data()

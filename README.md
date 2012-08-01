@@ -6,8 +6,8 @@ Generate and save payload_configuration and flight documents for habitat
 Building
 ========
 
- 1) Install coffee-script (Super easy: install node, which comes with npm)
- 2) ```coffee --join js/genpayload.js --compile coffee/*.coffee```
+ - Install coffee-script (Super easy: install node, which comes with npm)
+ - ```coffee --join js/genpayload.js --compile coffee/*.coffee```
 
 Compile errors? coffee gives less-helpful error messages when joining files.
 Try this: ```coffee --print --compile coffee/*.coffee > /dev/null```
@@ -26,9 +26,10 @@ Testing
 Tests run using jasmine in the browser. Having compiled js/specs.js, visit
 jasmine.html:
 
- 1) ```coffee --join js/specs.js --compile spec/*.coffee```
- 2) ```python spec/make_test_docs.py```
- 3) ```x-www-browser jasmine.html```
+ - You will need python with PyYAML to build the test docs.
+ - ```coffee --join js/specs.js --compile spec/*.coffee```
+ - ```python spec/make_test_docs.py```
+ - ```x-www-browser jasmine.html```
 
 License
 =======

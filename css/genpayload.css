@@ -43,7 +43,7 @@ body { overflow-y: scroll; }    /* Stop page width jumping around */
 }
 
 #wizard_text_box, #wizard_fields, #telemetry_string { font-family: monospace; }
-#wizard_fields .highlight { background-color: yellow; }
+#wizard_fields .highlight { background-color: yellow !important; }
 #wizard_fields .invalid { background-color: pink; }
 #wizard_numeric_scale_type { width: auto; }
 #wizard_numeric_scale_example { padding-top: 2px; height: 31px; }

@@ -184,7 +184,7 @@ sentences_list_item = (s) ->
             if s.filters.post then n += s.filters.post.length
 
             if n
-                t.append " (#{maybe_plural n, "filter"}) "
+                t.append " (#{maybe_plural n, "filter"})"
 
         e.append t
 

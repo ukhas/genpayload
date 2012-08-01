@@ -143,7 +143,7 @@ guess_field_type = (fs, index) ->
         name = if index is 2 then "latitude" else "longitude"
         if /^(-|)[0-9]{1,3}\.[0-9]{4,8}$/.test fs
             return sensor: "stdtelem.coordinate", format: "dd.dddd", name: name
-        if /^(-|)[0-9]{3,5}\.[0-5][0-9]{3,5}$/.test fs
+        if /^(-|)[0-9]{1,3}[0-5][0-9]\.[0-9]{2,6}$/.test fs
             return sensor: "stdtelem.coordinate", format: "ddmm.mmmm", name: name
 
     if /^(-|)[0-9]+$/.test fs
@@ -294,7 +294,7 @@ wizard_field_save = ->
         name: $("#wizard_field_name").val()
         sensor: $("#wizard_field_sensor").val()
 
-    if f.name == "" or f.name[0] == "_"
+    if not is_valid_field_name f.name
         f.invalid = true
 
     if f.sensor is "base.constant"

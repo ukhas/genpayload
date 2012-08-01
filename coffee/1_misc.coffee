@@ -137,11 +137,16 @@ set_valid = (elem, valid) ->
 
     return
 
+is_valid_field_name = (n) -> typeof n is "string" and
+                             nice_key_regexp.test(n) and
+                             n != "" and
+                             n[0] != "_"
+
 # Setup an input as a field name input with autocompletion & validation
 field_name_input = (elem) ->
     form_field elem,
         nonempty: true,
-        extra: (v) -> v[0] != "_"
+        extra: is_valid_field_name
 
     elem.autocomplete
         source: (w, cb) ->

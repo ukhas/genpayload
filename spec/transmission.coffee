@@ -1,4 +1,4 @@
-describe "transmissions", ->
+describe "the transmission editor", ->
     beforeEach ->
         $("#go_pcfg_new").click()
         expect($("#payload_configuration")).toBeVisible()
@@ -9,7 +9,7 @@ describe "transmissions", ->
         data = row.data("transmission")
         return [row, data, auto_descr]
 
-    it "should create transmission one", ->
+    it "should be able to create transmission one", ->
         $("#transmission_new").click()
         expect($("#transmission_edit")).toBeVisible()
 
@@ -31,7 +31,7 @@ describe "transmissions", ->
         expect(auto_descr).toBe("Fast RTTY: 0.01MHz LSB RTTY 300 baud " +
                 "200Hz shift ASCII-7 even parity 1 stop bit")
 
-    it "should create transmission two", ->
+    it "should be able to create transmission two", ->
         $("#transmission_new").click()
         expect($("#transmission_edit")).toBeVisible()
 
@@ -47,7 +47,7 @@ describe "transmissions", ->
         expect(data).toEqual(test_docs.pcfg1.transmissions[1])
         expect(auto_descr).toBe("0.02MHz USB DominoEX 11")
 
-    it "should create transmission three", ->
+    it "should be able to create transmission three", ->
         $("#transmission_new").click()
         expect($("#transmission_edit")).toBeVisible()
 
