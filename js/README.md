@@ -6,7 +6,7 @@ All dependencies are included in this directory.
 Dual licensed under MIT or GPL
 
  - jquery-1.7.2.min.js http://jquery.com
- - jquery-ui-1.8.21.custom.min.js http://jqueryui.com
+ - jquery-ui-1.8.21.custom.js and jquery-ui-1.8.21.custom.min.js http://jqueryui.com
  - jquery UI has the patch jquery-ui-1.8.21.patch applied to it
 
 Dual licensed (MIT, GPL); Copyright 2011, Klaus Hartl
@@ -30,4 +30,18 @@ These are in the public domain
 GNU GPL 3 or later, Copyright (c) 2009 Sebastiaan Deckers + 2012 Modifications.
 
  - rfc3339.js http://cbas.pandion.im/2009/10/generating-rfc-3339-timestamps-in.html
+
+MIT License, Copyright (c) 2008-2012 Pivotal Labs
+
+ - jasmine-html.js jasmine.js http://pivotal.github.com/jasmine/
+
+MIT License, Copyright (c) 2010 Wojciech Zawistowski
+
+ - jasmine-jquery-1.3.1.js https://github.com/velesin/jasmine-jquery
+
+The following files are part of genpayload and are therefore GPL3 (as explained in ../README.md)
+
+ - init_timezone.js
+ - genpayload.js (once compiled)
+ - specs.js
 

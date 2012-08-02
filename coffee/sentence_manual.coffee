@@ -174,9 +174,9 @@ sentence_field_div = (field, expert=false) ->
         n.change()
         s.change()
 
-        e.data "field_data", (validate=true) ->
+        m.data "field_data", (validate=true) ->
             d = name: n.val(), sensor: s.val()
-            if validate and not is_valid_field_name value
+            if validate and not is_valid_field_name d.name
                 throw "invalid field name"
             if d.sensor is "stdtelem.coordinate"
                 d.format = f.val()
@@ -188,7 +188,7 @@ sentence_field_div = (field, expert=false) ->
             convert:
                 text: "Convert this to a custom field"
                 func: ->
-                    data = (e.data "field_data") false
+                    data = (m.data "field_data") false
                     m.replaceWith sentence_field_div data, true
                     return
     else
@@ -202,7 +202,7 @@ sentence_field_div = (field, expert=false) ->
                                         callable_regexp.test value)
                     else true
         e = kv.elem
-        e.data "field_data", -> kv.data()
+        m.data "field_data", -> kv.data()
 
         menu.update
             convert:

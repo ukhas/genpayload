@@ -70,7 +70,8 @@ describe "the sentence wizard", ->
         expect($("#wizard_checksum_type").text()).toBe("xor")
         expect($("#wizard_field_name")).toBeVisible()
 
-        spyOn(window, 'alert')
+        window.alert.andReturn(undefined) # stop it throwing (see jasmine.html)
+
         $("#wizard_next").click()
 
         expect(window.alert).toHaveBeenCalled()
@@ -83,7 +84,7 @@ describe "the sentence wizard", ->
             $("#wizard_text_box").val("A,A*2C")
             $("#wizard_next").click()
 
-            spyOn(window, 'alert')
+            window.alert.andReturn(undefined)
             $("#wizard_next").click()
 
             $("#wizard_field_name").val(val)

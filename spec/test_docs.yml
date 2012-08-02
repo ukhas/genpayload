@@ -68,3 +68,95 @@ pcfg1:
                 filter: "common.invalid_location_zero"
     metadata:
         description: "Test doc one"
+
+# taken from genpayload beta output
+pcfg2:
+    type: "payload_configuration"
+    name: "Test doc 2"
+    time_created: "2012-07-31T01:40:10+01:00"
+    metadata:
+        description: "A long ish description of a doc"
+    transmissions:
+      - baud: "50"
+        parity: "none"
+        frequency: 434075000
+        mode: "USB"
+        encoding: "ASCII-8"
+        modulation: "RTTY"
+        shift: "350"
+        stop: "2"
+        description: "blah"
+      - frequency: 123000000
+        modulation: "Hellschreiber"
+        mode: "USB"
+        variant: "feldhell"
+      - frequency: 555000000
+        modulation: "Hellschreiber"
+        mode: "USB"
+        variant: "slowhell"
+      - frequency: 1000000
+        modulation: "Hellschreiber"
+        mode: "USB"
+        variant: "feldhell"
+    sentences:
+      - protocol: "UKHAS"
+        callsign: "T32_0"
+        checksum: "crc16-ccitt"
+        fields:
+          - name: "sentence_id"
+            sensor: "base.ascii_int"
+          - name: "time"
+            sensor: "stdtelem.time"
+          - name: "latitude"
+            sensor: "stdtelem.coordinate"
+            format: "dd.dddd"
+        filters:
+            intermediate:
+              - filter: "blah"
+                type: "normal"
+            post:
+              - filter: "meh"
+                type: "normal"
+              - filter: "common.numeric_scale"
+                source: "latitude"
+                factor: 1
+                round: 3
+                type: "normal"
+        description: "I describe"
+
+      - protocol: "UKHAS"
+        callsign: "T32_1"
+        checksum: "crc16-ccitt"
+        fields:
+          - name: "sentence_id"
+            sensor: "base.ascii_int"
+        description: "all"
+
+      - protocol: "UKHAS"
+        callsign: "T32_2"
+        checksum: "crc16-ccitt"
+        fields:
+          - name: "sentence_id"
+            sensor: "base.ascii_int"
+          - name: "time"
+            sensor: "stdtelem.time"
+        description: "A description of a sentence"
+
+      - protocol: "UKHAS"
+        checksum: "crc16-ccitt"
+        callsign: "T32_2"
+        fields:
+          - sensor: "base.ascii_int"
+            name: "sentence_id"
+          - sensor: "stdtelem.time"
+            name: "time"
+          - sensor: "stdtelem.coordinate"
+            name: "latitude"
+            format: "dd.dddd"
+          - sensor: "stdtelem.coordinate"
+            name: "longitude"
+            format: "dd.dddd"
+          - sensor: "base.ascii_int"
+            name: "altitude"
+          - sensor: "base.ascii_int"
+            name: "speed"

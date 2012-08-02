@@ -29,7 +29,7 @@
   <script type="text/javascript">
     (function() {
       var jasmineEnv = jasmine.getEnv();
-      jasmineEnv.updateInterval = 100;
+      jasmineEnv.updateInterval = 10000;
 
       var htmlReporter = new jasmine.HtmlReporter();
 
@@ -40,7 +40,7 @@
       };
 
       var blob = null, code = null, doc_ready = false;
-      var original_onerror = window.onerror;
+      var original_onerror = window.onerror, original_alert = window.alert;
 
       // Only global modification genpayload.js makes is to window.onerror
       beforeEach(function() {
@@ -52,6 +52,11 @@
         if (window.onerror != original_onerror)
             throw "onerror protection failed";
 
+        spyOn(window, 'alert').andCallFake(function () {
+            // as a function, facilitates easy breakpointing
+            // tests can .andReturn(null) to stop it throwing
+            throw "unexpected alert";
+        });
         spyOn($, 'ajax').andThrow("This should have been intercepted in jquery.couch");
 
         var dbspy = spyOn($.couch, 'db').andCallFake(function () {

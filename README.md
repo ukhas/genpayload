@@ -6,32 +6,54 @@ Generate and save payload_configuration and flight documents for habitat
 Building
 ========
 
- - Install coffee-script (Super easy: install node, which comes with npm)
- - ```coffee --join js/genpayload.js --compile coffee/*.coffee```
+ - Install coffee-script (Super easy: install node, which comes with npm,
+   then npm install -g coffee-script)
+ - Checkout the habitat-template submodule
+ - Compile js/genpayload.js
 
-Compile errors? coffee gives less-helpful error messages when joining files.
+    $ npm install -g coffee-script
+    $ git submodule init
+    $ git submodule update
+    $ coffee --join js/genpayload.js --compile coffee/*.coffee
+
+Compile errors? coffee gives less-helpful error messages when --joining files.
 Try this: ```coffee --print --compile coffee/*.coffee > /dev/null```
 
 Deploying
 =========
 
-Clone the repository into a web accessible directory. You may have to change
-the database at the bottom of coffee/misc.coffee; it defaults to habitat.
-
-Build js/genpayload.js either on the server or elsewhere and copy it in. Done.
+ - Clone the repository into a web accessible directory. You may have to
+   change the database at the bottom of coffee/misc.coffee; it defaults to
+   /habitat.
+ - Follow the building instructions above.
+ - Done :-)
 
 Testing
 =======
 
 Tests run using jasmine in the browser. Having compiled js/specs.js, visit
-jasmine.html:
+jasmine.html.
 
- - You will need python with PyYAML to build the test docs.
- - ```coffee --join js/specs.js --compile spec/*.coffee```
- - ```python spec/make_test_docs.py```
- - ```x-www-browser jasmine.html```
+You will need python with PyYAML to build the test docs.
 
-License
-=======
+    $ coffee --join js/specs.js --compile spec/*.coffee
+    $ python spec/make_test_docs.py
+    $ x-www-browser jasmine.html
 
+Legal stuff
+===========
 
+genpayload.html css/* coffee/* and spec/* are
+Copyright 2012 Daniel Richman and licensed under the GNU GPL 3;
+please see http://www.gnu.org/licenses/
+
+    genpayload is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+Several libraries are included in the js/ directory, and their various licenses
+(and links to their homepages) are listed in js/README.md
+
+The habitat template / theme is Copyright 2012 Daniel Saul, and is imported
+via git submodule

@@ -42,10 +42,13 @@ pcfg_edit = (doc, callback) ->
 
 # Save the doc, and then callback to close #payload_configuration
 pcfg_save = ->
+    time_created = new timezoneJS.Date()
+    time_created.setMilliseconds(0)
+
     doc =
         type: "payload_configuration"
         name: $("#pcfg_name").val()
-        time_created: (new timezoneJS.Date()).toRFC3339String()
+        time_created: time_created.toRFC3339String()
         metadata:
             description: $("#pcfg_description").val()
         transmissions: (array_data_map "#transmissions_list", "transmission")

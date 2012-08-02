@@ -80,7 +80,7 @@ describe "the transmission editor", ->
 
     it "should validate transmissions", ->
         # fairly weak test.
-        spyOn(window, 'alert')
+        window.alert.andReturn(undefined) # stop it throwing (see jasmine.html)
 
         $("#transmission_new").click()
         expect($("#transmission_edit")).toBeVisible()

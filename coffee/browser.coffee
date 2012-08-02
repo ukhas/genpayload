@@ -46,11 +46,11 @@ browse_types =
             callsigns = uniques.join ', '
             second = [$("<div class='nocollapse' />").text callsigns]
 
-            if doc.description?
+            if doc.metadata? and doc.metadata.description?
                 description = $("<small class='long_protection' />")
-                description.text '"' + doc.description + '"'
-                if doc.description.length > 30
-                    description.attr "title", doc.description
+                description.text '"' + doc.metadata.description + '"'
+                if doc.metadata.description.length > 30
+                    description.attr "title", doc.metadata.description
                 second.push $("<div class='nocollapse' />").append description
 
             d = browse_row doc.name, second, doc._id, doc.time_created
@@ -82,7 +82,6 @@ browse_types =
         view: "prototype_genpayload/flight__name"
         term_key: (term) -> term
         display: (row) ->
-            name = row.key
             doc = row.doc
 
             second = [($("<div class='nocollapse' />").text if doc.approved then "Approved" else ""),
@@ -200,7 +199,9 @@ browse_hack_response = (what, resp) ->
 
 # Update the ui with the results
 browse_display = (what, resp) ->
-    if not what.search?
+    if resp.rows.length == 0
+        $("#browse_status").text "No results"
+    else if not what.search?
         $("#browse_status").text "Rows #{resp.offset + 1}-#{resp.offset + resp.rows.length}"
     else
         # Can't figure out row counts when asking for subset.
