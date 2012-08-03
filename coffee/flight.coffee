@@ -29,15 +29,14 @@ flight_edit = (doc, callback, pcfgs={}) ->
         default_time_settings = false
 
     $("#flight_name").val doc.name
-    $("#flight_project").val doc.metadata.project
-    $("#flight_group").val doc.metadata.group
-    $("#launch_location_name").val doc.metadata.location or ""
+    $("#flight_project").val doc.metadata?.project
+    $("#flight_group").val doc.metadata?.group
+    $("#launch_location_name").val doc.metadata?.location ? ""
     $("#flight_name, #flight_project, #flight_group, #launch_location_name").change()
 
     $("#launch_latitude").val doc.launch.location.latitude
     $("#launch_longitude").val doc.launch.location.longitude
-    a = doc.launch.location.altitude
-    $("#launch_altitude").val if a? then a else ""
+    $("#launch_altitude").val doc.launch.location.altitude ? ""
     $("#launch_latitude, #launch_longitude, #launch_altitude").change()
 
     try
@@ -91,7 +90,8 @@ flight_edit = (doc, callback, pcfgs={}) ->
         flight_no_show_dates = false
 
     $("#flight_pcfgs_list").empty()
-    flight_add_payload pcfgs[p] for p in doc.payloads
+    if doc.payloads?
+        flight_add_payload pcfgs[p] for p in doc.payloads
 
     flight_show_dates()
 
@@ -332,7 +332,6 @@ setup_flight_form = ->
 
     $("#launch_date").datepicker
         onSelect: flight_launch_date_change
-        minDate: "+0"
 
     $("#launch_window_start, #launch_window_end").datepicker
         onSelect: flight_show_dates

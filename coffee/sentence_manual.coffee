@@ -21,10 +21,10 @@ sentence_edit = (s, callback) ->
     for f in s.fields
         $("#sentence_fields").append sentence_field_div f, not is_normal_field f
 
-    if s.filters? and s.filters.intermediate?
+    if s.filters?.intermediate?
         for f in s.filters.intermediate
             $("#sentence_intermediate_filters").append sentence_filter_div f
-    if s.filters? and s.filters.post?
+    if s.filters?.post?
         for f in s.filters.post
             $("#sentence_post_filters").append sentence_filter_div f
 

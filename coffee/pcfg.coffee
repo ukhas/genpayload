@@ -21,11 +21,7 @@ pcfg_edit = (doc, callback) ->
     # fire the change events to update the validation
     $("#pcfg_name").val(doc.name).change()
 
-    description =
-        if doc.metadata? and doc.metadata.description?
-            doc.metadata.description
-        else
-            ""
+    description = doc.metadata?.description ? ""
 
     $("#pcfg_description").val(description).change()
 

@@ -24,7 +24,7 @@ setup_create_actions = ->
         browse "flight", (doc) ->
             edit_cb = (doc) -> toplevel "#home"
 
-            if doc and doc.payloads.length
+            if doc and doc.payloads? and doc.payloads.length
                 toplevel "#loading_docs"
                 load_docs doc.payloads, (other_docs) ->
                     if other_docs

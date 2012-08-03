@@ -1,4 +1,5 @@
 unit test data output
+forbid launch windows of > 1 week (validation errors)
 
 parser tester flask app
 

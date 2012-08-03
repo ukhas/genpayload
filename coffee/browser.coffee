@@ -46,7 +46,7 @@ browse_types =
             callsigns = uniques.join ', '
             second = [$("<div class='nocollapse' />").text callsigns]
 
-            if doc.metadata? and doc.metadata.description?
+            if doc.metadata?.description?
                 description = $("<small class='long_protection' />")
                 description.text '"' + doc.metadata.description + '"'
                 if doc.metadata.description.length > 30
@@ -85,7 +85,7 @@ browse_types =
             doc = row.doc
 
             second = [($("<div class='nocollapse' />").text if doc.approved then "Approved" else ""),
-                      ($("<div class='nocollapse' />").text "#{doc.metadata.group or ""} #{doc.metadata.project or ""}")]
+                      ($("<div class='nocollapse' />").text "#{doc.metadata?.group or ""} #{doc.metadata?.project or ""}")]
 
             d = browse_row doc.name, second, doc._id, doc.launch.time
             d.data "browse_return", doc

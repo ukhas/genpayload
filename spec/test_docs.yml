@@ -160,3 +160,42 @@ pcfg2:
             name: "altitude"
           - sensor: "base.ascii_int"
             name: "speed"
+
+flight1:
+    type: "flight"
+    approved: false
+    start: "2012-08-02T00:00:00+01:00"
+    end: "2012-08-02T23:59:59+01:00"
+    name: "Tarantula launch 1"
+    launch:
+        time: "2012-08-02T10:30:00+01:00"
+        timezone: "Europe/London"
+        location:
+            latitude: 51.44943
+            longitude: -0.95468
+    metadata:
+        location: "A field"
+        project: "Project Arachnid"
+        group: "Team Spider"
+    payloads:
+      - "id_of_pcfg1"
+      - "id_of_pcfg2"
+
+flight2:
+    type: "flight"
+    approved: true
+    start: "2012-01-01T00:00:00+09:30"
+    end: "2012-01-03T23:59:59+09:30"
+    name: "Tarantula launch 2"
+    launch:
+        time: "2012-01-02T12:30:00+09:30"
+        timezone: "Australia/Adelaide"
+        location:
+            latitude: -34.77409
+            longitude: 138.51697
+    metadata:
+        location: "A field"
+        project: "Project Arachnid"
+        group: "Team Spider"
+    payloads:
+      - "id_of_pcfg2"
