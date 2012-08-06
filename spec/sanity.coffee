@@ -33,3 +33,14 @@ describe "The spec helper", ->
         $("#browse").show()
         expect($("#home")).toBeHidden()
         expect($("#browse")).toBeVisible()
+
+    it "should provide couchdbspy", ->
+        for k in ["view", "saveDoc", "allDocs"]
+            expect(couchdbspy[k].isSpy).toBe(true)
+
+        $("#go_pcfg_modify").click()
+        expect(couchdbspy.view).toHaveBeenCalled()
+
+    it "should create an alert spy that throws an error", ->
+        expect(-> alert "test").toThrow("unexpected alert")
+        # tests can alert.andReturn(null) to stop it throwing
