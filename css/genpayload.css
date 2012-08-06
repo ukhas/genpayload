@@ -96,4 +96,4 @@ body { overflow-y: scroll; }    /* Stop page width jumping around */
     width: 220px;
 }
 
-#launch_window_start, #launch_window_end { display: inline-block; }
+#launch_window_start, #launch_window_end { display: inline-block; margin-top: 5px; }

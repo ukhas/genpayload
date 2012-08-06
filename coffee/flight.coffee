@@ -267,6 +267,11 @@ flight_launch_date_change = ->
     return
 
 flight_add_payload = (pcfg) ->
+    for row in $("#flight_pcfgs_list").children()
+        if pcfg._id == $(row).data("pcfg_id")
+            # don't add the same payload twice
+            return
+
     row = $("<div class='row' />")
 
     row.append $("<div class='four columns alpha' />").append $("<h4 />").text pcfg.name

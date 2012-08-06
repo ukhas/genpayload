@@ -703,11 +703,17 @@
                 <div class="form row">
                     <label class="two columns alpha" for="launch_window">Launch window</label>
                     <div class="seven columns">
-                        <select id="launch_window">
-                            <option value="day">Launch day</option>
-                            <option value="three">3 days surrounding</option>
-                            <option value="other">other</option>
-                        </select>
+                        <div>
+                            <select id="launch_window">
+                                <option value="day">Launch day</option>
+                                <option value="three">3 days surrounding</option>
+                                <option value="other">other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <div id="launch_window_start"></div>
+                            <div id="launch_window_end"></div>
+                        </div>
                     </div>
                     <div class="six columns offset-by-one omega">
                         <div class="input_extra">
@@ -715,13 +721,6 @@
                             so that only telemetry from the flight itself is archived. <br />
                             <small id="launch_window_info"></small>
                         </div>
-                    </div>
-                </div>
-                <div class="form row">
-                    <label class="two columns alpha" for="launch_window_start">Custom window</label>
-                    <div class="seven columns">
-                        <div id="launch_window_start"></div>
-                        <div id="launch_window_end"></div>
                     </div>
                 </div>
             </div>
