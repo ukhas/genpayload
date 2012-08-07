@@ -30,7 +30,8 @@ browse_item_date_id = (id, date) ->
 
 browse_types =
     payload_configuration:
-        view: "prototype_genpayload/payload_configuration__name__created_descending"
+        view: "payload_configuration/name_time_created"
+        include_docs: true
         term_key: (term) -> [term]
         display: (row) ->
             doc = row.doc
@@ -58,15 +59,14 @@ browse_types =
             return d
 
     sentence:
-        view: "prototype_genpayload/payload_configuration__sentence_callsign__created_descending__sentence_index"
+        view: "payload_configuration/callsign_time_created"
+        include_docs: false
         term_key: (term) -> [term]
         display: (row) ->
             callsign = row.key[0]
-            index = row.key[2]
-            sentence = row.doc.sentences[index]
-            doc = row.doc
+            [metadata, sentence] = row.value
 
-            second = [$("<div class='nocollapse' />").text "from #{doc.name}"]
+            second = [$("<div class='nocollapse' />").text "from #{metadata.name}"]
             if sentence.description?
                 description = $("<small class='long_protection' />")
                 description.text '"' + sentence.description + '"'
@@ -74,12 +74,13 @@ browse_types =
                     description.attr "title", sentence.description
                 second.push $("<div class='nocollapse' />").append description
 
-            d = browse_row callsign, second, "#{doc._id} #{index}", doc.time_created
+            d = browse_row callsign, second, "#{row.id} #{metadata.index}", metadata.time_created
             d.data "browse_return", sentence
             return d
 
     flight:
-        view: "prototype_genpayload/flight__name"
+        view: "flight/all_name"
+        include_docs: true
         term_key: (term) -> term
         display: (row) ->
             doc = row.doc
@@ -127,7 +128,7 @@ browse_load = (what={}) ->
 
     options =
         limit: browse_per_page + 1
-        include_docs: true
+        include_docs: browse_types[browse_type].include_docs
 
     if what.search? and what.search == ""
         delete what.search

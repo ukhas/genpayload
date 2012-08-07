@@ -166,7 +166,10 @@ describe "the manual sentence editor", ->
             rows: [
                 id: "id_of_pcfg2"
                 key: ["T32_0", 123, 0]
-                doc: test_docs.pcfg2
+                value: [
+                    {name: "Test doc 2", time_created: "2012-08-02T00:04:17+01:00"}
+                    test_docs.pcfg2.sentences[0]
+                ]
             ]
 
         $("#browse_list > .row").first().click()
@@ -630,21 +633,19 @@ describe "the manual sentence editor", ->
             rows: [
                 id: "id_of_pcfg2"
                 key: ["MOO", 123, 0]
-                doc:
-                    type: "payload_configuration"
+                value: [
                     name: "Test doc"
                     time_created: "2012-07-31T01:40:10+01:00"
-                    transmissions: []
-                    sentences: [
-                        protocol: "UKHAS"
-                        checksum: "xor"
-                        callsign: "MOO"
-                        fields: [
-                            name: "blah"
-                            sensor: "stdtelem.coordinate"
-                            format: give_format
-                        ]
+                ,
+                    protocol: "UKHAS"
+                    checksum: "xor"
+                    callsign: "MOO"
+                    fields: [
+                        name: "blah"
+                        sensor: "stdtelem.coordinate"
+                        format: give_format
                     ]
+                ]
             ]
 
         $("#browse_list > .row").first().click()

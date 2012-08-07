@@ -1,4 +1,4 @@
-make_view_row = (doc, key=null, id="fake id") ->
+make_view_doc_row = (doc, key=null, id="fake id") ->
     doc = $.extend true, {}, doc
     if not doc._id
         doc._id = id
@@ -14,13 +14,13 @@ get_view_name = ->
     expect(couchdbspy.view).toHaveBeenCalled()
     return couchdbspy.view.mostRecentCall.args[0]
 
-respond_to_view = (rows) ->
+respond_to_view = (rows, include_docs=true) ->
     expect(couchdbspy.view).toHaveBeenCalled()
     o = couchdbspy.view.mostRecentCall.args[1]
-    expect(o.include_docs).toBe(true)
+    expect(o.include_docs).toBe(include_docs)
     rows = for r in rows
         if r.key? then r
-        else make_view_row r
+        else make_view_doc_row r
     o.success
         total_rows: rows.length
         offset: 0
@@ -58,7 +58,7 @@ for i in [1..451]
         name: "Test doc #{i}"
         launch:
             time: "2012-01-02T12:30:00+09:30"
-    fake_view.push make_view_row doc, Math.floor(i / 7)
+    fake_view.push make_view_doc_row doc, Math.floor(i / 7)
     # use integer keys and ids for testing. Easier than
     # sorting strings.
 
@@ -276,7 +276,7 @@ describe "the fake couchdb view", ->
 describe "the document browser", ->
     it "should find payload_configuration docs", ->
         $("#go_pcfg_modify").click()
-        expect(get_view_name()).toContain("payload_configuration")
+        expect(get_view_name()).toBe("payload_configuration/name_time_created")
         respond_to_view [test_docs.pcfg1, test_docs.pcfg2]
         expect($("#browse_list > .row").length).toBe(2)
 
@@ -293,13 +293,20 @@ describe "the document browser", ->
     it "should find sentence dicts", ->
         $("#go_pcfg_new").click()
         $("#go_import").click()
-        expect(get_view_name()).toContain("sentence")
+        expect(get_view_name()).toBe("payload_configuration/callsign_time_created")
         rows = []
         for d in [test_docs.pcfg1, test_docs.pcfg2]
+            m =
+                name: d.name
+                metadata: d.metadata
+                time_created: "2012-08-02T00:04:17+01:00"
             for s, i in d.sentences
-                # key is [callsign time idx]
-                rows.push make_view_row d, [s.callsign, 123, i]
-        respond_to_view rows
+                # key is [callsign time index]
+                rows.push
+                    id: d._id
+                    key: [s.callsign, 123, i]
+                    value: [m, s]
+        respond_to_view rows, false
 
         r = $("#browse_list > .row:nth-child(2)")
         expect(r.text()).toContain("T32_0")
@@ -317,7 +324,7 @@ describe "the document browser", ->
 
     it "should find flight docs", ->
         $("#go_flight_modify").click()
-        expect(get_view_name()).toContain("flight")
+        expect(get_view_name()).toBe("flight/all_name")
         respond_to_view [test_docs.flight1, test_docs.flight2]
         expect($("#browse_list > .row").length).toBe(2)
 
@@ -336,8 +343,8 @@ describe "the document browser", ->
         expect(l.keys).toEqual(["id_of_pcfg1", "id_of_pcfg2"])
         expect(l.include_docs).toBe(true)
         l.success
-            rows: [make_view_row(test_docs.pcfg1, "id_of_pcfg1", "id_of_pcfg1"),
-                   make_view_row(test_docs.pcfg2, "id_of_pcfg2", "id_of_pcfg2")]
+            rows: [make_view_doc_row(test_docs.pcfg1, "id_of_pcfg1", "id_of_pcfg1"),
+                   make_view_doc_row(test_docs.pcfg2, "id_of_pcfg2", "id_of_pcfg2")]
 
         expect($("#flight")).toBeVisible()
         expect($("#flight_name").val()).toBe("Tarantula launch 1")
@@ -420,7 +427,7 @@ describe "the document browser", ->
         check_page 2
 
     test_can_search = (type) ->
-        respond_to_view []
+        respond_to_view [], (type != "sentence")
         couchdbspy.view.reset()
 
         $("#browse_search").val("mySeArcH")
