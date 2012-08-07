@@ -195,6 +195,8 @@ flight_get_dates = ->
                 throw "Start or end dates not selected"
             start = new timezoneJS.Date(sd.getFullYear(), sd.getMonth(), sd.getDate(), 0, 0, 0, 0, timezone)
             end = new timezoneJS.Date(ed.getFullYear(), ed.getMonth(), ed.getDate(), 23, 59, 59, 0, timezone)
+            if end - start > 7 * 24 * 3600 * 1000
+                throw "Launch window may not be greater than one week (speak to an admin if you have a special requirement)."
 
     display = (d, utc=false) ->
         if utc
@@ -224,7 +226,7 @@ flight_show_dates = ->
 
     try
         data = flight_get_dates()
-    catch e
+    catch error
         data = null
 
     if data?
@@ -351,9 +353,9 @@ setup_flight_form = ->
 
     $("#launch_window").change ->
         if $("#launch_window").val() == "other"
-            $("#launch_window_start, #launch_window_end").show()
+            $("#launch_window_start, #launch_window_end, #launch_window_week_warning").show()
         else
-            $("#launch_window_start, #launch_window_end").hide()
+            $("#launch_window_start, #launch_window_end, #launch_window_week_warning").hide()
         flight_show_dates()
         return
 

@@ -167,7 +167,7 @@
 
         <section id="browse" class="container">
             <div class="sixteen columns remove-bottom">
-                <label class="two columns alpha" for="browse_search" id="browse_search_label">Search text: </label>
+                <label class="two columns alpha" for="browse_search" id="browse_search_label">Search prefix: </label>
                 <div class="six columns">
                     <input type="text" id="browse_search" />
                 </div>
@@ -719,6 +719,10 @@
                         <div class="input_extra">
                             This period must cover the entire flight, and ideally exclude testing,
                             so that only telemetry from the flight itself is archived. <br />
+                            <span id="launch_window_week_warning">
+                                The server rejects launch windows longer than one week.
+                                Please speak to an admin if you have a special requirement. <br />
+                            </span>
                             <small id="launch_window_info"></small>
                         </div>
                     </div>

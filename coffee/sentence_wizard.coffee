@@ -141,12 +141,12 @@ guess_field_type = (fs, index) ->
 
     if index is 2 or index is 3
         name = if index is 2 then "latitude" else "longitude"
-        if /^(-|)[0-9]{1,3}\.[0-9]{4,8}$/.test fs
+        if /^(-|\+|)[0-9]{1,3}\.[0-9]{4,8}$/.test fs
             return sensor: "stdtelem.coordinate", format: "dd.dddd", name: name
-        if /^(-|)[0-9]{1,3}[0-5][0-9]\.[0-9]{2,6}$/.test fs
+        if /^(-|\+|)[0-9]{1,3}[0-5][0-9]\.[0-9]{2,6}$/.test fs
             return sensor: "stdtelem.coordinate", format: "ddmm.mmmm", name: name
 
-    if /^(-|)[0-9]+$/.test fs
+    if /^(-|\+|)[0-9]+$/.test fs
         name = switch index
             when 0 then "sentence_id"
             when 4 then "altitude"
@@ -154,7 +154,7 @@ guess_field_type = (fs, index) ->
 
         return sensor: "base.ascii_int", name: name
 
-    if /^(-|)[0-9]+\.[0-9]+$/.test fs
+    if /^(-|\+|)[0-9]+\.[0-9]+$/.test fs
         name = if index is 4 then "altitude" else ""
         return sensor: "base.ascii_float", name: ""
 
@@ -164,7 +164,7 @@ guess_field_type = (fs, index) ->
 plausible_field_types = (fs) ->
     results = ["base.string", "base.constant"]
     if time_regex.test fs then results.push "stdtelem.time"
-    if (/^(-|)[0-9\.]+$/.test fs) and not isNaN(strict_numeric fs)
+    if (/^(-|\+|)[0-9\.]+$/.test fs) and not isNaN(strict_numeric fs)
         if (fs.indexOf '.') == -1
             results.push "base.ascii_int"
         else
@@ -270,7 +270,7 @@ wizard_field_load = (m, f) ->
 
     $("#wizard_field_name").val f.name
     $("#wizard_field_sensor").val f.sensor
-    $("#wizard_coordinate_format").val f.format or "dd.dddd"
+    $("#wizard_coordinate_format_select").val f.format or "dd.dddd"
     $("#wizard_numeric_scale").prop "checked", f.numeric_scale?
 
     if f.numeric_scale?

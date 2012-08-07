@@ -204,19 +204,18 @@ save_doc = (doc, callback) ->
     saving_doc = doc
     save_callback = callback
 
-    $("#saving_status").text "Saving payload_configuration document..."
     $("#saving_doc").val JSON.stringify doc
     $("#save_success, #save_fail").hide()
 
     database.saveDoc doc,
         success: (resp) ->
-            $("#saving_status").text "Saved."
+            $("#page_title").text "Saved."
             $("#saved_id").text resp.id
             $("#save_success").show()
             # jquery.couch will add _rev and _id to doc.
             return
         error: (status, error, reason) ->
-            $("#saving_status").text "Failed :-("
+            $("#page_title").text "Save failed :-("
             $("#save_fail_message").text "#{status} #{error} #{reason}"
             $("#save_fail").show()
             return

@@ -204,6 +204,17 @@ describe "the flight editor", ->
 
         expect(saved).toEqual(want_doc)
 
+    it "should forbid launch windows greater than one week", ->
+        make_flight1()
+        $("#launch_window").val("other")
+        $("#launch_window_start").datepicker("setDate", new Date(2012, 7 - 1, 20))
+        $("#launch_window_end").datepicker("setDate", new Date(2012, 8 - 1, 3))
+
+        window.alert.andReturn(null)
+        $("#flight_save").click()
+        expect(window.alert).toHaveBeenCalled()
+        expect($("#flight")).toBeVisible()
+
     it "should handle the launch window straddling a DST change", ->
         # ends 2012 October 28
         make_flight1()

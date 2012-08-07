@@ -50,7 +50,7 @@ pcfg_save = ->
         transmissions: (array_data_map "#transmissions_list", "transmission")
         sentences: (array_data_map "#sentences_list", "sentence")
 
-    if doc.description == ""
+    if doc.metadata.description == ""
         delete doc.metadata
 
     if doc.name == ""

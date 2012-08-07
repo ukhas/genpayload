@@ -285,7 +285,7 @@ sentence_get_hotfix = (s) ->
 
 # Create an item to be inserted into a filters list
 sentence_hotfix_filter_div = (d=null) ->
-    e = $("<div class='row' />")
+    e = $("<div class='row validated' />")
 
     c = $("<div class='item_icons' />")
     c.append sentence_sort_icon()
@@ -301,9 +301,13 @@ sentence_hotfix_filter_div = (d=null) ->
 
     e.append c
 
-    i = $("<input type='text' placeholder='Paste output of ./sign_hotfix.py' class='validated_inside hotfix_box' />")
+    i = $("<input type='text' placeholder='Paste output of ./sign_hotfix.py' class='hotfix_box' />")
     if d != null
         i.val JSON.stringify d
+
+    e.append i
+    e.append $("<img />")
+
     i.change ->
         try
             sentence_get_hotfix i.val()
@@ -312,7 +316,7 @@ sentence_hotfix_filter_div = (d=null) ->
             set_valid i, false
         return
     i.change()
-    e.append i
+
     e.data "filter_data", -> sentence_get_hotfix i.val()
     return e
 
