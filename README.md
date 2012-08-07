@@ -12,8 +12,7 @@ Building
  - Compile js/genpayload.js
 
     $ npm install -g coffee-script
-    $ git submodule init
-    $ git submodule update
+    $ git submodule update --init
     $ coffee --join js/genpayload.js --compile coffee/*.coffee
 
 Compile errors? coffee gives less-helpful error messages when --joining files.
@@ -23,7 +22,7 @@ Deploying
 =========
 
  - Clone the repository into a web accessible directory. You may have to
-   change the database at the bottom of coffee/misc.coffee; it defaults to
+   change the database at the bottom of coffee/1_misc.coffee; it defaults to
    /habitat.
  - Follow the building instructions above.
  - Done :-)
