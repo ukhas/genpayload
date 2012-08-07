@@ -263,7 +263,7 @@ $ ->
     $.ajaxSetup
         timeout: 10000
 
-    database = $.couch.db("test_habitat")
+    database = $.couch.db("habitat")
 
     setup_save_buttons()
     setup_loading_docs_buttons()
