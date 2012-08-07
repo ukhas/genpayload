@@ -419,26 +419,31 @@ describe "the document browser", ->
         $("#browse_prev").click()
         check_page 2
 
-    for type in ["payload_configuration", "flight", "sentence"]
-        it "can search for #{type}s", ->
-            switch type
-                when "payload_configuration" then $("#go_pcfg_modify").click()
-                when "flight" then $("#go_flight_modify").click
-                when "sentence"
-                    $("#go_pcfg_new").click()
-                    $("#go_import").click()
+    test_can_search = (type) ->
+        respond_to_view []
+        couchdbspy.view.reset()
 
-            respond_to_view []
-            couchdbspy.view.reset()
+        $("#browse_search").val("mySeArcH")
+        $("#browse_search_go").click()
+        expect(couchdbspy.view).toHaveBeenCalled()
+        o = couchdbspy.view.mostRecentCall.args[1]
 
-            $("#browse_search").val("mySeArcH")
-            $("#browse_search_go").click()
-            expect(couchdbspy.view).toHaveBeenCalled()
-            o = couchdbspy.view.mostRecentCall.args[1]
+        if type == "flight"
+            expect(o.startkey).toBe("mysearch")
+            expect(o.endkey).toBe("MYSEARCHZZZZZZZZZZZZZ")
+        else
+            expect(o.startkey).toEqual(["mysearch"])
+            expect(o.endkey).toEqual(["MYSEARCHZZZZZZZZZZZZZ"])
 
-            if type == "flight"
-                expect(o.startkey).toBe("mysearch")
-                expect(o.endkey).toBe("MYSEARCHZZZZZZZZZZZZZ")
-            else
-                expect(o.startkey).toEqual(["mysearch"])
-                expect(o.endkey).toEqual(["MYSEARCHZZZZZZZZZZZZZ"])
+    it "can search for payload_configuration docs", ->
+        $("#go_pcfg_modify").click()
+        test_can_search "payload_configuration"
+
+    it "can search for flight docs", ->
+        $("#go_flight_modify").click()
+        test_can_search "flight"
+
+    it "can search for sentence dicts", ->
+        $("#go_pcfg_new").click()
+        $("#go_import").click()
+        test_can_search "sentence"

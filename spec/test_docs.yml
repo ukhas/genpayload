@@ -110,13 +110,23 @@ pcfg2:
           - name: "latitude"
             sensor: "stdtelem.coordinate"
             format: "dd.dddd"
+          - name: "radiation"
+            sensor: "my.custom_sensor"
+            a_setting: 1245
+            some_data: ["a", 4, {g: true}]
         filters:
             intermediate:
+              - type: "hotfix"
+                code: "something\nthat\nfixes\n"
+                signature: "signature 1"
+                certificate: "danielrichman.crt"
               - filter: "blah"
                 type: "normal"
             post:
-              - filter: "meh"
-                type: "normal"
+              - type: "hotfix"
+                code: "something\nthat\nfixes\n"
+                signature: "signature 1"
+                certificate: "danielrichman.crt"
               - filter: "common.numeric_scale"
                 source: "latitude"
                 factor: 1

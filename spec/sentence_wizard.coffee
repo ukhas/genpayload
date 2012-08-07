@@ -78,19 +78,22 @@ describe "the sentence wizard", ->
         expect($("#wizard_fields span.invalid").length).toBe(1)
         expect($("#wizard_field_name")).toBeVisible()
 
-    for [test, val] in [["empty", ""], ["system", "_bad"], ["bad", " spaces "]]
-        it "should forbid #{test} field names", ->
-            $("#go_wizard").click()
-            $("#wizard_text_box").val("A,A*2C")
-            $("#wizard_next").click()
+    test_forbid_field_name = (val) ->
+        $("#go_wizard").click()
+        $("#wizard_text_box").val("A,A*2C")
+        $("#wizard_next").click()
 
-            window.alert.andReturn(undefined)
-            $("#wizard_next").click()
+        window.alert.andReturn(undefined)
+        $("#wizard_next").click()
 
-            $("#wizard_field_name").val(val)
+        $("#wizard_field_name").val(val)
 
-            expect(window.alert).toHaveBeenCalled()
-            expect($("#wizard_fields span.invalid").length).toBe(1)
+        expect(window.alert).toHaveBeenCalled()
+        expect($("#wizard_fields span.invalid").length).toBe(1)
+
+    it "should forbid empty field names", -> test_forbid_field_name ""
+    it "should forbid _internal field names", -> test_forbid_field_name "_internal"
+    it "should forbid bad field names", -> test_forbid_field_name " spaces "
 
     it "shouldn't give a no-lock option if there is no lat/lon", ->
         $("#go_wizard").click()
@@ -251,10 +254,17 @@ describe "the sentence wizard", ->
                 source: "bill"
                 expected: 176.0 # 176.29
 
-        for [name, bads...] in  [["factor", "asdf", ""], ["offset", "dfgh", ""],
-                                 ["round", "4.2", "asdf", ""]]
-            it "validate the #{name} property ", ->
-                for b in bads
-                    s = {}
-                    s[name] = b
-                    expect(try_settings s).toEqual("invalid")
+        test_validate_key = (name, bads...) ->
+            for b in bads
+                s = {}
+                s[name] = b
+                expect(try_settings s).toEqual("invalid")
+
+        it "validate the factor key", ->
+            test_validate_key "factor", "asdf", ""
+
+        it "validate the offset key", ->
+            test_validate_key "offset", "dfgh", ""
+
+        it "validate the round key", ->
+            test_validate_key "round", "4.2", "asdf", ""

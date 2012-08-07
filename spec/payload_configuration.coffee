@@ -70,3 +70,5 @@ describe "the payload_configuration editor", ->
         delete doc._id
         doc.transmissions[1..] = []
         expect(saved).toEqual(doc)
+
+    # importing specs (#go_import) is tested by browser.coffee

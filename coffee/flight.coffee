@@ -165,6 +165,8 @@ flight_save = ->
 # Return object with keys launch, start, end describing the 3 dates in the flight.
 flight_get_dates = ->
     timezone = $("#launch_timezone").val()
+    if timezone == "" or timezone == "null" or not timezone_js_data.zones[timezone]?
+        throw "invalid timezone"
 
     ld = $("#launch_date").datepicker "getDate"
     if ld == null
@@ -299,7 +301,7 @@ setup_flight_form = ->
 
     form_field "#launch_timezone"
         nonempty: true
-        extra: (s) -> s? and s != "null" and timezone_js_data.zones[s]?
+        extra: (s) -> s? and s != "" and s != "null" and timezone_js_data.zones[s]?
 
     reopen_timezone = false
     $("#launch_timezone").autocomplete

@@ -13,7 +13,7 @@ sentence_edit = (s, callback) ->
         callback false
 
     $("#sentence_description").val s.description or ""
-    $("#sentence_callsign").val s.callsign
+    $("#sentence_callsign").val(s.callsign).change()
     $("#sentence_checksum").val s.checksum or "crc16-ccitt"
 
     $("#sentence_fields, #sentence_intermediate_filters, #sentence_post_filters").empty()
@@ -122,8 +122,8 @@ sentence_field_div = (field, expert=false) ->
             text: "Add numeric scale filter"
             func: ->
                 try
-                    source = (e.data "field_data")().name
-                catch e
+                    source = (m.data "field_data")().name
+                catch err
                     source = ""
 
                 $("#sentence_post_filters").append sentence_normal_filter_div
@@ -136,23 +136,24 @@ sentence_field_div = (field, expert=false) ->
         delete:
             text: "Delete"
             func: ->
-                p = e.parent()
-                e.remove()
+                p = m.parent()
+                m.remove()
                 p.sortable "refresh"
                 return
     i.append menu.container
     m.append i
 
     if not expert
-        e = $("<div class='normal_field'>")
-        n = $("<input type='text' title='Field Name' placeholder='Field Name' class='validated_inside' />")
+        e = $("<div class='normal_field validated'>")
+        n = $("<input type='text' title='Field Name' placeholder='Field Name' />")
         field_name_input n
         s = $("<select class='big_select' />")
         sensor_select s
         f = $("<select class='big_select' />")
         sensor_format_select f
-        c = $("<input type='text' title='Expected Value' placeholder='Value' class='validated_inside' />")
-        e.append n, s, f, c
+        c = $("<input type='text' title='Expected Value' placeholder='Value' />")
+        v = $("<img />")
+        e.append n, s, f, c, v
 
         n.val field.name
         s.val field.sensor
@@ -212,7 +213,7 @@ sentence_field_div = (field, expert=false) ->
                         data = kv.data()
                         if not is_normal_field data
                             throw "couldn't convert"
-                    catch e
+                    catch err
                         alert "Could not convert the field. (non-standard type, options, or validation errors)"
                         return
                     m.replaceWith sentence_field_div data, false
@@ -239,6 +240,7 @@ sentence_normal_filter_div = (d={}) ->
         validator: (key, value) ->
             switch key
                 when "filter" then (typeof value is "string" and callable_regexp.test value)
+                when "source", "destination" then is_valid_field_name value
                 else true
 
     e = $("<div class='row' />")
@@ -316,6 +318,8 @@ sentence_hotfix_filter_div = (d=null) ->
 
 # Setup callbacks on page load
 $ ->
+    form_field "#sentence_callsign", extra: (v) -> callsign_regexp.test v
+
     $("#sentence_fields_add").click btn_cb ->
         $("#sentence_fields").append sentence_field_div
             name: ""

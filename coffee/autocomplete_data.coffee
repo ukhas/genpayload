@@ -36,7 +36,7 @@ suggest_field_data_correct = {
     "temp_int": "temperature_internal",
     "temp_ext": "temperature_external",
     "int_temp": "temperature_internal",
-    "ext_temp": "temperature_internal",
+    "ext_temp": "temperature_external",
     "battery_volts": "battery",
     "battery_voltage": "battery",
     "sequence_id": "sentence_id",

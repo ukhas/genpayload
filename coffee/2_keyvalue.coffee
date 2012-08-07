@@ -66,8 +66,8 @@ class KeyValueRow
         @row.data("object", this)
         @parent.elem.append @row
 
-        @k = $("<input type='text' title='Key' placeholder='Key' class='validated_inside' />")
-        @v = $("<input type='text' title='Value' placeholder='Value' class='validated_inside long' />")
+        @k = $("<input type='text' title='Key' placeholder='Key' />")
+        @v = $("<input type='text' title='Value' placeholder='Value' class='long' />")
         @i = $("<img />")
 
         @k.val key
