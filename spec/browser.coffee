@@ -324,7 +324,7 @@ describe "the document browser", ->
 
     it "should find flight docs", ->
         $("#go_flight_modify").click()
-        expect(get_view_name()).toBe("flight/all_name")
+        expect(get_view_name()).toBe("flight/all_name_time_created")
         respond_to_view [test_docs.flight1, test_docs.flight2]
         expect($("#browse_list > .row").length).toBe(2)
 

@@ -79,7 +79,7 @@ browse_types =
             return d
 
     flight:
-        view: "flight/all_name"
+        view: "flight/all_name_time_created"
         include_docs: true
         term_key: (term) -> term
         display: (row) ->
