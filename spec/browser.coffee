@@ -293,7 +293,7 @@ describe "the document browser", ->
     it "should find sentence dicts", ->
         $("#go_pcfg_new").click()
         $("#go_import").click()
-        expect(get_view_name()).toBe("payload_configuration/callsign_time_created")
+        expect(get_view_name()).toBe("payload_configuration/callsign_time_created_index")
         rows = []
         for d in [test_docs.pcfg1, test_docs.pcfg2]
             m =

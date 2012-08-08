@@ -59,7 +59,7 @@ browse_types =
             return d
 
     sentence:
-        view: "payload_configuration/callsign_time_created"
+        view: "payload_configuration/callsign_time_created_index"
         include_docs: false
         term_key: (term) -> [term]
         display: (row) ->
