@@ -1,119 +1,835 @@
 <!DOCTYPE html>
-<title>PAYLOAD DOCUMENT GENERATOR</title>
 
-<!-- css -->
-<link href="http://fonts.googleapis.com/css?family=Special+Elite&amp;v1" rel="stylesheet" type="text/css">
-<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/themes/vader/jquery-ui.css" rel="stylesheet" type="text/css">
-<link href="jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css">
-<link href="genpayload.less" rel="stylesheet/less" type="text/css">
+<!-- habitat: web template -->
+<!-- http://habitat.habhub.org -->
+<!-- (C) Copyright 2012 Daniel Richman, Daniel Saul; GNU GPL 3 -->
 
-<div id="top-bar">
-<header>
-    <h1>PAYLOAD DOCUMENT GENERATOR</h1>
-    <div id="text">
-    <p>
-        You have found a PAYLOAD DOCUMENT GENERATOR.
-        You can use it to generate PAYLOAD DOCUMENTS in both OLD and
-        <a href="http://habitat.habhub.org/docs/database/example.html#flight-docs-json">NEW</a> formats.
-        It was written by <a href="http://adamgreig.com">ADAM GREIG</a>
-        and is <a href="https://github.com/adamgreig/genpayload">OPEN SOURCE</a>.
-    </p>
-    <p>To begin, enter a PAYLOAD NAME in the TEXT ENTRY BOX below.</p>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8"/>
+
+    <title>habitat genpayload</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+    <link rel="stylesheet" href="t/css/base.css"/>
+    <link rel="stylesheet" href="t/css/skeleton.css"/>
+    <link rel="stylesheet" href="t/css/layout.css"/>
+
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="shortcut icon" href="t/images/favicon.ico" />
+
+    <link rel="stylesheet" href="css/redmond/jquery-ui-1.8.21.custom.css" />
+    <link rel="stylesheet" href="css/genpayload.css" />
+
+    <script type="text/javascript" src="js/json2.js"></script>
+    <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.8.21.custom.js"></script>
+    <script type="text/javascript" src="js/jquery.couch.js"></script>
+    <script type="text/javascript" src="js/timezone.js"></script>
+    <script type="text/javascript" src="js/all_zones.js"></script>
+    <script type="text/javascript" src="js/zone_list.js"></script>
+    <script type="text/javascript" src="js/init_timezone.js"></script>
+    <script type="text/javascript" src="js/genpayload.js"></script>
+
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div class="sixteen columns">
+                <h1 class="no-margin"><img src="t/images/header_logo.jpg" alt="habitat" title="habitat"/></h1>
+                <span id="app_name"><b>genpayload</b></span>
+            </div>
+        </div>
+    </header>
+
+    <div id="grey-section">
+        <div class="container">
+            <div class="two-thirds column">
+                <h3 class="remove-bottom" id="page_title">Loading...</h3>
+                <p class="remove-bottom" id="page_subtitle">If you can read this, the javascript isn't working :-(.</p>
+            </div>
+        </div>
     </div>
-</header>
-</div>
 
-<div id="scroller">
-    <section id="payload">
-        <h2>PAYLOAD</h2>
-        <label for="name">PAYLOAD NAME&gt;</label>
-        <input type="text" size="12" id="name" tabindex="1" required autofocus><br /><br />
-        <a href="#" class="continue">CONTINUE</a> (or press TAB)
-    </section>
-    <section id="flight">
-        <h2>FLIGHT DETAILS</h2>
-        <label for="location">LAUNCH LOCATION&gt;</label>
-        <input type="text" size="16" id="location" tabindex="2"><br />
-        <label for="project">PROJECT NAME&gt;</label>
-        <input type="text" size="16" id="project" tabindex="3"><br /><br />
-        LAUNCH WINDOW:<br />
-        <label for="window-start">FROM&gt;</label>
-        <input type="text" size="12" id="window-start" tabindex="4" required><br />
-        <label for="window-end">TO&gt;</label>
-        <input type="text" size="12" id="window-end" tabindex="5" required><br />
-        <label for="launch-date">LAUNCH DATE AND TIME&gt;</label>
-        <input type="text" size="17" id="launch-date" tabindex="6" required><br />
-        <label for="timezone">TIMEZONE&gt;</label>
-        <input type="text" size="20" id="timezone" tabindex="7" required><br /><br />
-        <a href="#" class="back">BACK</a> (or press SHIFT+TAB)<br />
-        <a href="#" class="continue">CONTINUE</a> (or press TAB)
-    </section>
-    <section id="radio">
-        <h2>RADIO DETAILS</h2>
-        <label for="frequency">FREQUENCY (MEGAHERTZ)&gt;</label>
-        <input type="text" size="7" id="frequency" value="434.075" tabindex="8" required><br />
-        <label for="mode">MODE&gt;</label>
-        <input type="text" size="3" id="mode" value="USB" tabindex="9" required><br /><br />
-        <a href="#" class="back">BACK</a> (or press SHIFT+TAB)<br />
-        <a href="#" class="continue">CONTINUE</a> (or press TAB)
-    </section>
-    <section id="telemetry">
-        <h2>TELEMETRY</h2>
-        <label for="modulation">MODULATION&gt;</label>
-        <input type="text" size="5" id="modulation" value="RTTY" tabindex="10" required><br />
-        <label for="shift">SHIFT (HERTZ)&gt;</label>
-        <input type="text" size="3" id="shift" value="350" tabindex="11" required><br />
-        <label for="encoding">ENCODING&gt;</label>
-        <input type="text" size="8" id="encoding" value="ASCII-8" tabindex="12" required><br />
-        <label for="baud">BAUD&gt;</label>
-        <input type="text" size="3" id="baud" value="50" tabindex="13" required><br />
-        <label for="parity">PARITY&gt;</label>
-        <input type="text" size="4" id="parity" value="NONE" tabindex="14" required><br />
-        <label for="stop">STOP BITS&gt;</label>
-        <input type="text" size="1" id="stop" value="1" tabindex="15" required><br /><br /><br />
-        <a href="#" class="back">BACK</a> (or press SHIFT+TAB)<br />
-        <a href="#" class="continue">CONTINUE</a> (or press TAB)
-    </section>
-    <section id="dataformat">
-        <h2>DATA FORMAT</h2>
-        <label for="callsign">CALLSIGN&gt;</label>
-        <input type="text" size="12" id="callsign" tabindex="16" required><br /><br />
-        SENTENCE&gt;<br />
-        <div id="fields">
-            <div class="field" id="time">TIME</div>
-            <div class="field" id="coordinate">COORDINATE</div>
-            <div class="field" id="integer">INTEGER</div>
-            <div class="field" id="float">FLOAT</div>
-            <div class="field" id="string">STRING</div>
-            <hr>
-            <div class="field" id="latitude">LATITUDE</div>
-            <div class="field" id="longitude">LONGITUDE</div>
-            <div class="field" id="altitude">ALTITUDE</div>
-            <div class="field" id="temperature">TEMPERATURE</div>
-        </div>
-        <div id="sentence">
-            
-        </div>
-        <div class="clear"></div>
-        <label for="checksum">CHECKSUM&gt;</label>
-        <input type="text" size="8" id="checksum" value="CRC-16" tabindex="100" required><br /><br />
-        <a href="#" class="back">BACK</a> (or press SHIFT+TAB)<br />
-        <a href="#" class="continue">CONTINUE</a> (or press TAB)
-    </section>
-    <section id="documents">
-        <h2>DOCUMENTS</h2>
-        <strong>HABITAT FLIGHT DOC:</strong><br />
-        <input type="text" size="30" id="json-flight-doc" tabindex="102"><br /><br />
-        <p>The XML format is now deprecated, please submit the flight document
-        above!</p>
-        <a href="#" class="back">BACK</a> (or press SHIFT+TAB)<br />
-    </section>
-</div>
+    <div id="sections">
+        <section id="home" class="container">
+            <h3 class="sixteen columns">payload configuration documents</h3>
 
-<!-- javascript -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>
-<script src="jquery.blockUI.min.js"></script>
-<script src="jquery-ui-timepicker-addon.min.js"></script>
-<script src="less-1.1.3.min.js"></script>
-<script src="genpayload.js"></script>
+            <div class="sixteen columns">
+                <div class="eleven columns alpha">
+                    <p><code>payload_configuration</code> documents describe a payload (no prizes for guessing that).
+                    They contain instructions to habitat: how to parse telemetry that listeners upload;
+                    and radio settings: how to setup listeners' radios.
+                    If you fly one payload multiple times, you shouldn't have to change payload configuration document.</p>
+                </div>
+                <div class="four columns offset-by-one omega">
+                    <button class="remove-bottom full-width" id="go_pcfg_new">create new</button>
+                    <button class="remove-bottom full-width" id="go_pcfg_modify">start from existing</button>
+                </div>
+            </div>
+
+            <h3 class="sixteen columns">flight documents</h3>
+
+            <div class="sixteen columns">
+                <div class="eleven columns alpha">
+                    <p><code>flight</code> documents describe the time and date of a planned flight. They allow us
+                    to add the flight to the calendar, set the title on the tracker, and select only relevant
+                    telemetry to go into the flight archive (i.e., exclude test data).</p>
+
+                    <p>A flight document contains a list of payload configuration documents - i.e., the payloads
+                    that are going to be launched. You can add more than one, if there are several payloads on one
+                    balloon/flight train - but for multiple launches, create a flight document per balloon.</p>
+                </div>
+                <div class="four columns offset-by-one omega">
+                    <button class="remove-bottom full-width" id="go_flight_new">create new</button>
+                    <button class="remove-bottom full-width" id="go_flight_modify">start from existing</button>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="sixteen columns" id="quickstart">
+                <h2>Quick start</h2>
+
+                <p><b>I've just programmed my brand new payload, and am now testing it.</b></p>
+
+                <p>You only need to create <a id="quick_pcfg" href='#'>a payload_configuration document</a>
+                using the "new format wizard".</p>
+
+                <p><b>I'm going to launch a balloon soon.</b></p>
+
+                <p><a id="quick_flight" href='#'>Create a flight document</a>, then ask on IRC for the
+                doc to be approved.</p>
+
+                <p>Note that you may also create documents by copying and modifying the last document you
+                created for your payload, so you need not start from scratch each time.</p>
+            </div>
+
+            <hr />
+
+            <div class="sixteen columns" id="misc_help">
+                <h2>Extra details</h2>
+
+                <h3>payload configuration</h3>
+                <p>The sentence and radio settings in a payload configuration document are ordered lists:
+                the first sentence format that matches successfully is used, and the first item in the radio
+                list is the default.</p>
+
+                <h3>Editing</h3>
+                <p>You can't edit documents once they're saved. You can however load, modify and save a new
+                copy of your configuration document: habitat will use the newest version.</p>
+
+                <h3>Launch windows</h3>
+                <p>Flight documents are only valid for an amount of time, preferably as small as possible.
+                Parsed strings that don't belong to an active flight document are treated as 'test' uploads,
+                and will only be shown in the testing section of the new tracker.</p>
+
+                <h3>Approval</h3>
+                <p>Since anyone at all can create flight documents, they must be checked before they appear on
+                the various websites. Payload configuration documents referenced by approved and active
+                (within the launch window) flights are given priority when parsing.</p>
+
+                <h3>Units</h3>
+                <p>Please tell habitat how to convert all of your sensor readings into their relevant SI
+                <a href="http://en.wikipedia.org/wiki/SI_base_unit">base</a> or
+                <a href="http://en.wikipedia.org/wiki/SI_derived_unit">derived</a> unit
+                without a metric prefix
+                (except: use <span title="an accepted SI unit for temperature interval">Celsius</span> for temperature;
+                <span title="an accepted unit">degrees</span> for latitude, longitude, heading;
+                <span title="because physicists are hilarious">kilograms</span> for mass).
+                For example: Volts for battery readings,
+                <span title="the tracker may change the prefix to display pressure (and similar cases)">Pa (not kPa)</span>
+                for pressure, m/s for speed. You can scale your fields with habitat, your payload need not do
+                the conversion.</p>
+            </div>
+
+            <hr />
+
+            <div class="sixteen columns" id="seealso">
+                <h2>See also</h2>
+                <ul>
+                    <li><a href="http://habitat.habhub.org/">habitat</a></li>
+                    <li><a href="http://habitat.habhub.org/logtail/">Live parser log output for debugging</a></li>
+                    <li><a href="http://habhub.org">habhub</a></li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="browse" class="container">
+            <div class="sixteen columns remove-bottom">
+                <label class="two columns alpha" for="browse_search" id="browse_search_label">Search prefix: </label>
+                <div class="six columns">
+                    <input type="text" id="browse_search" />
+                </div>
+
+                <button class="remove-bottom two columns" id="browse_search_go">Search</button>
+                <button class="remove-bottom two columns" id="browse_prev">Prev Page</button>
+                <button class="remove-bottom two columns" id="browse_next">Next Page</button>
+                <button class="remove-bottom two columns omega" id="browse_cancel">Cancel</button>
+            </div>
+
+            <div class="sixteen columns add-bottom" id="browse_status"></div>
+
+            <div id="browse_list"></div>
+        </section>
+
+        <section id="payload_configuration" class="container">
+            <div id="pcfg_misc" class="sixteen columns">
+                <div class="form row">
+                    <label class="two columns alpha" for="pcfg_name">Payload name</label>
+                    <div class="seven columns validated">
+                        <input type="text" id="pcfg_name" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">Need not be its callsign.</div>
+                    </div>
+                </div>
+                <div class="form row">
+                    <label class="two columns alpha" for="pcfg_description">Description</label>
+                    <div class="seven columns">
+                        <input type="text" id="pcfg_description" class="long" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">
+                            Free form, optional. <br />
+                            Used only to help you find it later.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="sixteen columns">
+                <h5 class="add-bottom">Radio and telemetry configuration</h5>
+
+                <div id="transmissions_list" class="itemlist clearfix"></div>
+
+                <div class="buttons">
+                    <button id="transmission_new">Add</button>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="sixteen columns">
+                <h5 class="add-bottom">Parser configuration</h5>
+
+                <div id="sentences_list" class="itemlist clearfix"></div>
+
+                <div class="buttons">
+                    <button id="go_wizard">New format wizard</button>
+                    <button id="go_manual">Manually add a new format</button>
+                    <button id="go_import">Copy format from another doc</button>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="sixteen columns buttons">
+                <button id="pcfg_save">Save</button>
+                <button id="pcfg_abandon">Cancel</button>
+            </div>
+        </section>
+
+        <section id="transmission_edit" class="container">
+            <div id="transmission_misc" class="sixteen columns">
+                <div class="form row">
+                    <label class="two columns alpha" for="transmission_description">Description</label>
+                    <div class="seven columns">
+                        <input type="text" id="transmission_description" class="long" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">Optional; e.g., Primary, alternative, nighttime mode.</div>
+                    </div>
+                </div>
+                <div class="form row">
+                    <label class="two columns alpha" for="transmission_frequency">Frequency</label>
+                    <div class="seven columns validated">
+                        <input type="text" id="transmission_frequency" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">MHz</div>
+                    </div>
+                </div>
+                <div class="form row">
+                    <label class="two columns alpha" for="transmission_mode">Mode</label>
+                    <div class="seven columns">
+                        <select id="transmission_mode">
+                            <option>USB</option>
+                            <option>LSB</option>
+                            <option>AM</option>
+                            <option>FM</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form row">
+                    <label class="two columns alpha" for="transmission_modulation">Modulation</label>
+                    <div class="seven columns">
+                        <select id="transmission_modulation">
+                            <option>RTTY</option>
+                            <option>DominoEX</option>
+                            <option>Hellschreiber</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div id="transmission_rtty" class="sixteen columns">
+                <div class="form row">
+                    <label class="two columns alpha" for="transmission_shift">Shift (Hz)</label>
+                    <div class="seven columns validated">
+                        <input type="text" id="transmission_shift" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">Shifts supported by legacy fldigi are: 23, 85, 160,
+                        170, 182, 200, 240, 350, 425, 600 and 850.<br />
+                        Modern versions support any custom shift.</div>
+                    </div>
+                </div>
+                <div class="form row">
+                    <label class="two columns alpha" for="transmission_encoding">Encoding</label>
+                    <div class="seven columns">
+                        <select id="transmission_encoding">
+                            <option>BAUDOT</option>
+                            <option>ASCII-7</option>
+                            <option>ASCII-8</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form row">
+                    <label class="two columns alpha" for="transmission_baud">Baud</label>
+                    <div class="seven columns validated">
+                        <input type="text" id="transmission_baud" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
+                    <div class="six offset-by-one columns omega">
+                        <div class="input_extra">fldigi supports 45, 45.45, 50, 56, 75, 100, 110, 150,
+                        200 and 300 baud</div>
+                    </div>
+                </div>
+                <div class="form row">
+                    <label class="two columns alpha" for="transmission_parity">Parity</label>
+                    <div class="seven columns">
+                        <select id="transmission_parity">
+                            <option>none</option>
+                            <option>odd</option>
+                            <option>even</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form row">
+                    <label class="two columns alpha" for="transmission_stop">Stop bits</label>
+                    <div class="seven columns">
+                        <select id="transmission_stop">
+                            <option>1</option>
+                            <option>1.5</option>
+                            <option>2</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div id="transmission_dominoex" class="sixteen columns">
+                <div class="form row">
+                    <label class="two columns alpha" for="transmission_speed">Speed</label>
+                    <div class="seven columns">
+                        <select id="transmission_speed">
+                            <option>4</option>
+                            <option>5</option>
+                            <option>8</option>
+                            <option>11</option>
+                            <option>16</option>
+                            <option>22</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div id="transmission_hellschreiber" class="sixteen columns">
+                <div class="form row">
+                    <label class="two columns alpha" for="transmission_variant">Variant</label>
+                    <div class="seven columns">
+                        <select id="transmission_variant">
+                            <option value="slowhell">Slow Hell</option>
+                            <option value="feldhell">Feld Hell</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+            <hr />
+
+            <div class="sixteen columns buttons">
+                <button id="transmission_confirm">Confirm</button>
+                <button id="transmission_cancel">Cancel</button>
+            </div>
+        </section>
+
+        <section id="sentence_wizard" class="container">
+            <div class="sixteen columns remove-bottom">
+                <input class="remove-bottom" type="text" id="wizard_text_box"
+                       placeholder="Please paste an example typical telemetry string" />
+            </div>
+
+            <div class="sixteen columns remove-bottom"><small id="wizard_error"></small></div>
+
+            <div class="sixteen columns remove-bottom" id="wizard_success">
+                <div id="wizard_fields"></div>
+                <div id="wizard_parse_info">
+                    <small>Parse OK; callsign: <span id="wizard_callsign"></span>,
+                    checksum: <span id="wizard_checksum_type"></span></small>
+                </div>
+            </div>
+
+            <div class="clearfix add-bottom"></div>
+
+            <hr id="wizard_success_sep" />
+
+            <div class="sixteen columns" id="wizard_form">
+                <div class="form row">
+                    <label class="two columns alpha" for="wizard_field_name">Field name</label>
+                    <div class="seven columns validated">
+                        <input type="text" id="wizard_field_name" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
+                </div>
+                <div class="form row">
+                    <label class="two columns alpha" for="wizard_field_sensor">Field type</label>
+                    <div class="seven columns">
+                        <select id="wizard_field_sensor"></select>
+                    </div>
+                </div>
+                <div class="form row" id="wizard_coordinate_format">
+                    <label class="two columns alpha" for="wizard_coordinate_format_select">Format</label>
+                    <div class="seven columns">
+                        <select id="wizard_coordinate_format_select"></select>
+                    </div>
+                </div>
+
+                <div id="wizard_numeric_scale_section" class="clearfix">
+                    <div class="form row">
+                        <label class="two columns alpha" for="wizard_numeric_scale">Scale this?</label>
+                        <div class="seven columns">
+                            <input type="checkbox" id="wizard_numeric_scale" />
+                        </div>
+                    </div>
+
+                    <div id="wizard_numeric_scale_opts" class="clearfix">
+                        <div class="form row">
+                            <div class="two columns alpha">
+                                <select id="wizard_numeric_scale_type">
+                                    <option value="m">Multiply by</option>
+                                    <option value="d">Divide by</option>
+                                </select>
+                            </div>
+                            <div class="seven columns validated">
+                                <input type="text" id="wizard_numeric_scale_factor" />
+                                <img src="t/images/tick.png" alt="Complete" />
+                            </div>
+                        </div>
+                        <div class="form row">
+                            <label class="two columns alpha" for="wizard_numeric_scale_offset">Offset:</label>
+                            <div class="seven columns validated">
+                                <input type="text" id="wizard_numeric_scale_offset" />
+                                <img src="t/images/tick.png" alt="Complete" />
+                            </div>
+                        </div>
+                        <div class="form row">
+                            <label class="two columns alpha" for="wizard_numeric_scale_do_round">Round?</label>
+                            <div class="seven columns validated">
+                                <input type="checkbox" id="wizard_numeric_scale_do_round" />
+                            </div>
+                        </div>
+                        <div class="form row" id="wizard_numeric_scale_round_opts">
+                            <label class="two columns alpha" for="wizard_numeric_scale_round">Precision</label>
+                            <div class="seven columns validated">
+                                <input type="text" id="wizard_numeric_scale_round" />
+                                <img src="t/images/tick.png" alt="Complete" />
+                            </div>
+                            <div class="six columns offset-by-one omega">
+                                <div class="input_extra">i.e., number of significant figures to round to</div>
+                            </div>
+                        </div>
+                        <div class="form row">
+                            <label class="two columns alpha">Example result:</label>
+                            <div class="seven columns">
+                                <div id="wizard_numeric_scale_example"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="wizard_misc" class="sixteen columns clearfix">
+                <div class="form row">
+                    <label class="two columns alpha" for="wizard_description">Description</label>
+                    <div class="seven columns">
+                        <input type="text" id="wizard_description" class="long" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">
+                            Name or short description of this sentence format. <br />
+                            Optional but strongly recommended. <br />
+                            <small>Some suggestions: Normal, No-lock mode (if it results in a
+                            different format), Long (i.e., more fields)</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="wizard_no_lock_section" class="sixteen columns clearfix">
+                <div class="form row">
+                    <label class="four columns alpha" for="wizard_no_lock">
+                        When without a lock, <span title="the payload">it</span> sends
+                    </label>
+                    <div class="six columns">
+                        <select id="wizard_no_lock">
+                            <option value="other">other</option>
+                            <option value="always">this format</option>
+                            <option value="lockfield">a certain value in a gps lock field</option>
+                            <option value="zeroes">latitude/longitude as 0,0</option>
+                        </select>
+                    </div>
+
+                    <div class="six columns omega">
+                        <div class="input_extra" id="wizard_nolock_othernotice">
+                            Other: Includes sending another format, such as empty or "!!!.!!!!!" fields.
+                            You should add the 'no-lock' format as another sentence format after you have finished this one.
+                        </div>
+                        <div class="input_extra" id="wizard_nolock_alwaysnotice">
+                            Any latitude longitude or altitude, if present, will be marked invalid.
+                            Other parsed data, like temperature, can still be used and plotted.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form row" id="wizard_select_lockfield">
+                    Please click on the field that should be tested above
+                </div>
+
+                <div class="form row" id="wizard_lockfield">
+                    <label class="four columns alpha" for="wizard_lockfield_ok">
+                        Good values
+                    </label>
+                    <div class="six columns validated">
+                        <input type="text" id="wizard_lockfield_ok" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
+                    <div class="six columns omega">
+                        <div class="input_extra">
+                            Comma separated <br />
+                            Iff <span id="wizard_lockfield_which"></span> matches one of
+                            these values, the fix is marked as valid.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <div id="wizard_buttons" class="sixteen columns buttons">
+                <button id="wizard_prev">Prev</button>
+                <button id="wizard_next">Next</button>
+                <button id="wizard_cancel">Cancel</button>
+            </div>
+        </section>
+
+        <section id="sentence_edit" class="container">
+            <div id="sentence_misc" class="sixteen columns">
+                <div class="form row">
+                    <label class="two columns alpha" for="sentence_description">Description</label>
+                    <div class="seven columns">
+                        <input type="text" id="sentence_description" class="long" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">Optional but strongly recommended; e.g., Normal format, No-lock
+                        format (if it's different), Long format (i.e., more fields), and so on.</div>
+                    </div>
+                </div>
+                <div class="form row">
+                    <label class="two columns alpha" for="sentence_protocol">Protocol</label>
+                    <div class="seven columns">
+                        <input type="text" id="sentence_protocol" value="UKHAS" disabled="disabled" />
+                    </div>
+                </div>
+                <div class="form row">
+                    <label class="two columns alpha" for="sentence_callsign">Callsign</label>
+                    <div class="seven columns validated">
+                        <input type="text" id="sentence_callsign" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
+                </div>
+                <div class="form row">
+                    <label class="two columns alpha" for="sentence_checksum">Checksum type</label>
+                    <div class="seven columns">
+                        <select id="sentence_checksum">
+                            <option>crc16-ccitt</option>
+                            <option>xor</option>
+                            <option>fletcher-16</option>
+                            <option>fletcher-16-256</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="sixteen columns">
+                <h5 class='add-bottom'>fields</h5>
+
+                <div id="sentence_fields" class="itemlist clearfix add-bottom"></div>
+
+                <div class="buttons">
+                    <button id="sentence_fields_add">Add Normal Field</button>
+                    <button id="sentence_fields_expert">Add Custom Field</button>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="sixteen columns">
+                <h5 class='add-bottom'>intermediate filters</h5>
+
+                <div id="sentence_intermediate_filters" class="itemlist clearfix"></div>
+
+                <div class="buttons">
+                    <button id="sentence_intermediate_normal_filter_add">Add filter</button>
+                    <button id="sentence_intermediate_hotfix_filter_add">Add hotfix</button>
+                </div>
+            </div>
+
+            <div class="sixteen columns">
+                <h5 class='add-bottom'>post parse filters</h5>
+
+                <div id="sentence_post_filters" class="itemlist clearfix"></div>
+
+                <div class="buttons">
+                    <button id="sentence_post_normal_filter_add">Add filter</button>
+                    <button id="sentence_post_hotfix_filter_add">Add hotfix</button>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="sixteen columns buttons">
+                <button id="sentence_edit_save">Save</button>
+                <button id="sentence_edit_cancel">Cancel</button>
+            </div>
+        </section>
+
+        <section id="loading_docs" class="container">
+            <div class="sixteen columns" id="loading_docs_text"></div>
+
+            <div class="sixteen columns buttons">
+                <button id="loading_docs_back">Back</button>
+            </div>
+        </section>
+
+        <section id="flight" class="container">
+            <div class="sixteen columns">
+                <div class="form row">
+                    <label class="two columns alpha" for="flight_name">Flight name</label>
+                    <div class="seven columns validated">
+                        <input type="text" id="flight_name" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">e.g., Dalmation launch 32 or Shark Christmas launch.</div>
+                    </div>
+                </div>
+                <div class="form row">
+                    <label class="two columns alpha" for="flight_project">Project name</label>
+                    <div class="seven columns">
+                        <input type="text" id="flight_project" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">Optional, but highly recommended.</div>
+                    </div>
+                </div>
+                <div class="form row">
+                    <label class="two columns alpha" for="flight_group">Group name</label>
+                    <div class="seven columns">
+                        <input type="text" id="flight_group" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">Or your name, if you're working alone :-(. Optional, also recommended.</div>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <div id="dates" class="sixteen columns">
+                <div class="form row" id="launch_timezone_section">
+                    <label class="two columns alpha" for="launch_timezone">Timezone</label>
+                    <div class="seven columns validated">
+                        <input type="text" id="launch_timezone" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">Launch time below is interpreted in this timezone; daylight saving detected automatically from the date. <br />
+                        Some clients/trackers may display times related to this flight in this timezone rather than the user's.</div>
+                    </div>
+                </div>
+                <div class="form row">
+                    <label class="two columns alpha" for="launch_date">Launch Date</label>
+                    <div class="seven columns"><div id="launch_date"></div></div>
+                </div>
+                <div class="form row">
+                    <label class="two columns alpha" for="launch_time">Time</label>
+                    <div class="seven columns validated">
+                        <input type="text" id="launch_time" placeholder="HH:MM" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra"><small id="launch_time_check"></small></div>
+                    </div>
+                </div>
+                <div class="form row">
+                    <label class="two columns alpha" for="launch_window">Launch window</label>
+                    <div class="seven columns">
+                        <div>
+                            <select id="launch_window">
+                                <option value="day">Launch day</option>
+                                <option value="three">3 days surrounding</option>
+                                <option value="other">other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <div id="launch_window_start"></div>
+                            <div id="launch_window_end"></div>
+                        </div>
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">
+                            This period must cover the entire flight, and ideally exclude testing,
+                            so that only telemetry from the flight itself is archived. <br />
+                            <span id="launch_window_week_warning">
+                                The server rejects launch windows longer than one week.
+                                Please speak to an admin if you have a special requirement. <br />
+                            </span>
+                            <small id="launch_window_info"></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="sixteen columns">
+                <div class="form row">
+                    <label class="two columns alpha" for="launch_location_name">Launch location</label>
+                    <div class="seven columns">
+                        <input type="text" id="launch_location_name" class="long" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">Optional. Suggested format: Place name, Area, Country</div>
+                    </div>
+                </div>
+                <div class="form row">
+                    <label class="two columns alpha" for="launch_latitude">Latitude</label>
+                    <div class="seven columns validated">
+                        <input type="text" id="launch_latitude" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">decimal degrees</div>
+                    </div>
+                </div>
+                <div class="form row">
+                    <label class="two columns alpha" for="launch_longitude">Longitude</label>
+                    <div class="seven columns validated">
+                        <input type="text" id="launch_longitude" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">decimal degrees<br />-180 &lt; l &lt;= 180</div>
+                    </div>
+                </div>
+                <div class="form row">
+                    <label class="two columns alpha" for="launch_altitude">Altitude</label>
+                    <div class="seven columns validated">
+                        <input type="text" id="launch_altitude" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">metres<br />Optional: only enter it if it's significant.</div>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="sixteen columns" id="flight_pcfgs">
+                <h5 class="add-bottom">payloads in this flight</h5>
+
+                <div id="flight_pcfgs_list" class="itemlist clearfix"></div>
+
+                <div class="buttons">
+                    <button id="flight_pcfgs_add">Add</button>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="sixteen columns buttons">
+                <button id="flight_save">Save</button>
+                <button id="flight_abandon">Cancel</button>
+            </div>
+        </section>
+
+        <section id="saving" class="container">
+            <div class="sixteen columns">
+                <div class="form row">
+                    <label class="two columns alpha" for="saving_doc">Document:</label>
+                    <div class="seven columns">
+                        <input type='text' id='saving_doc' class='long' disabled='disabled' />
+                    </div>
+                </div>
+
+                <div id="save_success">
+                    <div class="form row">
+                        <label class="two columns alpha">Doc ID:</label>
+                        <div class="seven columns">
+                            <span id='saved_id'></span>
+                        </div>
+                    </div>
+
+                    <div class="form row">
+                        <button id='save_done'>Done</button>
+                    </div>
+                </div>
+    
+                <div id="save_fail">
+                    <div class="form row">
+                        <label class="tow columns alpha">Error:</label>
+                        <div class="seven columns">
+                            <span id='save_fail_message'></span>
+                        </div>
+                    </div>
+
+                    <div class="form row">
+                        <button id='save_retry'>Retry</button>
+                        <button id='save_back'>Back</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+</body>
+</html>

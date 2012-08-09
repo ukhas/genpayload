@@ -1,0 +1,212 @@
+pcfg1:
+    type: "payload_configuration"
+    name: "Test payload 1"
+    transmissions:
+      - frequency: 10000
+        mode: "LSB"
+        modulation: "RTTY"
+        shift: 200
+        encoding: "ASCII-7"
+        baud: 300
+        parity: "even"
+        stop: 1
+        description: "Fast RTTY"
+      - frequency: 20000
+        mode: "USB"
+        modulation: "DominoEX"
+        speed: 11
+      - frequency: 30000
+        mode: "FM"
+        modulation: "Hellschreiber"
+        variant: "feldhell"
+        description: "Moderately long description. Testing, one two three"
+
+    # $$APEX,1482,21:34:31,5124.6345,-00016.2167,00030,05,000.0,19.13,20.50,64,36,15,7,0,0,6.08*1D68
+    sentences:
+      - protocol: "UKHAS"
+        checksum: "crc16-ccitt"
+        callsign: "APEX"
+        description: "Normal format"
+        fields:
+          - name: "sentence_id"
+            sensor: "base.ascii_int"
+          - name: "time"
+            sensor: "stdtelem.time"
+          - name: "latitude"
+            sensor: "stdtelem.coordinate"
+            format: "ddmm.mmmm"
+          - name: "longitude"
+            sensor: "stdtelem.coordinate"
+            format: "ddmm.mmmm"
+          - name: "altitude"
+            sensor: "base.ascii_int"
+          - name: "satellites"
+            sensor: "base.ascii_int"
+          - name: "speed"
+            sensor: "base.ascii_float"
+          - name: "temperature_external"
+            sensor: "base.ascii_float"
+          - name: "temperature_internal"
+            sensor: "base.ascii_float"          
+          - name: "light"
+            sensor: "base.ascii_int"
+          - name: "light_red"
+            sensor: "base.ascii_int"
+          - name: "light_green"
+            sensor: "base.ascii_int"
+          - name: "light_blue"
+            sensor: "base.ascii_int"
+          - name: "gas_co2"
+            sensor: "base.ascii_int"
+          - name: "gas_combustible"
+            sensor: "base.ascii_int"
+          - name: "battery"
+            sensor: "base.ascii_float"
+        filters:
+            post:
+              - type: "normal"
+                filter: "common.invalid_location_zero"
+    metadata:
+        description: "Test doc one"
+
+# taken from genpayload beta output
+pcfg2:
+    type: "payload_configuration"
+    name: "Test doc 2"
+    time_created: "2012-07-31T01:40:10+01:00"
+    metadata:
+        description: "A long ish description of a doc"
+    transmissions:
+      - baud: "50"
+        parity: "none"
+        frequency: 434075000
+        mode: "USB"
+        encoding: "ASCII-8"
+        modulation: "RTTY"
+        shift: "350"
+        stop: "2"
+        description: "blah"
+      - frequency: 123000000
+        modulation: "Hellschreiber"
+        mode: "USB"
+        variant: "feldhell"
+      - frequency: 555000000
+        modulation: "Hellschreiber"
+        mode: "USB"
+        variant: "slowhell"
+      - frequency: 1000000
+        modulation: "Hellschreiber"
+        mode: "USB"
+        variant: "feldhell"
+    sentences:
+      - protocol: "UKHAS"
+        callsign: "T32_0"
+        checksum: "crc16-ccitt"
+        fields:
+          - name: "sentence_id"
+            sensor: "base.ascii_int"
+          - name: "time"
+            sensor: "stdtelem.time"
+          - name: "latitude"
+            sensor: "stdtelem.coordinate"
+            format: "dd.dddd"
+          - name: "radiation"
+            sensor: "my.custom_sensor"
+            a_setting: 1245
+            some_data: ["a", 4, {g: true}]
+        filters:
+            intermediate:
+              - type: "hotfix"
+                code: "something\nthat\nfixes\n"
+                signature: "signature 1"
+                certificate: "danielrichman.crt"
+              - filter: "blah"
+                type: "normal"
+            post:
+              - type: "hotfix"
+                code: "something\nthat\nfixes\n"
+                signature: "signature 1"
+                certificate: "danielrichman.crt"
+              - filter: "common.numeric_scale"
+                source: "latitude"
+                factor: 1
+                round: 3
+                type: "normal"
+        description: "I describe"
+
+      - protocol: "UKHAS"
+        callsign: "T32_1"
+        checksum: "crc16-ccitt"
+        fields:
+          - name: "sentence_id"
+            sensor: "base.ascii_int"
+        description: "all"
+
+      - protocol: "UKHAS"
+        callsign: "T32_2"
+        checksum: "crc16-ccitt"
+        fields:
+          - name: "sentence_id"
+            sensor: "base.ascii_int"
+          - name: "time"
+            sensor: "stdtelem.time"
+        description: "A description of a sentence"
+
+      - protocol: "UKHAS"
+        checksum: "crc16-ccitt"
+        callsign: "T32_2"
+        fields:
+          - sensor: "base.ascii_int"
+            name: "sentence_id"
+          - sensor: "stdtelem.time"
+            name: "time"
+          - sensor: "stdtelem.coordinate"
+            name: "latitude"
+            format: "dd.dddd"
+          - sensor: "stdtelem.coordinate"
+            name: "longitude"
+            format: "dd.dddd"
+          - sensor: "base.ascii_int"
+            name: "altitude"
+          - sensor: "base.ascii_int"
+            name: "speed"
+
+flight1:
+    type: "flight"
+    approved: false
+    start: "2012-08-02T00:00:00+01:00"
+    end: "2012-08-02T23:59:59+01:00"
+    name: "Tarantula launch 1"
+    launch:
+        time: "2012-08-02T10:30:00+01:00"
+        timezone: "Europe/London"
+        location:
+            latitude: 51.44943
+            longitude: -0.95468
+    metadata:
+        location: "A field"
+        project: "Project Arachnid"
+        group: "Team Spider"
+    payloads:
+      - "id_of_pcfg1"
+      - "id_of_pcfg2"
+
+flight2:
+    type: "flight"
+    approved: true
+    start: "2012-04-09T00:00:00+09:30"
+    end: "2012-04-11T23:59:59+09:30"
+    name: "Tarantula launch 2"
+    launch:
+        time: "2012-04-10T12:30:00+09:30"
+        timezone: "Australia/Adelaide"
+        location:
+            latitude: -34.77409
+            longitude: 138.51697
+            altitude: 100
+    metadata:
+        location: "A field"
+        project: "Project Arachnid"
+        group: "Team Spider"
+    payloads:
+      - "id_of_pcfg2"

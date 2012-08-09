@@ -1,31 +1,58 @@
-genpayload
-==========
+habitat-genpayload
+==================
 
-Generate a JSON and XML flight document for a payload.
+Generate and save payload_configuration and flight documents for habitat
 
-Adam Greig, July 2011
+Building
+========
 
-All genpayload source code (HTML, JS, CSS) is released under the simplified
-BSD license, as follows:
+ - Install coffee-script (Super easy: install node, which comes with npm,
+   then npm install -g coffee-script)
+ - Checkout the habitat-template submodule
+ - Compile js/genpayload.js
 
-Copyright (c) 2011, Adam Greig. All rights reserved.
+    $ npm install -g coffee-script
+    $ git submodule update --init
+    $ coffee --join js/genpayload.js --compile coffee/*.coffee
 
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
+Compile errors? coffee gives less-helpful error messages when --joining files.
+Try this: ```coffee --print --compile coffee/*.coffee > /dev/null```
 
-* Redistributions of source code must retain the above copyright notice, this
-  list of conditions and the following disclaimer.
-* Redistributions in binary form must reproduce the above copyright notice,
-  this list of conditions and the following disclaimer in the documentation
-  and/or other materials provided with the distribution.
+Deploying
+=========
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ - Clone the repository into a web accessible directory. You may have to
+   change the database at the bottom of coffee/1_misc.coffee; it defaults to
+   /habitat.
+ - Follow the building instructions above.
+ - Done :-)
+
+Testing
+=======
+
+Tests run using jasmine in the browser. Having compiled js/specs.js, visit
+jasmine.html.
+
+You will need python with PyYAML to build the test docs.
+
+    $ coffee --join js/specs.js --compile spec/*.coffee
+    $ python spec/make_test_docs.py
+    $ x-www-browser jasmine.html
+
+Legal stuff
+===========
+
+genpayload.html css/* coffee/* and spec/* are
+Copyright 2012 Daniel Richman and licensed under the GNU GPL 3;
+please see http://www.gnu.org/licenses/
+
+    genpayload is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+Several libraries are included in the js/ directory, and their various licenses
+(and links to their homepages) are listed in js/README.md
+
+The habitat template / theme is Copyright 2012 Daniel Saul, and is imported
+via git submodule
