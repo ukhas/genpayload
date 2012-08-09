@@ -1,0 +1,18 @@
+parser tester flask app
+change views over and test with new views
+fix copyright: apply GPL header to all files and place license in repository
+
+misc boring stuff:
+    export functions and stop using --join
+    check comments on functions
+    check large functions, etc.
+    check for stuff in .container not in a columns class.
+
+packaging
+    custom jquery ui build (?)
+    minify all the things
+    bundle into single file (?)
+
+suggest_launch_data: "lots of guesswork went into some of these names. Check"
+
+load times. make it fast, or fake it

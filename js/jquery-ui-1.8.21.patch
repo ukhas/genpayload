@@ -1,0 +1,22 @@
+--- a/js/jquery-ui-1.8.22.custom.js 2012-07-29 20:50:25.000000000 +0100
++++ b/js/jquery-ui-1.8.21.custom.js 2012-07-29 20:49:41.000000000 +0100
+@@ -3441,6 +3441,9 @@
+            relative: this._getRelativeOffset() //This is a relative to absolute position minus the actual position calculation - only used for relative positioned helper
+        });
+ 
++       //Create the placeholder
++       this._createPlaceholder();
++
+        // Only after we got the offset, we can change the helper's position to absolute
+        // TODO: Still need to figure out a way to make relative sorting possible
+        this.helper.css("position", "absolute");
+@@ -3462,9 +3465,6 @@
+            this.currentItem.hide();
+        }
+ 
+-       //Create the placeholder
+-       this._createPlaceholder();
+-
+        //Set a containment if given in the options
+        if(o.containment)
+            this._setContainment();
