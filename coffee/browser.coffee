@@ -64,6 +64,7 @@ browse_types =
         term_key: (term) -> [term]
         display: (row) ->
             callsign = row.key[0]
+            index = row.key[2]
             [metadata, sentence] = row.value
 
             second = [$("<div class='nocollapse' />").text "from #{metadata.name}"]
@@ -74,7 +75,7 @@ browse_types =
                     description.attr "title", sentence.description
                 second.push $("<div class='nocollapse' />").append description
 
-            d = browse_row callsign, second, "#{row.id} #{metadata.index}", metadata.time_created
+            d = browse_row callsign, second, "#{row.id} #{index}", metadata.time_created
             d.data "browse_return", sentence
             return d
 
