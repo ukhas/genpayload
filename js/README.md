@@ -5,7 +5,7 @@ All dependencies are included in this directory.
 
 Dual licensed under MIT or GPL
 
- - jquery-1.7.2.min.js http://jquery.com
+ - jquery-1.7.2.js and jquery-1.7.2.min.js http://jquery.com
  - jquery-ui-1.8.21.custom.js and jquery-ui-1.8.21.custom.min.js http://jqueryui.com
  - jquery UI has the patch jquery-ui-1.8.21.patch applied to it
  - html5shiv.js http://paulirish.com/2011/the-history-of-the-html5-shiv/
