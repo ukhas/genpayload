@@ -29,8 +29,8 @@ sentence_wizard = (ignored, callback) ->
 # Returns a 4 character uppercase hexadecimal string.
 crc16_ccitt = (data) ->
     crc = 0xFFFF
-    for char in data
-        crc ^= (char.charCodeAt(0) << 8)
+    for chr in data
+        crc ^= (chr.charCodeAt(0) << 8)
         for i in [0...8]
             if crc & 0x8000
                 crc = (crc << 1) ^ 0x1021
@@ -43,15 +43,15 @@ crc16_ccitt = (data) ->
 # Calculates the XOR checksum of *data*
 xor_checksum = (data) ->
     crc = 0
-    for char in data
-        crc ^= char.charCodeAt(0)
+    for chr in data
+        crc ^= chr.charCodeAt(0)
     return hexify crc, 2
 
 # Calculate the Fletcher-16 checksum of *data*, default modulus 255
 fletcher_16 = (data, modulus=255) ->
     a = b = 0
-    for char in data
-        num = char.charCodeAt(0)
+    for chr in data
+        num = chr.charCodeAt(0)
         a += num
         b += a
         a %= modulus
