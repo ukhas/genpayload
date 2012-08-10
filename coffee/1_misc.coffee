@@ -235,7 +235,7 @@ load_docs_error = (status, error, reason) ->
 load_docs = (docs, callback) ->
     loading_docs_callback = callback
 
-    $("#loading_docs_text").show
+    $("#loading_docs_text").show()
     $("#loading_docs_back").hide()
 
     database.allDocs

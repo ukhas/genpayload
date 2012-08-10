@@ -1,6 +1,7 @@
 parser tester flask app
 change views over and test with new views
 fix copyright: apply GPL header to all files and place license in repository
+make sortable work on mobile devices
 
 misc boring stuff:
     export functions and stop using --join

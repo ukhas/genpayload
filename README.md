@@ -35,6 +35,7 @@ jasmine.html.
 
 You will need python with PyYAML to build the test docs.
 
+    $ pip install PyYAML
     $ coffee --join js/specs.js --compile spec/*.coffee
     $ python spec/make_test_docs.py
     $ x-www-browser jasmine.html
@@ -55,4 +56,4 @@ Several libraries are included in the js/ directory, and their various licenses
 (and links to their homepages) are listed in js/README.md
 
 The habitat template / theme is Copyright 2012 Daniel Saul, and is imported
-via git submodule
+via git submodule; please see https://github.com/ukhas/habitat-template.
