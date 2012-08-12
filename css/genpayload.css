@@ -3,6 +3,8 @@
 body { overflow-y: scroll; }    /* Stop page width jumping around */
 .btn_vmid { margin-top: 7px; }
 
+.long_protection { text-overflow: ellipsis; }
+
 #browse_status { text-align: right; }
 #browse_search_label { padding-top: 3px; font-weight: normal; }
 .browse_item:hover { background-color: #B8E6F3; }
