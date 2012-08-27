@@ -140,7 +140,8 @@ set_valid = (elem, valid) ->
 is_valid_field_name = (n) -> typeof n is "string" and
                              nice_key_regexp.test(n) and
                              n != "" and
-                             n[0] != "_"
+                             n[0] != "_" and
+                             n != "payload"
 
 # Setup an input as a field name input with autocompletion & validation
 field_name_input = (elem) ->

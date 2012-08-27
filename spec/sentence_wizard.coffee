@@ -93,6 +93,7 @@ describe "the sentence wizard", ->
 
     it "should forbid empty field names", -> test_forbid_field_name ""
     it "should forbid _internal field names", -> test_forbid_field_name "_internal"
+    it "should forbid a 'payload' field", -> test_forbid_field_name "payload"
     it "should forbid bad field names", -> test_forbid_field_name " spaces "
 
     it "shouldn't give a no-lock option if there is no lat/lon", ->

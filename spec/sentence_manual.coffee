@@ -529,7 +529,7 @@ describe "the manual sentence editor", ->
         save_and_get()
 
     it "should require a valid custom field name", ->
-        test_custom_field_validation "name", "", "_asdf", " invalid ", "asd*f"
+        test_custom_field_validation "name", "", "_asdf", " invalid ", "asd*f", "payload"
 
     it "should require a valid custom field sensor", ->
         test_custom_field_validation "sensor", "", " invalid ", "some.&"
