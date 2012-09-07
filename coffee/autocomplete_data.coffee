@@ -71,7 +71,7 @@ suggest_launch_data = [
     latitude:   52.2135
     longitude:  0.0964
 ,
-    label:      "EARS, Cambridge, England"
+    label:      "Elsworth, Cambridge, England"
     latitude:   52.2511
     longitude:  -0.0927
 ,
