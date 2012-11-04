@@ -21,6 +21,7 @@ flight_edit = (doc, callback, pcfgs={}) ->
                     longitude: ""
                     altitude: ""
             metadata:
+                balloon: ""
                 location: ""
                 project: ""
                 group: ""
@@ -31,6 +32,7 @@ flight_edit = (doc, callback, pcfgs={}) ->
     $("#flight_name").val doc.name
     $("#flight_project").val doc.metadata?.project
     $("#flight_group").val doc.metadata?.group
+    $("#balloon_type").val doc.metadata?.balloon ? ""
     $("#launch_location_name").val doc.metadata?.location ? ""
     $("#flight_name, #flight_project, #flight_group, #launch_location_name").change()
 
@@ -116,6 +118,7 @@ flight_save = ->
                 latitude: strict_numeric $("#launch_latitude").val()
                 longitude: strict_numeric $("#launch_longitude").val()
         metadata:
+            balloon: $("#balloon_type").val()
             location: $("#launch_location_name").val()
             project: $("#flight_project").val()
             group: $("#flight_group").val()
@@ -135,6 +138,8 @@ flight_save = ->
     if not (-180 < doc.launch.location.longitude <= 180)
         valid = false
 
+    if doc.metadata.balloon == ""
+        delete doc.metadata.balloon
     if doc.metadata.location == ""
         delete doc.metadata.location
     if doc.metadata.project == ""

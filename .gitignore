@@ -2,3 +2,4 @@
 js/genpayload.js
 js/specs.js
 js/specs_test_docs.js
+coffee/*.js
