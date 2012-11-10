@@ -12,7 +12,6 @@ pcfg_edit = (doc, callback) ->
     if doc == null
         doc =
             name: ""
-            weight: ""
             type: "payload_configuration"
             sentences: []
             transmissions: []
@@ -21,7 +20,6 @@ pcfg_edit = (doc, callback) ->
 
     # fire the change events to update the validation
     $("#pcfg_name").val(doc.name).change()
-    $("#pcfg_weight").val(doc.weight).change()
 
     description = doc.metadata?.description ? ""
 
@@ -46,7 +44,6 @@ pcfg_save = ->
     doc =
         type: "payload_configuration"
         name: $("#pcfg_name").val()
-        weight: $("#pcfg_weight").val()
         time_created: time_created.toRFC3339String()
         metadata:
             description: $("#pcfg_description").val()
@@ -267,11 +264,8 @@ sentence_import = ->
 
 # Add callbacks for the #pcfg_misc form
 setup_pcfg_form = ->
-    form_field "#pcfg_name"
+    form_field "#pcfg_name",
         nonempty: true
-    form_field "#pcfg_weight"
-        numeric: true
-				positive: true
     # #pcfg_description is optional.
 
 # Use jQuery UI's sortable, with callbacks to update the doc as items are reordered

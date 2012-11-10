@@ -22,6 +22,9 @@ flight_edit = (doc, callback, pcfgs={}) ->
                     altitude: ""
             metadata:
                 balloon: ""
+                weight: ""
+                fill_volume: ""
+                fill_gas: ""
                 location: ""
                 project: ""
                 group: ""
@@ -32,7 +35,10 @@ flight_edit = (doc, callback, pcfgs={}) ->
     $("#flight_name").val doc.name
     $("#flight_project").val doc.metadata?.project
     $("#flight_group").val doc.metadata?.group
-    $("#balloon_type").val doc.metadata?.balloon ? ""
+    $("#launch_balloon").val doc.metadata?.balloon ? ""
+    $("#launch_weight").val doc.metadata?.weight ? ""
+    $("#launch_fill_volume").val doc.metadata?.fill_volume ? ""
+    $("#launch_fill_gas").val doc.metadata?.fill_gas ? ""
     $("#launch_location_name").val doc.metadata?.location ? ""
     $("#flight_name, #flight_project, #flight_group, #launch_location_name").change()
 
@@ -118,7 +124,10 @@ flight_save = ->
                 latitude: strict_numeric $("#launch_latitude").val()
                 longitude: strict_numeric $("#launch_longitude").val()
         metadata:
-            balloon: $("#balloon_type").val()
+            balloon: $("#launch_balloon").val()
+            weight: $("#launch_weight").val()
+            fill_volume: $("#launch_fill_volume").val()
+            fill_gas: $("#launch_fill_gas").val()
             location: $("#launch_location_name").val()
             project: $("#flight_project").val()
             group: $("#flight_group").val()
@@ -140,6 +149,12 @@ flight_save = ->
 
     if doc.metadata.balloon == ""
         delete doc.metadata.balloon
+    if doc.metadata.weight == ""
+        delete doc.metadata.weight
+    if doc.metadata.fill_volume == ""
+        delete doc.metadata.fill_volume
+    if doc.metadata.fill_gas == ""
+        delete doc.metadata.fill_gas
     if doc.metadata.location == ""
         delete doc.metadata.location
     if doc.metadata.project == ""
@@ -363,6 +378,14 @@ setup_flight_form = ->
             $("#launch_window_start, #launch_window_end, #launch_window_week_warning").hide()
         flight_show_dates()
         return
+
+    form_field "#launch_weight"
+        numeric: true
+        positive: true
+
+    form_field "#launch_fill_volume"
+        numeric: true
+        positive: true
 
     $("#launch_location_name").autocomplete
         source: suggest_launch_data
