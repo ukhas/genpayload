@@ -342,7 +342,6 @@ $ ->
     $("#sentence_fields, #sentence_intermediate_filters, #sentence_post_filters").sortable
         revert: true
         tolerance: 5
-    $("#sentence_fields, #sentence_intermediate_filters, #sentence_post_filters").disableSelection()
 
     $("#sentence_edit_cancel").click btn_cb -> sentence_callback false
     $("#sentence_edit_save").click btn_cb -> sentence_save()
