@@ -24,6 +24,8 @@ flight_edit = (doc, callback, pcfgs={}) ->
                 location: ""
                 project: ""
                 group: ""
+                aprs_payload: ""
+                aprs_chase: ""
             payloads: []
     else
         default_time_settings = false
@@ -38,6 +40,9 @@ flight_edit = (doc, callback, pcfgs={}) ->
     $("#launch_longitude").val doc.launch.location.longitude
     $("#launch_altitude").val doc.launch.location.altitude ? ""
     $("#launch_latitude, #launch_longitude, #launch_altitude").change()
+
+    $("#aprs_payload_callsigns").val doc.metadata.aprs_payload
+    $("#aprs_chase_callsigns").val doc.metadata.aprs_chase
 
     try
         flight_no_show_dates = true
@@ -119,6 +124,8 @@ flight_save = ->
             location: $("#launch_location_name").val()
             project: $("#flight_project").val()
             group: $("#flight_group").val()
+            aprs_payload: $("#aprs_payload_callsigns").val()
+            aprs_chase: $("#aprs_chase_callsigns").val()
         payloads: (array_data_map "#flight_pcfgs_list", "pcfg_id")
 
     valid = true
@@ -141,6 +148,10 @@ flight_save = ->
         delete doc.metadata.project
     if doc.metadata.group == ""
         delete doc.metadata.group
+    if doc.metadata.aprs_payload == ""
+        delete doc.metadata.aprs_payload
+    if doc.metadata.aprs_chase == ""
+        delete doc.metadata.aprs_chase
     # leave metadata = {}
 
     if doc.name == ""
@@ -150,7 +161,7 @@ flight_save = ->
         alert "There are errors in your form. Please fix them"
         return
 
-    if doc.payloads.length == 0
+    if doc.payloads.length == 0 && doc.metadata.aprs_payload != ""
         alert "You should probably add atleast one payload to your flight document"
         return
 
