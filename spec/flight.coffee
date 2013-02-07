@@ -45,6 +45,8 @@ describe "the flight editor", ->
         $("#launch_location_name").val("A field")
         $("#launch_latitude").val("51.44943")
         $("#launch_longitude").val("-0.95468")
+        $("#aprs_payload_callsigns").val("LZ1AAA,LZ1BBB")
+        $("#aprs_chaser_callsigns").val("LZ1CCC")
         add_pcfg 1
         add_pcfg 2
 
@@ -103,6 +105,8 @@ describe "the flight editor", ->
         $("#launch_latitude").val("-34.77409")
         $("#launch_longitude").val("138.51697")
         $("#launch_altitude").val("100")
+        $("#aprs_payload_callsigns").val("LZ1AAA")
+        $("#aprs_chaser_callsigns").val("")
 
         check_flight1_pcfgs_list() # not tested by the browse suite
         $("#flight_pcfgs_list > div.row:first-child button").click() # remove pcfg1
@@ -163,6 +167,12 @@ describe "the flight editor", ->
 
     it "should validate altitude", ->
         test_validation "altitude", "#launch_altitude", "asdf"
+
+    it "should validate APRS payloads", ->
+        test_validation "payloads", "#aprs_payload_callsigns", " ", "aaa", ",", "LZ1AA,", " LZ1AA", "LZ1AA,LL"
+
+    it "should validate APRS chasers", ->
+        test_validation "chasers", "#aprs_chaser_callsigns", " ", "aaa", ",", "LZ1AA,", " LZ1AA", "LZ1AA,LL"
 
     it "shouldn't let you add the same payload twice", ->
         make_flight1()
