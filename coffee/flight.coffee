@@ -24,6 +24,9 @@ flight_edit = (doc, callback, pcfgs={}) ->
                 location: ""
                 project: ""
                 group: ""
+            aprs:
+                payloads: []
+                chasers: []
             payloads: []
     else
         default_time_settings = false
@@ -38,6 +41,9 @@ flight_edit = (doc, callback, pcfgs={}) ->
     $("#launch_longitude").val doc.launch.location.longitude
     $("#launch_altitude").val doc.launch.location.altitude ? ""
     $("#launch_latitude, #launch_longitude, #launch_altitude").change()
+
+    $("#aprs_payload_callsigns").val doc.aprs.payloads.join ', '
+    $("#aprs_chaser_callsigns").val doc.aprs.chasers.join ', '
 
     try
         flight_no_show_dates = true
@@ -99,6 +105,7 @@ flight_edit = (doc, callback, pcfgs={}) ->
 flight_save = ->
     try
         dates = flight_get_dates()
+        aprs_validate_callsign_fields()
     catch e
         alert "There are errors in your form: #{e}"
         return
@@ -119,6 +126,9 @@ flight_save = ->
             location: $("#launch_location_name").val()
             project: $("#flight_project").val()
             group: $("#flight_group").val()
+        aprs:
+            payloads: if $("#aprs_payload_callsigns").val().length then $("#aprs_payload_callsigns").val().replace(' ','').split(',') else []
+            chasers: if $("#aprs_chaser_callsigns").val().length then $("#aprs_chaser_callsigns").val().replace(' ','').split(',') else []
         payloads: (array_data_map "#flight_pcfgs_list", "pcfg_id")
 
     valid = true
@@ -143,6 +153,12 @@ flight_save = ->
         delete doc.metadata.group
     # leave metadata = {}
 
+    if doc.aprs.payloads.length == 0
+        delete doc.aprs.payloads
+
+    if doc.aprs.chasers.length == 0
+        delete doc.aprs.chasers
+
     if doc.name == ""
         valid = false
 
@@ -150,7 +166,7 @@ flight_save = ->
         alert "There are errors in your form. Please fix them"
         return
 
-    if doc.payloads.length == 0
+    if doc.payloads.length == 0 && doc.aprs.payloads.length == 0
         alert "You should probably add atleast one payload to your flight document"
         return
 
@@ -161,6 +177,18 @@ flight_save = ->
             flight_callback saved
 
     return
+
+# validates aprs callsigns string
+aprs_validate_callsign_fields = ->
+    payloads = $("#aprs_payload_callsigns").val()
+    chasers = $("#aprs_chaser_callsigns").val()
+
+    if payloads.length != 0
+        if !payloads.match aprs_callsign_comma_separated_regexp
+            throw "format of callsign(s) in APRS payload is invalid"
+    if chasers.length != 0
+        if !chasers.match aprs_callsign_comma_separated_regexp
+            throw "format of callsign(s) in APRS chase car is invalid"
 
 # Return object with keys launch, start, end describing the 3 dates in the flight.
 flight_get_dates = ->
@@ -392,6 +420,12 @@ setup_flight_form = ->
 
             v = strict_numeric v
             set_valid e, not isNaN(v)
+
+    form_field "#aprs_payload_callsigns"
+        extra: (v) -> v.match(aprs_callsign_comma_separated_regexp) || v == ""
+
+    form_field "#aprs_chaser_callsigns"
+        extra: (v) -> v.match(aprs_callsign_comma_separated_regexp) || v == ""
 
     $("#flight_pcfgs_add").click btn_cb ->
         toplevel "#browse"

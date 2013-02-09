@@ -187,6 +187,9 @@ flight1:
         location: "A field"
         project: "Project Arachnid"
         group: "Team Spider"
+    aprs:
+        payloads: ["LZ1AAA","LZ1BBB"]
+        chasers: ["LZ1CCC"]
     payloads:
       - "id_of_pcfg1"
       - "id_of_pcfg2"
@@ -208,5 +211,7 @@ flight2:
         location: "A field"
         project: "Project Arachnid"
         group: "Team Spider"
+    aprs:
+        payloads: ["LZ1AAA"]
     payloads:
       - "id_of_pcfg2"
