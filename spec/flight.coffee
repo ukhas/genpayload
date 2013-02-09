@@ -103,7 +103,7 @@ describe "the flight editor", ->
         $("#launch_latitude").val("-34.77409")
         $("#launch_longitude").val("138.51697")
         $("#launch_altitude").val("100")
-        $("#aprs_payload_callsigns").val("LZ1AAA, LZ1BBB")
+        $("#aprs_payload_callsigns").val("LZ1AAA, LZ1BBB,     SPACE1")
         $("#aprs_chaser_callsigns").val("LZ1CCC")
 
         check_flight1_pcfgs_list() # not tested by the browse suite
