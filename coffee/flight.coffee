@@ -107,7 +107,7 @@ aprs_callsigns = (elem) ->
     if not v.length
         []
     else
-        v.replace(/\ /g,'').split(',')
+        v.replace(/\ /g,'').toUpperCase().split(',')
 
 # Save doc, call callback
 flight_save = ->

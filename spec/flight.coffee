@@ -160,6 +160,16 @@ describe "the flight editor", ->
 
         expect(saved).toEqual(want_doc)
 
+    it "should upper-case APRS callsigns", ->
+        make_flight1()
+        $("#aprs_payload_callsigns").val("LZ1aaa,LZ1BBB,space1")
+        $("#aprs_chaser_callsigns").val("lZ1ccc")
+        $("#flight_save").click()
+        saved = couchdbspy.saveDoc.calls[0].args[0]
+        want_doc = $.extend {}, test_docs.flight1
+        want_doc.aprs = test_docs.flight2.aprs
+        expect(saved).toEqual(want_doc)
+
     test_validation = (key, elem, badvalues...) ->
         make_flight1()
 
