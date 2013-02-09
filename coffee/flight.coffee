@@ -101,6 +101,14 @@ flight_edit = (doc, callback, pcfgs={}) ->
 
     flight_show_dates()
 
+# Load a comma separated callsign list
+aprs_callsigns = (elem) ->
+    v = $(elem).val()
+    if not v.length
+        []
+    else
+        v.replace(' ','').split(',')
+
 # Save doc, call callback
 flight_save = ->
     try
@@ -127,8 +135,8 @@ flight_save = ->
             project: $("#flight_project").val()
             group: $("#flight_group").val()
         aprs:
-            payloads: if $("#aprs_payload_callsigns").val().length then $("#aprs_payload_callsigns").val().replace(' ','').split(',') else []
-            chasers: if $("#aprs_chaser_callsigns").val().length then $("#aprs_chaser_callsigns").val().replace(' ','').split(',') else []
+            payloads: aprs_callsigns "#aprs_payload_callsigns"
+            chasers: aprs_callsigns "#aprs_chaser_callsigns"
         payloads: (array_data_map "#flight_pcfgs_list", "pcfg_id")
 
     valid = true
@@ -155,9 +163,10 @@ flight_save = ->
 
     if doc.aprs.payloads.length == 0
         delete doc.aprs.payloads
-
     if doc.aprs.chasers.length == 0
         delete doc.aprs.chasers
+    if not doc.aprs.payloads? and not doc.aprs.chasers?
+        delete doc.aprs
 
     if doc.name == ""
         valid = false
@@ -166,7 +175,7 @@ flight_save = ->
         alert "There are errors in your form. Please fix them"
         return
 
-    if doc.payloads.length == 0 && doc.aprs.payloads.length == 0
+    if doc.payloads.length == 0 && doc.aprs?.payloads?.length == 0
         alert "You should probably add atleast one payload to your flight document"
         return
 

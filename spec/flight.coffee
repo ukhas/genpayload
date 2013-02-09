@@ -137,6 +137,30 @@ describe "the flight editor", ->
 
         expect(saved).toEqual(want_doc)
 
+    it "should not create empty lists in the aprs dict", ->
+        make_flight1()
+        $("#aprs_payload_callsigns").val("")
+        $("#flight_save").click()
+        saved = couchdbspy.saveDoc.calls[0].args[0]
+
+        want_doc = $.extend true, {}, test_docs.flight1
+        delete want_doc.aprs.payloads
+
+        expect(saved).toEqual(want_doc)
+
+    it "should not create an empty aprs dict", ->
+        make_flight1()
+
+        $("#aprs_payload_callsigns").val("")
+        $("#aprs_chaser_callsigns").val("")
+        $("#flight_save").click()
+        saved = couchdbspy.saveDoc.calls[0].args[0]
+
+        want_doc = $.extend {}, test_docs.flight1
+        delete want_doc.aprs
+
+        expect(saved).toEqual(want_doc)
+
     test_validation = (key, elem, badvalues...) ->
         make_flight1()
 
@@ -168,11 +192,13 @@ describe "the flight editor", ->
     it "should validate altitude", ->
         test_validation "altitude", "#launch_altitude", "asdf"
 
+    invalid_APRS = [" ", "aaa", ",", "LZ1AA,", " LZ1AA", "LZ1AA,LL"]
+
     it "should validate APRS payloads", ->
-        test_validation "payloads", "#aprs_payload_callsigns", " ", "aaa", ",", "LZ1AA,", " LZ1AA", "LZ1AA,LL"
+        test_validation "payloads", "#aprs_payload_callsigns", invalid_APRS...
 
     it "should validate APRS chasers", ->
-        test_validation "chasers", "#aprs_chaser_callsigns", " ", "aaa", ",", "LZ1AA,", " LZ1AA", "LZ1AA,LL"
+        test_validation "chasers", "#aprs_chaser_callsigns", invalid_APRS...
 
     it "shouldn't let you add the same payload twice", ->
         make_flight1()
