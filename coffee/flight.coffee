@@ -42,8 +42,8 @@ flight_edit = (doc, callback, pcfgs={}) ->
     $("#launch_altitude").val doc.launch.location.altitude ? ""
     $("#launch_latitude, #launch_longitude, #launch_altitude").change()
 
-    $("#aprs_payload_callsigns").val doc.aprs.payloads.join ', '
-    $("#aprs_chaser_callsigns").val doc.aprs.chasers.join ', '
+    $("#aprs_payload_callsigns").val (doc.aprs?.payloads?.join ', ') or ""
+    $("#aprs_chaser_callsigns").val (doc.aprs?.chasers?.join ', ') or ""
 
     try
         flight_no_show_dates = true
