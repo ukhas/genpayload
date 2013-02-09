@@ -45,8 +45,6 @@ describe "the flight editor", ->
         $("#launch_location_name").val("A field")
         $("#launch_latitude").val("51.44943")
         $("#launch_longitude").val("-0.95468")
-        $("#aprs_payload_callsigns").val("LZ1AAA,LZ1BBB")
-        $("#aprs_chaser_callsigns").val("LZ1CCC")
         add_pcfg 1
         add_pcfg 2
 
@@ -105,8 +103,8 @@ describe "the flight editor", ->
         $("#launch_latitude").val("-34.77409")
         $("#launch_longitude").val("138.51697")
         $("#launch_altitude").val("100")
-        $("#aprs_payload_callsigns").val("LZ1AAA")
-        $("#aprs_chaser_callsigns").val("")
+        $("#aprs_payload_callsigns").val("LZ1AAA, LZ1BBB")
+        $("#aprs_chaser_callsigns").val("LZ1CCC")
 
         check_flight1_pcfgs_list() # not tested by the browse suite
         $("#flight_pcfgs_list > div.row:first-child button").click() # remove pcfg1
