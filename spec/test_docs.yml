@@ -213,6 +213,5 @@ flight2:
         group: "Team Spider"
     aprs:
         payloads: ["LZ1AAA"]
-        chasers: []
     payloads:
       - "id_of_pcfg2"

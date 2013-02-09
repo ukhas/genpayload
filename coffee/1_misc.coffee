@@ -11,7 +11,7 @@ nice_key_regexp = /^[a-z_0-9]+$/
 callsign_regexp = /^[a-zA-Z0-9/_\\-]+$/
 callable_regexp = /^[a-z_\.0-9]+$/
 time_regex = /^((0|1)[0-9]|2[0-3])(:|)([0-5][0-9])(|\3([0-5][0-9]|60))$/
-aprs_callsign_comma_separated_regexp = /^([a-z0-9]{4,6}(\-[0-9]{1,2})?)(,[a-z0-9]{4,6}(\-[0-9]{1,2})?)*$/i
+aprs_callsign_comma_separated_regexp = /^([a-z0-9]{4,6}(\-[0-9]{1,2})?)(, *[a-z0-9]{4,6}(\-[0-9]{1,2})?)*$/i
 
 # parse a string into an array [hours, minutes, seconds]
 time_parse = (str) ->

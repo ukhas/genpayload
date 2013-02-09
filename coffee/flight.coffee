@@ -42,8 +42,8 @@ flight_edit = (doc, callback, pcfgs={}) ->
     $("#launch_altitude").val doc.launch.location.altitude ? ""
     $("#launch_latitude, #launch_longitude, #launch_altitude").change()
 
-    $("#aprs_payload_callsigns").val doc.aprs.payloads.join ','
-    $("#aprs_chaser_callsigns").val doc.aprs.chasers.join ','
+    $("#aprs_payload_callsigns").val doc.aprs.payloads.join ', '
+    $("#aprs_chaser_callsigns").val doc.aprs.chasers.join ', '
 
     try
         flight_no_show_dates = true
@@ -127,8 +127,8 @@ flight_save = ->
             project: $("#flight_project").val()
             group: $("#flight_group").val()
         aprs:
-            payloads: if $("#aprs_payload_callsigns").val().length then $("#aprs_payload_callsigns").val().split(',') else []
-            chasers: if $("#aprs_chaser_callsigns").val().length then $("#aprs_chaser_callsigns").val().split(',') else []
+            payloads: if $("#aprs_payload_callsigns").val().length then $("#aprs_payload_callsigns").val().replace(' ','').split(',') else []
+            chasers: if $("#aprs_chaser_callsigns").val().length then $("#aprs_chaser_callsigns").val().replace(' ','').split(',') else []
         payloads: (array_data_map "#flight_pcfgs_list", "pcfg_id")
 
     valid = true
@@ -152,6 +152,12 @@ flight_save = ->
     if doc.metadata.group == ""
         delete doc.metadata.group
     # leave metadata = {}
+
+    if doc.aprs.payloads.length == 0
+        delete doc.aprs.payloads
+
+    if doc.aprs.chasers.length == 0
+        delete doc.aprs.chasers
 
     if doc.name == ""
         valid = false
@@ -414,6 +420,12 @@ setup_flight_form = ->
 
             v = strict_numeric v
             set_valid e, not isNaN(v)
+
+    form_field "#aprs_payload_callsigns"
+        extra: (v) -> v.match(aprs_callsign_comma_separated_regexp) || v == ""
+
+    form_field "#aprs_chaser_callsigns"
+        extra: (v) -> v.match(aprs_callsign_comma_separated_regexp) || v == ""
 
     $("#flight_pcfgs_add").click btn_cb ->
         toplevel "#browse"
