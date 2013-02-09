@@ -138,11 +138,12 @@ describe "the flight editor", ->
     it "should not create empty lists in the aprs dict", ->
         make_flight1()
         $("#aprs_payload_callsigns").val("")
+        $("#aprs_chaser_callsigns").val("TEST1, TEST2, TEST3")
         $("#flight_save").click()
         saved = couchdbspy.saveDoc.calls[0].args[0]
 
-        want_doc = $.extend true, {}, test_docs.flight1
-        delete want_doc.aprs.payloads
+        want_doc = $.extend {}, test_docs.flight1
+        want_doc.aprs = chasers: ["TEST1", "TEST2", "TEST3"]
 
         expect(saved).toEqual(want_doc)
 
