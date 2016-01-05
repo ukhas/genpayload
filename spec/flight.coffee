@@ -103,8 +103,6 @@ describe "the flight editor", ->
         $("#launch_latitude").val("-34.77409")
         $("#launch_longitude").val("138.51697")
         $("#launch_altitude").val("100")
-        $("#aprs_payload_callsigns").val("LZ1AAA, LZ1BBB,     SPACE1")
-        $("#aprs_chaser_callsigns").val("LZ1CCC")
 
         check_flight1_pcfgs_list() # not tested by the browse suite
         $("#flight_pcfgs_list > div.row:first-child button").click() # remove pcfg1
@@ -133,41 +131,6 @@ describe "the flight editor", ->
         want_doc = $.extend {}, test_docs.flight1
         want_doc.metadata = {}
 
-        expect(saved).toEqual(want_doc)
-
-    it "should not create empty lists in the aprs dict", ->
-        make_flight1()
-        $("#aprs_payload_callsigns").val("")
-        $("#aprs_chaser_callsigns").val("TEST1, TEST2, TEST3")
-        $("#flight_save").click()
-        saved = couchdbspy.saveDoc.calls[0].args[0]
-
-        want_doc = $.extend {}, test_docs.flight1
-        want_doc.aprs = chasers: ["TEST1", "TEST2", "TEST3"]
-
-        expect(saved).toEqual(want_doc)
-
-    it "should not create an empty aprs dict", ->
-        make_flight1()
-
-        $("#aprs_payload_callsigns").val("")
-        $("#aprs_chaser_callsigns").val("")
-        $("#flight_save").click()
-        saved = couchdbspy.saveDoc.calls[0].args[0]
-
-        want_doc = $.extend {}, test_docs.flight1
-        delete want_doc.aprs
-
-        expect(saved).toEqual(want_doc)
-
-    it "should upper-case APRS callsigns", ->
-        make_flight1()
-        $("#aprs_payload_callsigns").val("LZ1aaa,LZ1BBB,space1")
-        $("#aprs_chaser_callsigns").val("lZ1ccc")
-        $("#flight_save").click()
-        saved = couchdbspy.saveDoc.calls[0].args[0]
-        want_doc = $.extend {}, test_docs.flight1
-        want_doc.aprs = test_docs.flight2.aprs
         expect(saved).toEqual(want_doc)
 
     test_validation = (key, elem, badvalues...) ->
@@ -200,14 +163,6 @@ describe "the flight editor", ->
 
     it "should validate altitude", ->
         test_validation "altitude", "#launch_altitude", "asdf"
-
-    invalid_APRS = [" ", "aaa", ",", "LZ1AA,", " LZ1AA", "LZ1AA,LL"]
-
-    it "should validate APRS payloads", ->
-        test_validation "payloads", "#aprs_payload_callsigns", invalid_APRS...
-
-    it "should validate APRS chasers", ->
-        test_validation "chasers", "#aprs_chaser_callsigns", invalid_APRS...
 
     it "shouldn't let you add the same payload twice", ->
         make_flight1()

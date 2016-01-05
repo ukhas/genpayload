@@ -208,8 +208,5 @@ flight2:
         location: "A field"
         project: "Project Arachnid"
         group: "Team Spider"
-    aprs:
-        payloads: ["LZ1AAA","LZ1BBB", "SPACE1"]
-        chasers: ["LZ1CCC"]
     payloads:
       - "id_of_pcfg2"
