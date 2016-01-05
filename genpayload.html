@@ -497,21 +497,30 @@
                     </label>
                     <div class="six columns">
                         <select id="wizard_no_lock">
-                            <option value="other">other</option>
-                            <option value="always">this format</option>
                             <option value="lockfield">a certain value in a gps lock field</option>
                             <option value="zeroes">latitude/longitude as 0,0</option>
+                            <option value="other">another format</option>
+                            <option value="always">exclusively this format</option>
                         </select>
                     </div>
 
                     <div class="six columns omega">
                         <div class="input_extra" id="wizard_nolock_othernotice">
-                            Other: Includes sending another format, such as empty or "!!!.!!!!!" fields.
-                            You should add the 'no-lock' format as another sentence format after you have finished this one.
+                            You've chosen "other": this means that when the payload does not have a lock it will send 
+                            another sentence format that can not be parsed by this specification. This includes sending 
+                            empty or "!!!.!!!!!" fields. <br>
+                            You should add the 'no-lock' format as another sentence format after you have finished this one,
+                            choosing "exclusively this format" when you get to this step.
                         </div>
                         <div class="input_extra" id="wizard_nolock_alwaysnotice">
+                            You've chosen "always invalid": only choose this if the payload will send something matching
+                            this specification if and only if it does not have a lock. In particlar, no valid sentence 
+                            with a lock can match this sentence specification. <br>
                             Any latitude longitude or altitude, if present, will be marked invalid.
-                            Other parsed data, like temperature, can still be used and plotted.
+                            Other parsed data, like temperature, can still be used and plotted. <br>
+                            This option must be combined with a second sentence format where you've chosen the 'other'
+                            option at this step. <br>
+                            Use of this option is quite rare.
                         </div>
                     </div>
                 </div>
