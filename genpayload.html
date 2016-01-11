@@ -205,7 +205,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
             <hr />
 
@@ -739,6 +738,84 @@
             <hr />
 
             <div class="sixteen columns">
+                <div class="form row">
+                    <label class="two columns alpha" for="launch_balloon">Balloon type</label>
+                    <div class="seven columns">
+                        <select id="launch_balloon">
+                            <option value="none" selected="selected">- choose -</option>
+                            <option value="other">Other</option>
+                            <option value="k200">Kaymont - 200</option>
+                            <option value="k300">Kaymont - 300</option>
+                            <option value="k350">Kaymont - 350</option>
+                            <option value="k450">Kaymont - 450</option>
+                            <option value="k500">Kaymont - 500</option>
+                            <option value="k600">Kaymont - 600</option>
+                            <option value="k700">Kaymont - 700</option>
+                            <option value="k800">Kaymont - 800</option>
+                            <option value="k1000">Kaymont - 1000</option>
+                            <option value="k1200">Kaymont - 1200</option>
+                            <option value="k1500">Kaymont - 1500</option>
+                            <option value="k2000">Kaymont - 2000</option>
+                            <option value="k3000">Kaymont - 3000</option>
+                            <option value="h200">Hwoyee - 200</option>
+                            <option value="h300">Hwoyee - 300</option>
+                            <option value="h350">Hwoyee - 350</option>
+                            <option value="h450">Hwoyee - 400</option>
+                            <option value="h500">Hwoyee - 500</option>
+                            <option value="h600">Hwoyee - 600</option>
+                            <option value="h700">Hwoyee - 750</option>
+                            <option value="h800">Hwoyee - 800</option>
+                            <option value="h800">Hwoyee - 950</option>
+                            <option value="h1000">Hwoyee - 1000</option>
+                            <option value="h1200">Hwoyee - 1200</option>
+                            <option value="h1500">Hwoyee - 1500</option>
+                            <option value="h1600">Hwoyee - 1600</option>
+                            <option value="h2000">Hwoyee - 2000</option>
+                            <option value="p1200">PAWAN - 1200</option>
+                        </select>
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">
+                            brand and weight (g), optional. <br />
+                            Data will be used to improve the prediction models
+                        </div>
+                    </div>
+                </div>
+                <div class="form row">
+                    <label class="two columns alpha" for="launch_weight">Payload(s) weight</label>
+                    <div class="seven columns validated">
+                        <input type="text" id="launch_weight" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">
+                            Combined weight of all payloads (g), optional. <br />
+                            Data will be used to improve the prediction models
+                        </div>
+                    </div>
+                </div>
+                <div class="form row">
+                    <label class="two columns alpha" for="launch_fill_volume">Fill volume</label>
+                    <div class="seven columns validated">
+                        <input type="text" id="launch_fill_volume" />
+                        <img src="t/images/tick.png" alt="Complete" />
+                    </div>
+                    <div class="six columns offset-by-one omega">
+                        <div class="input_extra">
+                           Fill volume in Liters, optional
+                       </div>
+                    </div>
+                </div>
+                <div class="form row">
+                    <label class="two columns alpha" for="launch_fill_gas">Fill gas</label>
+                    <div class="seven columns">
+                        <select id="launch_fill_gas">
+                            <option value="helium" selected="selected">Helium</option>
+                            <option value="hydrogen">Hydrogen</option>
+                        </select>
+                    </div>
+                </div>
+            <hr />
                 <div class="form row">
                     <label class="two columns alpha" for="launch_location_name">Launch location</label>
                     <div class="seven columns">
